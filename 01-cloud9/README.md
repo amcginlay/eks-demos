@@ -1,6 +1,6 @@
 # Create Cloud9 (EC2) Environment
 
-NOTE: these instructions have been tested under the assumption that you are logged on to the AWS console as a sufficiently privileged IAM User, *not* an assumed role.
+NOTE: these instructions have been tested under the assumption that you are logged on to the AWS console as a sufficiently privileged IAM User, *not* an assumed IAM Role.
 
 Navigate to https://us-west-2.console.aws.amazon.com/cloudshell
 
