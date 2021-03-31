@@ -29,9 +29,6 @@ EOF
 chmod +x ./ssm-exec
 sudo mv ./ssm-exec /usr/local/bin/ssm-exec
 
-# verify this worked
-which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
-
 # finally, install the kubectl neat add-on (https://krew.sigs.k8s.io/docs/user-guide/setup/install/ | https://github.com/itaysk/kubectl-neat)
 (
   set -x; cd "$(mktemp -d)" &&
@@ -43,6 +40,9 @@ which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 kubectl krew install neat
+
+# verify the installs worked
+which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
 ```
 
 [Return To Main Menu](../README.md)
