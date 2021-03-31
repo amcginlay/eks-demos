@@ -1,6 +1,6 @@
 # Set Variables
 
-Prepare your environment file.
+Prepare your EC2 variables file.
 
 ```bash
 cat > ~/.env << EOF
