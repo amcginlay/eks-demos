@@ -1,6 +1,6 @@
 # Configure Client Tools
 
-Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, jq, helm, tree and siege
+Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, jq, helm, tree and siege.
 ```bash
 sudo mv /usr/local/bin/aws /usr/local/bin/aws.old
 sudo mv /usr/bin/aws /usr/bin/aws.old
@@ -40,8 +40,10 @@ sudo mv ./ssm-exec /usr/local/bin/ssm-exec
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 kubectl krew install neat
+```
 
-# verify the installs worked
+Verify the installs worked.
+```bash
 which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
 ```
 
