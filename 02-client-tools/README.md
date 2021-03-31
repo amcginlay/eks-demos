@@ -1,3 +1,3 @@
-# Configure CLient Tools
+# Configure Client Tools
 
 [Return To Main Menu](../README.md)
