@@ -2,7 +2,7 @@
 
 **IMPORTANT MANUAL STEPS** - At this point, c9 is using "AWS managed temporary credentials" and we are NOT currently assuming the Role-EC2-EKSClusterAdmin. You must perform the following step manually:
 
-* **go to c9 IDE Preferences**
+* **Go to the Cloud9 IDE Preferences**
 * **-> AWS Settings**
 * **-> switch OFF "AWS managed temporary credentials"**
 
