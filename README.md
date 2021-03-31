@@ -1,6 +1,6 @@
 # eks-demos
 A selection of demos guiding you through the maze of EKS
 
-* [Create Cloud9 (EC2) Environment](c9/README.md)
-* [Configure Client Tools](toolset/README.md)
-* [Build EKS Cluster](build-eks/README.md)
+* [01. Create Cloud9 (EC2) Environment](01-c9/README.md)
+* [02. Configure Client Tools](02-toolset/README.md)
+* [03. Build EKS Cluster](03-build-eks/README.md)
