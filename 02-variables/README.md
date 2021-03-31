@@ -1,6 +1,6 @@
 # Variables
 
-Prepare you environment file.
+Prepare your environment file.
 
 ```bash
 cat > ~/.env << EOF
