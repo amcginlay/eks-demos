@@ -1,4 +1,4 @@
-# Variables
+# Set Variables
 
 Prepare your environment file.
 
