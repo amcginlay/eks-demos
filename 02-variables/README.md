@@ -6,7 +6,7 @@ Prepare your environment file.
 cat > ~/.env << EOF
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=""
-cluster=dev
+cluster_name=dev
 k8s_version=1.18
 namespace=demo
 app_name=demo
