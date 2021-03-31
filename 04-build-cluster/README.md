@@ -1,6 +1,8 @@
 # Build EKS Cluster
 
-**IMPORTANT MANUAL STEPS** - At this point, Cloud9 is using "AWS managed temporary credentials" and we are NOT currently assuming the Role-EC2-EKSClusterAdmin. You must perform the following step manually:
+**IMPORTANT MANUAL STEPS** - At this point, Cloud9 is using "AWS managed temporary credentials" and we are NOT currently assuming the Role-EC2-EKSClusterAdmin associated with the underlying EC2 instance.
+
+You **must** perform the following step manually:
 
 * **Go to the Cloud9 IDE Preferences**
 * **-> AWS Settings**
