@@ -20,7 +20,7 @@ Ensure these variables get set into every bash session.
 echo "source ~/.env" >> ~/.bashrc
 ```
 
-Load the variables into your current shell so we can use them immediately.
+Set the variables into your current shell so we can use them immediately.
 
 ```bash
 source ~/.env
