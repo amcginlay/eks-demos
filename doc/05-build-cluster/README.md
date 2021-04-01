@@ -68,4 +68,4 @@ We can further validate our permissions by observing the pods initally deployed 
 kubectl -n kube-system get pods -o wide
 ```
 
-[Return To Main Menu](../../README.md)
+[Return To Main Menu](/README.md)
