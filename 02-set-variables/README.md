@@ -6,6 +6,8 @@ Prepare your EC2 variables file.
 cat > ~/.env << EOF
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=""
+
+github_public_repo=https://github.com/amcginlay/eks-demos.git             # if you fork this repo, change this!
 cluster_name=dev
 k8s_version=1.18
 namespace=demo
