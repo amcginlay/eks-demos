@@ -47,4 +47,4 @@ Verify the installs worked.
 which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
 ```
 
-[Return To Main Menu](../README.md)
+[Return To Main Menu](../../README.md)
