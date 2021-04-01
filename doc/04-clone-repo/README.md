@@ -5,4 +5,4 @@ Some of the config and source code you need to complete the demos are inside thi
 git clone ${github_public_repo} ~/environment/eks-demos
 ```
 
-[Return To Main Menu](../README.md)
+[Return To Main Menu](../../README.md)
