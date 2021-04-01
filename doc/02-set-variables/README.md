@@ -28,4 +28,4 @@ Set the variables into your current shell so we can use them immediately.
 source ~/.env
 ```
 
-[Return To Main Menu](../README.md)
+[Return To Main Menu](../../README.md)
