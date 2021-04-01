@@ -10,6 +10,9 @@ export AWS_PAGER=""
 export GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git             # if you fork this repo, change this!
 export CLUSTER_NAME=dev
 export K8S_VERSION=1.18
+
+export APP_NAME=php-echo
+export APP_VERSION=1.0.42
 EOF
 ```
 
