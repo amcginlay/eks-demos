@@ -56,4 +56,4 @@ Execute the following command then navigate your browser to the URL produced bef
 echo "https://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}"
 ```
 
-[Return To Main Menu](../README.md)
+[Return To Main Menu](../../README.md)
