@@ -4,6 +4,7 @@ Prepare your EC2 variables file.
 
 ```bash
 cat > ~/.env << EOF
+export AWS_ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep accountId|awk -F\" '{print $4}')
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=""
 
