@@ -14,6 +14,7 @@ export K8S_VERSION=1.18
 
 export APP_NAME=php-echo
 export APP_VERSION=1.0.42
+export APP_ECR_REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${APP_NAME}
 EOF
 ```
 
