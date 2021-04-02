@@ -7,3 +7,4 @@ A selection of guides through the maze of [Elastic Kubernetes Service (EKS)](htt
 * [04. Clone This Repo](doc/04-clone-repo/README.md)
 * [05. Build EKS Cluster](doc/05-build-cluster/README.md)
 * [06. Build A Container Image](doc/06-build-container-image/README.md)
+* [07. Push Container Image To ECR](doc/07-push-to-ecr/README.md)
