@@ -13,7 +13,7 @@ aws ecr create-repository \
 
 NOTE the generated repo name should match our exported variable APP_ECR_REPO
 
-Push the Docker image to ECR repository (click "View push commands" in console to see these instructions)
+Push the Docker image to ECR repository
 ```bash
 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${APP_ECR_REPO}
 docker tag ${APP_NAME}:latest ${APP_ECR_REPO}:${APP_VERSION}
