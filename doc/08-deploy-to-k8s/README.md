@@ -1,5 +1,7 @@
 # Deploy From ECR To Kubernetes
 
+Kubernetes objects, such as deployments, require manifests in order to be created. 
+
 Deploy the app to Kubernetes and scale to 3 pods.
 ```bash
 kubectl create deployment ${APP_NAME} --image ${APP_ECR_REPO}:${APP_VERSION}
