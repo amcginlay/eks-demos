@@ -11,7 +11,7 @@ aws ecr create-repository \
   --output text
 ```
 
-NOTE this generated repo name should match our exported variable APP_ECR_REPO
+NOTE the generated repo name should match our exported variable APP_ECR_REPO
 
 Push the Docker image to ECR repository (click "View push commands" in console to see these instructions)
 ```bash
