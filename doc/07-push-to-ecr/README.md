@@ -1,6 +1,6 @@
 # Push Container Image To ECR
 
-Create target ECR repo, deleting it first if needed
+Create target ECR repo, deleting it first if needed.
 ```bash
 aws ecr delete-repository --repository-name ${APP_NAME} --force >/dev/null 2>&1
 aws ecr create-repository \
@@ -11,9 +11,9 @@ aws ecr create-repository \
   --output text
 ```
 
-NOTE the generated repo name should match our exported variable APP_ECR_REPO
+NOTE the generated repo name should match our exported variable APP_ECR_REPO.
 
-Push the Docker image to ECR repository
+Push the Docker image to ECR repository.
 ```bash
 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${APP_ECR_REPO}
 docker tag ${APP_NAME}:latest ${APP_ECR_REPO}:${APP_VERSION}
