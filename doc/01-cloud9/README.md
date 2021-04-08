@@ -42,7 +42,7 @@ aws iam add-role-to-instance-profile --instance-profile-name Role-EC2-EKSCluster
 aws iam attach-role-policy --role-name Role-EC2-EKSClusterAdmin --policy-arn ${admin_policy_arn}
 ```
 
-Create your cloud9 environment from the CloudShell session and associate new role with this instance
+Create your Cloud9 environment from the CloudShell session and associate new role with this instance
 ```bash
 env_id=$(aws cloud9 create-environment-ec2 --name c9-eks-${cluster_name} --instance-type m5.large --automatic-stop-time-minutes 240 --query "environmentId" --output text)
 sleep 20 && instance_id=$(aws ec2 describe-instances --filters "Name='tag:aws:cloud9:environment',Values='${env_id}'" --query "Reservations[].Instances[0].InstanceId" --output text)
