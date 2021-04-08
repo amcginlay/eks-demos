@@ -14,9 +14,7 @@ Check you're not using an assumed IAM Role. These instructions have been tested 
 aws sts get-caller-identity
 ```
 
-**Skip the next section if you've already created the Role-EC2-EKSClusterAdmin role**
-
-Identify the AWS managed AdministratorAccess policy then create the Role-EC2-EKSClusterAdmin role, ensuring both the current user and EC2 instances are able to assume it.
+Identify the AWS managed AdministratorAccess policy then create the Role-EC2-EKSClusterAdmin role, ensuring both the current user and EC2 instances are able to assume it. **You can skip this section if you've already created the Role-EC2-EKSClusterAdmin role**
 ```bash
 # NOTE cluster creators should ideally follow these instructions https://eksctl.io/usage/minimum-iam-policies/
 admin_policy_arn=$(aws iam list-policies --query "Policies[?PolicyName=='AdministratorAccess'].Arn" --output text)
