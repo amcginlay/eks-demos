@@ -6,7 +6,7 @@ The target for our first image is a simple PHP app hosted as a single file which
 Satisfy yourself that your can **run** this code inside Cloud9. To test, you can `curl http://localhost:8080/eks-demos/src/php-echo` from the Cloud9 terminal window. 
 As you do so, observe that the recorded value of **ec2IP** is equivalent to **localhostIP** within this execution environment.
 
-NOTE the use of **169.254.169.254** within the app is an indication that our app is tailor-made for deployment on EC2 instances.
+NOTE the use of **169.254.169.254** within [eks-demos/src/php-echo/index.php](/src/php-echo/index.php) is an indication that our app is tailor-made for deployment on EC2 instances.
 
 Build the Dockerfile for this application locally from a template. The following command resolves the **VERSION** variable which we need to track.
 ```bash
