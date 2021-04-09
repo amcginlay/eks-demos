@@ -64,7 +64,7 @@ docker run --detach --rm -p 8081:8080 orchestration
 Confirm the container instance is running, hit the `/shutdown` endpoint, then confirm it was terminated. This proves that Docker alone cannot protect us from process termination.
 ```bash
 docker ps                                     # container running?
-curl -X POST localhost:8081/actuator/shutdown # send shutdown
+curl -X POST localhost:8081/actuator/shutdown
 docker ps                                     # container dead?
 ```
 
