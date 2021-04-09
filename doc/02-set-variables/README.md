@@ -8,13 +8,13 @@ export AWS_ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-i
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=""
 
-export GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git             # if you fork this repo, change this!
-export CLUSTER_NAME=dev
-export K8S_VERSION=1.18
+export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git             # if you fork this repo, change this!
+export EKS_CLUSTER_NAME=dev
+export EKS_K8S_VERSION=1.18
 
-export APP_NAME=php-echo
-export APP_VERSION=1.0.42
-export APP_ECR_REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${APP_NAME}
+export EKS_APP_NAME=php-echo
+export EKS_APP_VERSION=1.0.42
+export EKS_APP_ECR_REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${APP_NAME}
 EOF
 ```
 
