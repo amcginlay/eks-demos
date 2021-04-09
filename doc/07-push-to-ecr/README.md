@@ -2,9 +2,9 @@
 
 Create target ECR repo, deleting it first if needed.
 ```bash
-aws ecr delete-repository --repository-name ${APP_NAME} --force >/dev/null 2>&1
+aws ecr delete-repository --repository-name ${EKS_APP_NAME} --force >/dev/null 2>&1
 aws ecr create-repository \
-  --repository-name ${APP_NAME} \
+  --repository-name ${EKS_APP_NAME} \
   --region ${AWS_DEFAULT_REGION} \
   --image-scanning-configuration scanOnPush=true \
   --query 'repository.repositoryUri' \
