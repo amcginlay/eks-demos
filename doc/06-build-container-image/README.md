@@ -21,7 +21,7 @@ docker system prune --all --force
 
 Build the docker image and run a container instance
 ```bash
-docker build -t ${EKS_APP_NAME} ~/environment/eks-demos/src/php-echo/
+docker build -t ${EKS_APP_NAME} ~/environment/eks-demos/src/${EKS_APP_NAME}/
 docker images                                                       # see what you produced
 docker ps                                                           # nothing running ...
 container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP_NAME}) # request docker to instantiate a single container as a background process
