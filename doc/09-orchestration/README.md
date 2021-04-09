@@ -46,6 +46,28 @@ From **another terminal session**, invoke the `/shutdown` endpoint
 curl -X POST http://localhost:8080/actuator/shutdown
 ```
 
-TODO ...
+You will see the response "Shutting down, bye...". The application has now terminated and the prompt in the first terminal window is back. The `/shutdown` request was successful.
+
+We need to containerize this app, so create a Dockerfile then build our container and run it.
+```bash
+cat > ~/environment/eks-demos/src/orchestration/Dockerfile << EOF
+FROM adoptopenjdk/openjdk11:alpine-jre
+ARG JAR_FILE=target/*.jar
+COPY \${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+EOF
+
+docker build --build-arg JAR_FILE=build/libs/\*.jar -t orchestration .
+docker run --detach --rm -p 8081:8080 orchestration
+```
+
+Confirm the container instance is running, hit the `/shutdown` endpoint, then check if it was terminated.
+```bash
+docker ps                                     # container running?
+curl -X POST localhost:8081/actuator/shutdown # send shutdown
+docker ps                                     # container dead?
+```
+
+... TODO
 
 [Return To Main Menu](/README.md)
