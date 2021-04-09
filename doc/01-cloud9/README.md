@@ -6,9 +6,9 @@ Navigate to https://us-west-2.console.aws.amazon.com/cloudshell
 
 Update the AWS CLI.
 ```bash
-rm -r /usr/local/bin/aws 2> /dev/null
-rm -r /usr/local/aws-cli 2> /dev/null
-rm -r aws awscliv2.zip 2> /dev/null
+rm -rf /usr/local/bin/aws 2> /dev/null
+rm -rf /usr/local/aws-cli 2> /dev/null
+rm -rf aws awscliv2.zip 2> /dev/null
 curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install --update
