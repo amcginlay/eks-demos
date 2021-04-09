@@ -57,7 +57,7 @@ COPY \${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EOF
 
-docker build --build-arg JAR_FILE=build/libs/\*.jar -t orchestration .
+docker build --build-arg JAR_FILE=build/libs/\*.jar -t orchestration ~/environment/eks-demos/src/orchestration/
 docker run --detach --rm -p 8081:8080 orchestration
 ```
 
