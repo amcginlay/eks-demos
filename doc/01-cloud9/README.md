@@ -4,6 +4,14 @@ NOTE: these instructions have been tested under the assumption that you are logg
 
 Navigate to https://us-west-2.console.aws.amazon.com/cloudshell
 
+Update the AWS CLI
+```bash
+sudo mv /usr/local/bin/aws /usr/local/bin/aws.old
+curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
+
 Set a variable for the EKS cluster name
 ```bash
 cluster_name=dev
