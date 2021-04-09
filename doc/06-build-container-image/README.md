@@ -3,7 +3,7 @@
 If you followed the previous steps the source code will have already been cloned onto your Cloud9 instance.
 
 The target for our first image is a simple PHP app hosted as a single file which you can review here [eks-demos/src/php-echo/index.php](/src/php-echo/index.php).
-Satisfy yourself that your can run and **Preview** this this app on port 8080 inside Cloud9.
+Satisfy yourself that your can **run** this code inside Cloud9. To test, you can `curl` then endpoint at `http://localhost:8080/eks-demos/src/php-echo/index.php`. 
 As you do so, observe that the recorded value of **ec2IP** is equivalent to **localhostIP** within this execution environment.
 
 NOTE the use of **169.254.169.254** within the app is an indication that our app is tailor-made for deployment on EC2 instances.
