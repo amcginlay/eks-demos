@@ -47,7 +47,7 @@ kubectl krew install neat
 
 Verify the installs worked.
 ```bash
-which aws eksctl kubectl session-manager-plugin jq tree helm siege ssm-exec
+which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle ssm-exec
 ```
 
 [Return To Main Menu](/README.md)
