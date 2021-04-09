@@ -1,6 +1,6 @@
 # Configure Client Tools
 
-Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, jq, helm, tree and siege.
+Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, jq, helm, tree, siege and gradle.
 ```bash
 sudo mv /usr/local/bin/aws /usr/local/bin/aws.old
 sudo mv /usr/bin/aws /usr/bin/aws.old
@@ -15,6 +15,9 @@ sudo mv ./kubectl /usr/local/bin/kubectl
 curl --silent "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
 sudo yum install -y session-manager-plugin.rpm jq tree siege
 curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install gradle
 rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm
 
 # ... plus a custom script to simplify remote calls to the EKS worker nodes via SSM
