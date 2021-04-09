@@ -1,5 +1,5 @@
 # eks-demos
-A selection of guides through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
+A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
 
 * [01. Create Cloud9 (EC2) Environment](doc/01-cloud9/README.md)
 * [02. Set Variables](doc/02-set-variables/README.md)
