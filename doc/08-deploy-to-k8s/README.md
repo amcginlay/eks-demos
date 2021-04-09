@@ -1,6 +1,6 @@
 # Deploy From ECR To Kubernetes
 
-Kubernetes objects, such as deployments, require manifests in order to be created. `kubectl` supports a number of `create` commands which internalize the manifest creation such that, for the simplest of use cases, we never need to see the manifest. `kubectl` also supports dry runs and the ability to export those manifests thereby enabling `kubectl create` commands double-up as manifest generators. This behaviour can be observed when executing the following command. NOTE the command also makes use of the `kubectl neat` add-on which simplifies generated manifests down to their essential elements.
+Kubernetes objects, such as deployments, require manifests in order to be created. `kubectl` supports a number of `create` commands which internalize the creation of manfests such that, for simple use cases, we do not need to see the manifest in order to apply one. `kubectl` also supports dry runs and the ability to export those manifests thereby enabling `kubectl create` commands double-up as manifest generators. This behaviour can be observed when executing the following non-destructive command. NOTE the command also makes use of the `kubectl neat` add-on which further simplifies manifests to their essential elements.
 ```bash
 kubectl create deployment demo --image nginx --dry-run=client -o yaml | kubectl neat
 ```
