@@ -15,10 +15,10 @@ NOTE the generated repo name output by the above command should match our export
 
 Push the Docker image to ECR repository.
 ```bash
-aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${APP_ECR_REPO}
-docker tag ${APP_NAME}:latest ${APP_ECR_REPO}:${APP_VERSION}
+aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${EKS_APP_ECR_REPO}
+docker tag ${EKS_APP_NAME}:latest ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 docker images
-docker push ${APP_ECR_REPO}:${APP_VERSION}
+docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 ```
 
 The EKS cluster can now locate this image by its tag
