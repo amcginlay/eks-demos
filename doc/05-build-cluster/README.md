@@ -16,23 +16,23 @@ aws sts get-caller-identity
 Set up a KMS customer managed key to encrypt secrets, as per: https://aws.amazon.com/blogs/containers/using-eks-encryption-provider-support-for-defense-in-depth/
 ```bash
 key_metadata=($(aws kms create-key --query KeyMetadata.[KeyId,Arn] --output text)) # [0]=KeyId [1]=Arn
-aws kms create-alias --alias-name alias/cmk-eks-${CLUSTER_NAME}-$(cut -c-8 <<< ${key_metadata[0]}) --target-key-id ${key_metadata[1]}
+aws kms create-alias --alias-name alias/cmk-eks-${EKS_CLUSTER_NAME}-$(cut -c-8 <<< ${key_metadata[0]}) --target-key-id ${key_metadata[1]}
 ```
 
 Create a manifest describing the EKS cluster with a managed node group and fargate profile (NOTE "eksctl create cluster" will also update ~/.kube/config)
 ```bash
-cat > ~/environment/${CLUSTER_NAME}-cluster-config.yaml << EOF
+cat > ~/environment/${EKS_CLUSTER_NAME}-cluster-config.yaml << EOF
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: ${CLUSTER_NAME}
+  name: ${EKS_CLUSTER_NAME}
   region: ${AWS_DEFAULT_REGION}
   version: "${K8S_VERSION}"
 availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
 secretsEncryption:
   keyARN: ${key_metadata[1]}
 managedNodeGroups:
-  - name: ng-${CLUSTER_NAME}
+  - name: ng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
     instanceType: t3.small
     desiredCapacity: 2
@@ -47,7 +47,7 @@ managedNodeGroups:
         xRay: true
         cloudWatch: true
 fargateProfiles:
-  - name: fp-${CLUSTER_NAME}
+  - name: fp-${EKS_CLUSTER_NAME}
     selectors:
       - namespace: serverless
 EOF
@@ -55,7 +55,7 @@ EOF
 
 Build the EKS cluster from the manifest (~20 mins)
 ```bash
-eksctl create cluster -f ~/environment/${CLUSTER_NAME}-cluster-config.yaml 
+eksctl create cluster -f ~/environment/${EKS_CLUSTER_NAME}-cluster-config.yaml 
 ```
 
 Check the Cloud9 environment can connect to the k8s cluster and display the TWO nodes in the managed node group.
