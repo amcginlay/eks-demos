@@ -18,15 +18,10 @@ export EKS_APP_ECR_REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaw
 EOF
 ```
 
-Ensure these variables get set into every bash session.
+Ensure these variables get set into every bash session then set the variables into your current shell so we can use them immediately.
 
 ```bash
 echo "source ~/.env" >> ~/.bashrc
-```
-
-Set the variables into your current shell so we can use them immediately.
-
-```bash
 source ~/.env
 ```
 
