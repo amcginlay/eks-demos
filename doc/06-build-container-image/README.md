@@ -21,15 +21,15 @@ docker system prune --all --force
 
 Build the docker image and run a container instance
 ```bash
-docker build -t ${APP_NAME} ~/environment/eks-demos/src/php-echo/
-docker images                                                   # see what you produced
-docker ps                                                       # nothing running ...
-container_id=$(docker run --detach --rm -p 8081:80 ${APP_NAME}) # request docker to instantiate a single container as a background process
-docker ps                                                       # ... now one container running
-docker exec -it ${container_id} curl localhost:80               # shell INTO that container and curl the INTERNAL port (80)
-curl localhost:8081                                             # show that the corresponding EXTERNAL port is mapped to a high-order port (8081) on the c9 instance
-docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet  # see why the ec2IP is no longer equivalent to the localhostIP
-docker stop ${container_id}                                     # stop the container (which will be terminated because we ran it with the --rm flag)
+docker build -t ${EKS_APP_NAME} ~/environment/eks-demos/src/php-echo/
+docker images                                                       # see what you produced
+docker ps                                                           # nothing running ...
+container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP_NAME}) # request docker to instantiate a single container as a background process
+docker ps                                                           # ... now one container running
+docker exec -it ${container_id} curl localhost:80                   # shell INTO that container and curl the INTERNAL port (80)
+curl localhost:8081                                                 # show that the corresponding EXTERNAL port is mapped to a high-order port (8081) on the c9 instance
+docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet      # see why the ec2IP is no longer equivalent to the localhostIP
+docker stop ${container_id}                                         # stop the container (which will be terminated because we ran it with the --rm flag)
 ```
 
 [Return To Main Menu](/README.md)
