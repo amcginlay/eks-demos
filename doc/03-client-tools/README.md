@@ -9,7 +9,7 @@ unzip awscliv2.zip
 sudo ./aws/install
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
-curl -LO https://storage.googleapis.com/kubernetes-release/release/v${K8S_VERSION}.0/bin/linux/amd64/kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v${EKS_K8S_VERSION}.0/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 curl --silent "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
