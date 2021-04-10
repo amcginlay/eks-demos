@@ -1,6 +1,6 @@
 # Orchestration
 
-[Kubernetes](https://en.wikipedia.org/wiki/Kubernetes) can be described as an orchestration platform. To understand what that means we first need to understand some of the limitations of using a standalone containerization platform such as [Docker](https://en.wikipedia.org/wiki/Docker_(software)).
+[Kubernetes](https://en.wikipedia.org/wiki/Kubernetes) can be described as container orchestrator. To understand what that means we first need to understand some of the limitations of using a standalone containerization platform such as [Docker](https://en.wikipedia.org/wiki/Docker_(software)).
 
 [Spring Boot](https://en.wikipedia.org/wiki/Spring_Framework#Spring_Boot) is a popular Java framework for rapid application development which does much of the heavy lifting associated with modern software. So much so that it is possible to illustrate a key benefit of container orchestration in Spring Boot without writing any code whatsoever. We are going to build a web application which can be terminated by invoking its `/shutdown` endpoint.
 
