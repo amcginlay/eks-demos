@@ -45,7 +45,7 @@ From **another terminal session**, invoke the `/shutdown` endpoint
 curl -X POST http://localhost:8080/actuator/shutdown
 ```
 
-You will see the response "**Shutting down, bye...**". The application has now terminated and the prompt in the first terminal window is back. The `/shutdown` request was successful.
+You will see the response "**Shutting down, bye...**". The application has now terminated and the prompt in the first terminal window has returned. The `/shutdown` request was successful.
 
 With the Dockerfile in place we can containerize and run the app as follows.
 ```bash
