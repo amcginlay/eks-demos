@@ -93,6 +93,6 @@ We no longer need this particular deployment so delete it.
 kubectl delete deployment boot-orch
 ```
 
-Do not delete any further deployments. We will need them later.
+Do not delete the previous `php-echo` deployment. We will need that later.
 
 [Return To Main Menu](/README.md)
