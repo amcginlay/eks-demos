@@ -75,14 +75,14 @@ docker images
 docker push ${boot_orch_repo}:1.0.0
 ```
 
-Use `kubectl create deployment` to deploy the app from ECR to Kubernetes.
+Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and confirm it is running
 ```bash
 kubectl create deployment boot-orch --image ${boot_orch_repo}:1.0.0
+sleep 10 && kubectl get deployments,pods -o wide
 ```
 
 Exec into the first pod to invoke the `/shudown` endpoint.
 ```bash
-sleep 10 && kubectl get deployments,pods -o wide
 kubectl exec -it $(kubectl get pods -l app=boot-orch -o jsonpath='{.items[0].metadata.name}') -- ash -c "apk add curl; curl -X POST http://localhost:8080/actuator/shutdown"
 sleep 10 && kubectl get deployments,pods -o wide
 ```
