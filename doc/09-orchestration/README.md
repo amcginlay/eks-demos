@@ -76,6 +76,18 @@ docker images
 docker push ${boot_orch_repo}:1.0.0
 ```
 
-The EKS cluster can now locate this image by its tag
+Use `kubectl create deployment` to deploy the app from ECR to Kubernetes.
+```bash
+kubectl create deployment boot-orch --image ${boot_orch_repo}:1.0.0
+```
+
+Exec into the first pod to invoke the `/shudown` endpoint.
+```bash
+sleep 10 && kubectl get deployments,pods -o wide
+kubectl exec -it $(kubectl get pods -l app=boot-orch -o jsonpath='{.items[0].metadata.name}') -- ash -c "apk add curl; curl -X POST http://localhost:8080/actuator/shutdown"
+sleep 10 && kubectl get deployments,pods -o wide
+```
+
+Unlike Docker, observe that when we invoke the `/shutdown` endpoint hosted in Kubernetes, after a few seconds, the container is restarted. The number of times this happens per pod is tracked by the RESTARTS attributes. Container restarts are a typical feature of container orchestrators.
 
 [Return To Main Menu](/README.md)
