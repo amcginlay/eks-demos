@@ -1,4 +1,4 @@
-# NodePort Services - because workloads outside the cluster need to talk to pods
+# K8s NodePort Services - because workloads outside the cluster need to talk to pods
 
 Upgrade to a NodePort service which also makes deployment accessible via ANY worker node, then check the services.
 ```bash
