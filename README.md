@@ -9,4 +9,4 @@ A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazo
 * [06. Build A Container Image](doc/06-build-container-image/README.md)
 * [07. Push Container Image To ECR](doc/07-push-to-ecr/README.md)
 * [08. Deploy From ECR To Kubernetes](doc/08-deploy-to-k8s/README.md)
-* [09. Orchestration](doc/09-orchestration/README.md) - balancing that which is desired against that which exists
+* [09. Orchestration](doc/09-orchestration/README.md) - balancing desired against actual
