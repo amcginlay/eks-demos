@@ -34,7 +34,7 @@ endpoints.shutdown.enabled=true
 EOF
 ```
 
-When we build and run the application, the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a prompt. Running the application will take a couple of minutes on the first attempt. Look for a response like "**Started OrchestrationApplication**" to know that your app is running.
+When we build and run the application, the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a prompt. Running the application will take a couple of minutes on the first attempt. Look for a response like "**Started BootOrchApplication**" to know that your app is running.
 ```bash
 cd ~/environment/eks-demos/src/boot-orch/
 ./gradlew build && java -jar ./build/libs/boot-orch-0.0.1-SNAPSHOT.jar
