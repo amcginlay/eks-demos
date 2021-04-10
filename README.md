@@ -16,5 +16,5 @@ A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazo
 * [10. K8s NodePort Services](doc/10-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
 * [11. K8s LoadBalancer Services](doc/11-loadbalancer-services/README.md) - because the world outside needs to talk to our cluster
 
-## Standalone Topics
+## Extension Topics
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
