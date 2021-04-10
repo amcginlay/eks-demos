@@ -1,7 +1,7 @@
 # eks-demos
 A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
 
-# Main Topics
+## Main Topics
 * [01. Create Cloud9 (EC2) Environment](doc/01-cloud9/README.md)
 * [02. Set Variables](doc/02-set-variables/README.md)
 * [03. Configure Client Tools](doc/03-client-tools/README.md)
@@ -12,5 +12,5 @@ A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazo
 * [08. Deploy From ECR To Kubernetes](doc/08-deploy-to-k8s/README.md)
 * [09. ClusterIP Services](doc/09-clusterip-services/README.md) - because pods need to talk to each other
 
-# Optional Topics
+## Optional Topics
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
