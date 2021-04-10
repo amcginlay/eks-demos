@@ -9,9 +9,9 @@ Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and sca
 ```bash
 kubectl create deployment ${EKS_APP_NAME} --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 kubectl set resources deployment ${EKS_APP_NAME} --requests=cpu=200m # set a reasonable resource allocation (for scaling)
-sleep 10 && kubectl get deployments,pods -o wide                           # one deployment, one pod
+sleep 10 && kubectl get deployments,pods -o wide                     # one deployment, one pod
 kubectl scale deployment ${EKS_APP_NAME} --replicas 3
-kubectl get deployments,pods -o wide                           # one deployment, three pods
+kubectl get deployments,pods -o wide                                 # one deployment, three pods
 ```
 
 Exec into the first pod to perform curl test.
