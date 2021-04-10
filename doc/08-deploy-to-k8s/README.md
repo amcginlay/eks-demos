@@ -19,4 +19,6 @@ Exec into the first pod to perform curl test.
 kubectl exec -it $(kubectl get pods -l app=${EKS_APP_NAME} -o jsonpath='{.items[0].metadata.name}') -- curl localhost:80
 ```
 
+Do not delete this deployment. We will need it later.
+
 [Return To Main Menu](/README.md)
