@@ -81,7 +81,7 @@ kubectl create deployment boot-orch --image ${boot_orch_repo}:1.0.0
 sleep 10 && kubectl get deployments,pods -o wide
 ```
 
-Exec into the first pod to invoke the `/shudown` endpoint.
+Exec into the pod to invoke the `/shudown` endpoint.
 ```bash
 kubectl exec -it $(kubectl get pods -l app=boot-orch -o jsonpath='{.items[0].metadata.name}') -- ash -c "apk add curl; curl -X POST http://localhost:8080/actuator/shutdown"
 sleep 10 && kubectl get deployments,pods -o wide
