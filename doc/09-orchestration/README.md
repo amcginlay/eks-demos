@@ -53,14 +53,13 @@ docker build -t boot-orch ~/environment/eks-demos/src/boot-orch/
 docker run --detach --rm -p 8081:8080 boot-orch
 ```
 
-This time the app is running detached inside Docker so the command prompt remains available. Confirm the container instance is running, then hit the `/shutdown` endpoint and confirm it was terminated. This proves that Docker alone cannot protect us from process termination.
+This time the app is running detached inside Docker so the command prompt remains available. Confirm the container instance is running, then hit the `/shutdown` endpoint and confirm it was terminated.
 ```bash
 docker ps                                     # container running?
 curl -X POST localhost:8081/actuator/shutdown
 docker ps                                     # container dead?
 ```
-
-Create target ECR repo, deleting it first if needed, then push the Docker image to ECR repository
+This proves that Docker alone cannot protect us from process termination so we now turn our attention to Kubernetes. Create a target ECR repo, deleting it first if needed, then push the Docker image to ECR repository
 ```bash
 aws ecr delete-repository --repository-name boot-orch --force >/dev/null 2>&1
 boot_orch_repo=$(aws ecr create-repository \
