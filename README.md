@@ -10,3 +10,4 @@ A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazo
 * [07. Push Container Image To ECR](doc/07-push-to-ecr/README.md)
 * [08. Deploy From ECR To Kubernetes](doc/08-deploy-to-k8s/README.md)
 * [09. Orchestration](doc/09-orchestration/README.md) - balancing desired against actual
+* [10. ClusterIP Services](doc/10-clusterip-services/README.md) - because pods need to talk to each other
