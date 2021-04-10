@@ -8,9 +8,8 @@ Our first step is to use [Spring Initializr](https://start.spring.io/) - a web a
 
 The required dependencies, which combine to provide the features needed, are **Web** and **Actuator**. Check the documentation to learn more about the [Actuator](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) dependency.
 
-From the Cloud9 terminal, invoke Spring Initializr to construct a [Gradle](https://en.wikipedia.org/wiki/Gradle) project with the required dependencies, then unzip the results.
+If you followed the previous steps a directory for the source code will have already been cloned onto your Cloud9 instance. Confirm that the `~/environment/eks-demos/src/boot-orch` directory exists and contains a single file named `Dockerfile`. From the Cloud9 terminal, invoke Spring Initializr to construct a [Gradle](https://en.wikipedia.org/wiki/Gradle) project with the required dependencies, then unzip the results which will appear alongside the `Dockerfile`.
 ```bash
-mkdir ~/environment/eks-demos/src/boot-orch
 curl https://start.spring.io/starter.zip \
   -d type=gradle-project \
   -d language=java \
@@ -24,7 +23,7 @@ curl https://start.spring.io/starter.zip \
   -d dependencies=web,actuator \
   -o ~/environment/eks-demos/src/boot-orch/app.zip
 unzip ~/environment/eks-demos/src/boot-orch/app.zip -d ~/environment/eks-demos/src/boot-orch/
-``` 
+```
 
 For security reasons the Actuator's `/shutdown` endpoint is disabled by default. Re-enable it by updating the `application.properties` configuration file as follows.
 ```bash
@@ -35,7 +34,7 @@ endpoints.shutdown.enabled=true
 EOF
 ```
 
-When we build and run the application the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a prompt. Running the application will take a couple of minutes on the first attempt. Look for a response like "**Started OrchestrationApplication**" to know that your app is running.
+When we build and run the application, the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a prompt. Running the application will take a couple of minutes on the first attempt. Look for a response like "**Started OrchestrationApplication**" to know that your app is running.
 ```bash
 cd ~/environment/eks-demos/src/boot-orch/
 ./gradlew build && java -jar ./build/libs/boot-orch-0.0.1-SNAPSHOT.jar
@@ -48,19 +47,13 @@ curl -X POST http://localhost:8080/actuator/shutdown
 
 You will see the response "Shutting down, bye...". The application has now terminated and the prompt in the first terminal window is back. The `/shutdown` request was successful.
 
-We need to containerize this app, so create a Dockerfile then build our container and run it.
+With the Dockerfile in place we can containerize and run the app as follows.
 ```bash
-cat > ~/environment/eks-demos/src/boot-orch/Dockerfile << EOF
-FROM adoptopenjdk/openjdk11:alpine-jre
-COPY build/libs/*.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
-EOF
-
 docker build -t boot-orch ~/environment/eks-demos/src/boot-orch/
 docker run --detach --rm -p 8081:8080 boot-orch
 ```
 
-Confirm the container instance is running, hit the `/shutdown` endpoint, then confirm it was terminated. This proves that Docker alone cannot protect us from process termination.
+This time the app is running detached inside Docker so the command prompt remains available. Confirm the container instance is running, then hit the `/shutdown` endpoint and confirm it was terminated. This proves that Docker alone cannot protect us from process termination.
 ```bash
 docker ps                                     # container running?
 curl -X POST localhost:8081/actuator/shutdown
