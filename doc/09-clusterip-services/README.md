@@ -7,7 +7,7 @@ NOTE we are positioning nginx as the equivalent of jumpbox - we will use it to g
 ```bash
 kubectl create deployment nginx --image nginx
 kubectl get deployments,pods -o wide                           # two deployments, four pods
-kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- curl localhost:80
+sleep 5 && kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- curl localhost:80
 ```
 
 Introduce ClusterIP service (NOTE we remote into nginx here to demonstrate pod-to-pod communication).
