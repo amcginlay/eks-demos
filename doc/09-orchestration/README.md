@@ -1,4 +1,4 @@
-# Orchestration - balancing desired against actual
+# Orchestration - balancing desired against actual (optional)
 
 [Kubernetes](https://en.wikipedia.org/wiki/Kubernetes) can be described as container orchestrator. To understand what that means we first need to understand some of the limitations of using a standalone containerization platform such as [Docker](https://en.wikipedia.org/wiki/Docker_(software)).
 
