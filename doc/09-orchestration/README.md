@@ -10,7 +10,7 @@ The required dependencies, which combine to provide the features needed, are **W
 
 From the Cloud9 terminal, invoke Spring Initializr to construct a [Gradle](https://en.wikipedia.org/wiki/Gradle) project with the required dependencies, then unzip the results.
 ```bash
-mkdir ~/environment/eks-demos/src/orchestration
+mkdir ~/environment/eks-demos/src/boot-orch
 curl https://start.spring.io/starter.zip \
   -d type=gradle-project \
   -d language=java \
@@ -18,17 +18,17 @@ curl https://start.spring.io/starter.zip \
   -d packaging=jar \
   -d jvmVersion=11 \
   -d groupId=com.eks \
-  -d artifactId=orchestration \
-  -d name=orchestration \
-  -d packageName=com.eks.orchestration \
+  -d artifactId=boot-orch \
+  -d name=boot-orch \
+  -d packageName=com.eks.boot-orch \
   -d dependencies=web,actuator \
-  -o ~/environment/eks-demos/src/orchestration/orchestration.zip
-unzip ~/environment/eks-demos/src/orchestration/orchestration.zip -d ~/environment/eks-demos/src/orchestration/
+  -o ~/environment/eks-demos/src/boot-orch/app.zip
+unzip ~/environment/eks-demos/src/boot-orch/app.zip -d ~/environment/eks-demos/src/boot-orch/
 ``` 
 
 For security reasons the Actuator's `/shutdown` endpoint is disabled by default. Re-enable it by updating the `application.properties` configuration file as follows.
 ```bash
-cat > ~/environment/eks-demos/src/orchestration/src/main/resources/application.properties << EOF
+cat > ~/environment/eks-demos/src/boot-orch/src/main/resources/application.properties << EOF
 management.endpoints.web.exposure.include=*
 management.endpoint.shutdown.enabled=true
 endpoints.shutdown.enabled=true
@@ -37,8 +37,8 @@ EOF
 
 When we build and run the application the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a prompt. Running the application will take a couple of minutes on the first attempt. Look for a response like "**Started OrchestrationApplication**" to know that your app is running.
 ```bash
-cd ~/environment/eks-demos/src/orchestration/
-./gradlew build && java -jar ./build/libs/orchestration-0.0.1-SNAPSHOT.jar
+cd ~/environment/eks-demos/src/boot-orch/
+./gradlew build && java -jar ./build/libs/boot-orch-0.0.1-SNAPSHOT.jar
 ```
 
 From **another terminal session**, invoke the `/shutdown` endpoint
@@ -50,15 +50,14 @@ You will see the response "Shutting down, bye...". The application has now termi
 
 We need to containerize this app, so create a Dockerfile then build our container and run it.
 ```bash
-cat > ~/environment/eks-demos/src/orchestration/Dockerfile << EOF
+cat > ~/environment/eks-demos/src/boot-orch/Dockerfile << EOF
 FROM adoptopenjdk/openjdk11:alpine-jre
-ARG JAR_FILE=target/*.jar
-COPY \${JAR_FILE} app.jar
+COPY build/libs/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EOF
 
-docker build --build-arg JAR_FILE=build/libs/\*.jar -t orchestration ~/environment/eks-demos/src/orchestration/
-docker run --detach --rm -p 8081:8080 orchestration
+docker build -t boot-orch ~/environment/eks-demos/src/boot-orch/
+docker run --detach --rm -p 8081:8080 boot-orch
 ```
 
 Confirm the container instance is running, hit the `/shutdown` endpoint, then confirm it was terminated. This proves that Docker alone cannot protect us from process termination.
