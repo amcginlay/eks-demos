@@ -73,7 +73,6 @@ boot_orch_repo=$(aws ecr create-repository \
 )
 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${boot_orch_repo}
 docker tag boot-orch:latest ${boot_orch_repo}:1.0.0
-docker images
 docker push ${boot_orch_repo}:1.0.0
 ```
 
