@@ -86,7 +86,7 @@ kubectl exec -it $(kubectl get pods -l app=boot-orch -o jsonpath='{.items[0].met
 sleep 10 && kubectl get deployments,pods -o wide
 ```
 
-Observe that, unlike Docker, when we invoke the `/shutdown` endpoint hosted in Kubernetes, after a few seconds, the container is restarted. The RESTARTS attribute tracks how many times this occurs. Automated restarts are a typical feature of container orchestrators. They also support horizontal scaling of the compute resources which protects against failure of an entire instance as well as individual container failure.
+Observe that, unlike Docker, when we invoke the `/shutdown` endpoint hosted in Kubernetes the container is restarted. The RESTARTS attribute tracks how many times this occurs. Automated restarts are a typical feature of container orchestrators. They also support horizontal scaling of the compute resources which protects against failure of an entire instance as well as individual container failure.
 
 We no longer need this deployment so delete it.
 ```bash
