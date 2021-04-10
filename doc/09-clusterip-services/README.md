@@ -1,4 +1,4 @@
-# ClusterIP Services - because pods need to talk to each other
+# K8s ClusterIP Services - because pods need to talk to each other
 
 This section assumes that the `php-echo` app is deployed and scaled to 3 instances.
 
