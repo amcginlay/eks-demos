@@ -60,11 +60,22 @@ curl -X POST localhost:8081/actuator/shutdown
 docker ps                                     # container dead?
 ```
 
-Upload this container image to ECR.
+Create target ECR repo, deleting it first if needed, then push the Docker image to ECR repository
 ```bash
-...
+aws ecr delete-repository --repository-name boot-orch --force >/dev/null 2>&1
+boot_orch_repo=$(aws ecr create-repository \
+  --repository-name boot-orch \
+  --region ${AWS_DEFAULT_REGION} \
+  --image-scanning-configuration scanOnPush=true \
+  --query 'repository.repositoryUri' \
+  --output text \
+)
+aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${boot_orch_repo}
+docker tag boot-orch:latest ${boot_orch_repo}:1.0.0
+docker images
+docker push ${boot_orch_repo}:1.0.0
 ```
 
-... TODO
+The EKS cluster can now locate this image by its tag
 
 [Return To Main Menu](/README.md)
