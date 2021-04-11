@@ -20,18 +20,6 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install gradle
 rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm
 
-# ... plus a custom script to simplify remote calls to the EKS worker nodes via SSM
-cat > ./ssm-exec << EOF
-#!/bin/bash
-worker_node_instance_id=\$1
-command=\$2
-command_id=\$(aws ssm send-command --instance-ids \${worker_node_instance_id} --document-name "AWS-RunShellScript" --parameters commands="\${command}" --output text --query Command.CommandId)
-aws ssm wait command-executed --instance-id \${worker_node_instance_id} --command-id \${command_id}
-aws ssm list-command-invocations --instance-id \${worker_node_instance_id} --command-id \${command_id} --details --output text --query CommandInvocations[0].CommandPlugins[0].Output
-EOF
-chmod +x ./ssm-exec
-sudo mv ./ssm-exec /usr/local/bin/ssm-exec
-
 # finally, install the kubectl neat add-on (https://krew.sigs.k8s.io/docs/user-guide/setup/install/ | https://github.com/itaysk/kubectl-neat)
 (
   set -x; cd "$(mktemp -d)" &&
@@ -47,7 +35,7 @@ kubectl krew install neat
 
 Verify the installs worked.
 ```bash
-which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle ssm-exec
+which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle
 ```
 
 Each Cloud9 instance has the [Docker](https://en.wikipedia.org/wiki/Docker_(software)) daemon installed with a set of images pre-loaded. Remove them as they are not required.
