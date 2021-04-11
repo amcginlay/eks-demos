@@ -74,19 +74,21 @@ docker tag boot-orch:latest ${boot_orch_repo}:1.0.0
 docker push ${boot_orch_repo}:1.0.0
 ```
 
-Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and confirm it is running
+Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and confirm it is running.
 ```bash
 kubectl create deployment boot-orch --image ${boot_orch_repo}:1.0.0
 sleep 10 && kubectl get deployments,pods -o wide
 ```
 
-Exec into the pod to invoke the `/shudown` endpoint.
+At this point we have instructed Kubernetes to run a single pod instance. It has made a comparison between actual versus desired states and taken steps to match the actual number of running pods (previously zero) with the desired number (one). This is not a one-off activity. Kubernetes is under instruction to constantly monitor the actual number of running pods and take the appropriate action, whether that be addition or subtraction.
+
+To prove the point, exec into the pod to invoke the local `/shudown` endpoint.
 ```bash
 kubectl exec -it $(kubectl get pods -l app=boot-orch -o jsonpath='{.items[0].metadata.name}') -- ash -c "apk add curl; curl -X POST http://localhost:8080/actuator/shutdown"
 sleep 10 && kubectl get deployments,pods -o wide
 ```
 
-Observe that, unlike Docker, when we invoke the `/shutdown` endpoint hosted in Kubernetes the container is restarted. The RESTARTS attribute tracks how many times this occurs. Automated restarts are a typical feature of container orchestrators. They also support horizontal scaling of the compute resources which protects against failure of an entire instance as well as individual container failure.
+Observe that, unlike Docker, when we invoke the `/shutdown` endpoint hosted in Kubernetes the container is restarted. The pod-level **RESTARTS** attribute tracks how many times this occurs. Automated restarts are a typical feature of container orchestrators. They also support horizontal scaling of the compute resources which protects against failure of an entire instance in addition to individual container failure as shown when we invoked the `/shudown` endpoint.
 
 We no longer need this particular deployment so delete it.
 ```bash
