@@ -4,11 +4,11 @@
 
 [Spring Boot](https://en.wikipedia.org/wiki/Spring_Framework#Spring_Boot) is a popular Java framework for rapid application development which does much of the heavy lifting associated with modern software. So much so that it is possible to illustrate a key benefit of container orchestration in Spring Boot without writing any code whatsoever. We are going to build a web application which can be terminated by invoking its `/shutdown` endpoint.
 
-Our first step is to use [Spring Initializr](https://start.spring.io/), an online tool which automates the construction of ready-to-roll Spring Boot application code. This code is downloaded as a zipfile and gives the developer a well defined starting position. Whilst it is common to use Spring Initializr from a web browser, it is equally easy to invoke it from the command line.
+Our first step is to use [Spring Initializr](https://start.spring.io/), an online tool which automates the construction of ready-to-roll Spring Boot application code. This will leverage the [Gradle](https://en.wikipedia.org/wiki/Gradle) build tool but support is provided for Maven if you prefer. This resultant code is downloaded as a zipfile and gives the developer a well defined starting position. Whilst it is common to use Spring Initializr from a web browser, it is equally easy to invoke it from the command line.
 
 The Spring Boot dependencies required to provide the features needed are **Web**, which embeds a [Tomcat](http://tomcat.apache.org/) web server, and **Actuator**. Check the documentation to learn more about the [Actuator](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready) dependency.
 
-If you followed the previous steps a directory for the source code will have already been cloned onto your Cloud9 instance. Confirm that the `~/environment/eks-demos/src/boot-orch` directory exists and contains a single file named `Dockerfile`. From the Cloud9 terminal, invoke Spring Initializr to construct a [Gradle](https://en.wikipedia.org/wiki/Gradle) project with the required code and dependencies, then unzip the results which will appear alongside the `Dockerfile`.
+If you followed the previous steps a directory for the source code will have already been cloned onto your Cloud9 instance. Confirm that the `~/environment/eks-demos/src/boot-orch` directory exists and contains a single file named `Dockerfile`. From the Cloud9 terminal, invoke Spring Initializr to construct a Gradle project with the required code and dependencies, then unzip the results which will appear alongside the `Dockerfile`.
 ```bash
 curl https://start.spring.io/starter.zip \
   -d type=gradle-project \
