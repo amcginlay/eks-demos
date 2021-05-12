@@ -13,7 +13,7 @@ sleep 5 && kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items
 Introduce ClusterIP service (NOTE we remote into nginx here to demonstrate pod-to-pod communication).
 This fails, because no such service exists yet ...
 ```bash
-kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- curl ${EKS_APP_NAME}:80                                        # <---- FAILURE
+kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 kubectl get services                                           # our service should not currently exist so delete if present
 kubectl expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
 kubectl get services
@@ -21,7 +21,8 @@ kubectl get services
 
 Now pods can reach each other via services.
 ```bash
-kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80; done" # <---- SUCCESS ctrl+c to quit loop
+kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80; done"
+# ctrl+c to quit loop
 ```
 
 [Return To Main Menu](/README.md)
