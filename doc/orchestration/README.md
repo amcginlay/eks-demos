@@ -59,7 +59,7 @@ docker ps                                     # container running?
 curl -X POST localhost:8081/actuator/shutdown
 docker ps                                     # container dead?
 ```
-This proves that Docker alone cannot protect us from process termination so we now turn our attention to Kubernetes. Create a target ECR repo, deleting it first if needed, then push the Docker image to ECR repository
+This proves that Docker alone cannot protect us from process termination so we now turn our attention to Kubernetes. Create a target ECR repo, deleting it first if needed, then push the Docker image to ECR repository.
 ```bash
 aws ecr delete-repository --repository-name boot-orch --force >/dev/null 2>&1
 boot_orch_repo=$(aws ecr create-repository \
