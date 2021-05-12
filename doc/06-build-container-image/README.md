@@ -13,7 +13,7 @@ Build the Dockerfile for this application locally from a template. The following
 envsubst < ~/environment/eks-demos/src/php-echo/Dockerfile.template > ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
 
-Assume docker local install (Cloud9) - keep it neat, kill everything Cloud9 puts imn there by default.
+Assume docker local install (Cloud9) - keep it neat, kill everything Cloud9 puts in there by default.
 ```bash
 for i in $(docker ps -q); do docker kill $i; done
 docker system prune --all --force
