@@ -53,7 +53,7 @@ docker build -t boot-orch ~/environment/eks-demos/src/boot-orch/
 docker run --detach --rm -p 8081:8080 boot-orch
 ```
 
-This time the app is running detached inside Docker so the command prompt remains available. Confirm the container instance is running, then hit the `/shutdown` endpoint and confirm it was terminated.
+This time the app is running detached inside Docker so the command prompt remains available. In the code snippet which follows, we confirm the container instance is running, then hit the `/shutdown` endpoint before finally confirming it was terminated.
 ```bash
 docker ps                                     # container running?
 curl -X POST localhost:8081/actuator/shutdown
