@@ -13,7 +13,7 @@ Construct the Dockerfile for this application locally from a template. The follo
 envsubst < ~/environment/eks-demos/src/php-echo/Dockerfile.template > ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
 
-Each Cloud9 instance has the Docker daemon installed. Build the docker image from the Cloud9 terminal to run a container instance
+Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the containerized PHP app.
 ```bash
 docker build -t ${EKS_APP_NAME} ~/environment/eks-demos/src/${EKS_APP_NAME}/
 docker images                                                       # see what you produced
