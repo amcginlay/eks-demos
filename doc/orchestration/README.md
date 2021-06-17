@@ -30,7 +30,7 @@ Familiarize yourself with the structure of the unzipped contents which includes 
 tree ~/environment/eks-demos/src/boot-orch/
 ```
 
-Take a closer look at the app's only class which, for now, is all that's required to launch our Spring Boot app.
+Take a closer look at the app's only piece of Java code which, for now, is all that's required to launch our Spring Boot app.
 ```
 cat ~/environment/eks-demos/src/boot-orch/src/main/java/com/eks/bootorch/BootOrchApplication.java
 ```
