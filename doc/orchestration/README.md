@@ -57,7 +57,7 @@ curl -X POST http://localhost:8080/actuator/shutdown
 
 You will see the response "**Shutting down, bye...**". The application has now terminated and the prompt in the first terminal window has returned. The `/shutdown` request was successful.
 
-With the Dockerfile in place (NOTE this was sourced from Github before we unzipped our app) we can containerize and run the app as follows.
+With the Dockerfile in place (this was sourced from Github before we unzipped our app) we can containerize and run the app as follows.
 ```bash
 docker build -t boot-orch ~/environment/eks-demos/src/boot-orch/
 docker run --detach --rm -p 8081:8080 boot-orch
