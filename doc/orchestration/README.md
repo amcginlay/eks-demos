@@ -44,13 +44,13 @@ endpoints.shutdown.enabled=true
 EOF
 ```
 
-Building and running the application will take a couple of minutes on the first attempt. Look out for a response like "**Started BootOrchApplication**" to know that your app is running. Once running, the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a user prompt. 
+Building and running the application will take a couple of minutes on the first attempt. Look out for a response like "**Started BootOrchApplication**" to know that your app is running.
 ```bash
 cd ~/environment/eks-demos/src/boot-orch/
 ./gradlew clean bootJar && java -jar ./build/libs/*.jar
 ```
 
-From **another terminal session**, invoke the `/shutdown` endpoint
+Once running, the Cloud9 terminal will begin tailing [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout)) and will not return a user prompt so, from **another terminal session**, invoke the `/shutdown` endpoint
 ```bash
 curl -X POST http://localhost:8080/actuator/shutdown
 ```
