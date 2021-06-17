@@ -8,7 +8,7 @@ As you do so, observe that the recorded value of **ec2IP** is equivalent to **lo
 
 NOTE the use of **169.254.169.254** within [eks-demos/src/php-echo/index.php](/src/php-echo/index.php) is an indication that our app is tailor-made for deployment on EC2 instances.
 
-Build the Dockerfile for this application locally from a template. The following command resolves the **VERSION** variable which we need to track.
+Construct the Dockerfile for this application locally from a template. The following command initializes the **VERSION** variable which we want to track.
 ```bash
 envsubst < ~/environment/eks-demos/src/php-echo/Dockerfile.template > ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
