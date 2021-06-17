@@ -25,6 +25,13 @@ curl https://start.spring.io/starter.zip \
 unzip ~/environment/eks-demos/src/boot-orch/app.zip -d ~/environment/eks-demos/src/boot-orch/
 ```
 
+Familiarize yourself with the structure of the unzipped contents:
+```
+tree ~/environment/eks-demos/src/boot-orch/
+```
+
+This structure includes a bare minimum of Java code and some configuration files so Gradle knows how to build our app. Take a look at `~/environment/eks-demos/src/boot-orch/src/main/java/com/eks/bootorch/BootOrchApplication.java`. For now, that's all the code required to start our app.
+
 For security reasons the Actuator's `/shutdown` endpoint is disabled by default. Re-enable it by updating the `application.properties` configuration file as follows.
 ```bash
 cat > ~/environment/eks-demos/src/boot-orch/src/main/resources/application.properties << EOF
