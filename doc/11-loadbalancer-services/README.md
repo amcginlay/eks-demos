@@ -1,4 +1,4 @@
-# K8s LoadBalancer Services - because the world outside needs to talk to our cluster
+# K8s LoadBalancer Services - because the world needs to talk to our cluster
 
 Upgrade to a LoadBalancer service which also supports external request distribution over an AWS ELB, then check the services.
 ```bash
