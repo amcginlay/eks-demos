@@ -13,7 +13,7 @@ Construct the Dockerfile for this application from a template you cloned earlier
 envsubst < ~/environment/eks-demos/src/php-echo/Dockerfile.template > ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
 
-Inspect the resultant Dockerfile which initializes a container-scoped environemnt variable named **VERSION**.
+Inspect the resultant Dockerfile which initializes a container-scoped environment variable named **VERSION**.
 ```bash
 cat ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
