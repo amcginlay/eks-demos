@@ -8,7 +8,7 @@ As you do so, observe that the recorded value of **ec2IP** is equivalent to **lo
 
 NOTE the use of **169.254.169.254** within [eks-demos/src/php-echo/index.php](/src/php-echo/index.php) is an indication that our app is tailor-made for deployment on EC2 instances.
 
-Construct the Dockerfile for this application locally from a template.
+Construct the Dockerfile for this application from a template you cloned earlier. If you've not seen `envsubst` before, see [here](https://stackoverflow.com/questions/14155596/how-to-substitute-shell-variables-in-complex-text-files)
 ```bash
 envsubst < ~/environment/eks-demos/src/php-echo/Dockerfile.template > ~/environment/eks-demos/src/php-echo/Dockerfile
 ```
