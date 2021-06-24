@@ -3,7 +3,7 @@
 This section assumes that the `php-echo` app is deployed and scaled to 3 instances.
 
 Create a second deployment (nginx) for ClusterIP demo purposes.
-NOTE we are positioning nginx as the equivalent of jumpbox - we will use it to gain "private" access to our app
+NOTE we are positioning our nginx deployment as a form of jumpbox - we will use it to gain "private" access to our app
 ```bash
 kubectl create deployment nginx --image nginx
 kubectl get deployments,pods -o wide                           # two deployments, four pods
