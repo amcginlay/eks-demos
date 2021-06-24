@@ -35,7 +35,7 @@ Take a look at the `BootOrchApplication` class file. For now, this short block o
 cat ~/environment/eks-demos/src/boot-orch/src/main/java/com/eks/bootorch/BootOrchApplication.java
 ```
 
-For security reasons Spring Boot Actuator's `/shutdown` endpoint is disabled by default. Re-enable it by updating the `application.properties` configuration file as follows.
+For security reasons Spring Boot's `/actuator/shutdown` endpoint is disabled by default. Re-enable it by updating the `application.properties` configuration file as follows.
 ```bash
 cat > ~/environment/eks-demos/src/boot-orch/src/main/resources/application.properties << EOF
 management.endpoints.web.exposure.include=*
