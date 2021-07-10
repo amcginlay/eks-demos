@@ -1,6 +1,6 @@
 # Set Variables
 
-Prepare your EC2 variables file.
+For the terminal window of your Cloud9 environment, prepare your EC2 variables file.
 
 ```bash
 cat > ~/.env << EOF
