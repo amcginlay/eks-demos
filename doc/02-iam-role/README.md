@@ -2,7 +2,7 @@
 
 NOTE: these instructions currently assume that you are logged on to the AWS console as a sufficiently privileged IAM User, *not* an assumed IAM Role. This limitation will be addressed at a later date.
 
-Your EKS cluster we be built with an appropriatelky permissioned EC2 instance in the form of a Cloud9 development environment. The purpose of this section is to ensure that you have an appropriate IAM role available for the instance to assume. As the creation of the role, named `Role-EC2-EKSClusterAdmin`, is a one-time requirement it may first be advisable to check if an instance profile for that role already exists.
+Your EKS cluster we be built with an appropriately permissioned EC2 instance in the form of a Cloud9 development environment. The purpose of this section is to ensure that you have an appropriate IAM role available for the instance to assume. As the creation of the role, named `Role-EC2-EKSClusterAdmin`, is a one-time requirement it may first be advisable to check if an instance profile for that role already exists.
 ```bash
 if aws iam get-instance-profile --instance-profile-name Role-EC2-EKSClusterAdmin 2&>1 > /dev/null
 then
