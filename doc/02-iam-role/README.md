@@ -32,7 +32,7 @@ cat > ./Role-EC2-EKSClusterAdmin.trust << EOF
 }
 EOF
 aws iam create-instance-profile --instance-profile-name Role-EC2-EKSClusterAdmin
-aws iam create-role --role-name Role-EC2-EKSClusterAdmin --assume-role-policy-document file://Role-EC2-EKSClusterAdmin.trust
+aws iam create-role --role-name Role-EC2-EKSClusterAdmin --assume-role-policy-document file://Role-EC2-EKSClusterAdmin.trust --max-session-duration 43200
 aws iam add-role-to-instance-profile --instance-profile-name Role-EC2-EKSClusterAdmin --role-name Role-EC2-EKSClusterAdmin
 aws iam attach-role-policy --role-name Role-EC2-EKSClusterAdmin --policy-arn ${admin_policy_arn}
 ```
