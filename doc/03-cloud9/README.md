@@ -1,6 +1,6 @@
 # Create Cloud9 (EC2) Environment
 
-Create your Cloud9 environment from the CloudShell session and associate new role with this instance
+Create your Cloud9 environment from the CloudShell session and associate `Role-EC2-EKSClusterAdmin` with this instance
 ```bash
 cluster_name=dev
 env_id=$(aws cloud9 create-environment-ec2 --name c9-eks-${cluster_name} --instance-type m5.large --image-id amazonlinux-2-x86_64 --query "environmentId" --output text)
