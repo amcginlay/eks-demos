@@ -1,4 +1,4 @@
-# Configure required IAM permissions
+# Configure Required IAM Permissions
 
 NOTE: these instructions currently assume that you are logged on to the AWS console as a sufficiently privileged IAM User, *not* an assumed IAM Role. This limitation will be addressed at a later date.
 
