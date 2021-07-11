@@ -1,7 +1,6 @@
 # Set Variables
 
-From a terminal window inside your Cloud9 environment, prepare your EC2 variables file.
-
+From a terminal session inside your Cloud9 environment, prepare your EC2 variables file:
 ```bash
 cat > ~/.env << EOF
 export AWS_ACCOUNT_ID=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep accountId|awk -F\" '{print $4}')
@@ -18,8 +17,7 @@ export EKS_APP_ECR_REPO=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaw
 EOF
 ```
 
-Ensure these variables get set into every bash session then set the variables into your current shell so we can use them immediately.
-
+Ensure these variables get set into every bash session then set the variables into your current shell so we can use them immediately:
 ```bash
 echo "source ~/.env" >> ~/.bashrc
 source ~/.env
