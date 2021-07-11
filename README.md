@@ -2,8 +2,8 @@
 A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
 
 ## Setup
-* [01. Prepare your CloudShell environment](doc/01-cloudshell/README.md)
-* [02. Configure required IAM permissions](doc/02-iam-role/README.md)
+* [01. Prepare Your CloudShell Environment](doc/01-cloudshell/README.md)
+* [02. Configure Required IAM Permissions](doc/02-iam-role/README.md)
 * [03. Create Cloud9 (EC2) Environment](doc/03-cloud9/README.md)
 * [04. Set Variables](doc/04-set-variables/README.md)
 * [05. Configure Client Tools](doc/05-client-tools/README.md)
