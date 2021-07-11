@@ -1,4 +1,4 @@
-# Create an IAM Role to permit creation of your EKS cluster
+# Configure required IAM permissions
 
 NOTE: these instructions currently assume that you are logged on to the AWS console as a sufficiently privileged IAM User, *not* an assumed IAM Role. This limitation will be addressed at a later date.
 
