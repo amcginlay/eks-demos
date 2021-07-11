@@ -1,5 +1,19 @@
 # Create Cloud9 (EC2) Environment
 
+Cloud9 has a feature known as "AWS managed temporary credentials". We need to disable this feature to allow the underlying EC2 instance to acknowledge its assigned IAM Role. It is not (currently) possible to programatically disable the feature however we can assign a DENY policy to the currently active principal which acheives the same aim:
+```bash
+arn=$(aws sts get-caller-identity --query Arn --output text)
+context="user"
+if grep -q assumed-role <<< ${arn}; then
+  context="role"
+fi
+principal=$(echo ${arn} | cut -d/ -f2)
+aws iam put-${context}-policy \
+  --${context}-name ${principal} \
+  --policy-name Policy-DisableCloud9Update \
+  --policy-document file://<(echo '{"Version": "2012-10-17","Statement": [{"Effect": "Deny","Action": "cloud9:UpdateEnvironment","Resource": "*"}]}')
+```
+
 Create your Cloud9 environment from the CloudShell session and associate `Role-EC2-EKSClusterAdmin` with this instance
 ```bash
 cluster_name=dev
