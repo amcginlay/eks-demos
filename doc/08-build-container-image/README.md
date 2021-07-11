@@ -6,7 +6,7 @@ The target for our first image is a simple PHP app hosted as a single file which
 Satisfy yourself that your can **run** this code inside Cloud9. To test, you can `curl http://localhost:8080/eks-demos/src/php-echo` from the Cloud9 terminal window. 
 As you do so, observe that the recorded value of **ec2IP** is equivalent to **localhostIP** within this execution environment.
 
-NOTE the use of **169.254.169.254** within [eks-demos/src/php-echo/index.php](/src/php-echo/index.php) is an indication that our app is tailor-made for deployment on EC2 instances.
+NOTE the use of [Instance Metadata](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html) **(169.254.169.254)** within [eks-demos/src/php-echo/index.php](/src/php-echo/index.php) is an indication that our app is tailor-made for deployment on EC2 instances.
 
 Construct the Dockerfile for this application from a template you cloned earlier. If you've not seen `envsubst` before, see [here](https://stackoverflow.com/questions/14155596/how-to-substitute-shell-variables-in-complex-text-files)
 ```bash
