@@ -1,6 +1,6 @@
 # Build EKS Cluster
 
-Verify we are now using the Role-EC2-EKSClusterAdmin IAM role.
+Verify that your Cloud9 environment is currently assuming the Role-EC2-EKSClusterAdmin IAM role.
 ```bash
 aws sts get-caller-identity
 ```
