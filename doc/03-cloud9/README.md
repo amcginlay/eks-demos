@@ -28,4 +28,9 @@ Execute the following command then navigate your browser to the URL produced bef
 echo "https://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}"
 ```
 
+Once inside the Cloud9 environment, run the following command to confirm the `Role-EC2-EKSClusterAdmin` IAM role is being used:
+```bash
+aws sts get-caller-identity
+```
+
 [Return To Main Menu](/README.md)
