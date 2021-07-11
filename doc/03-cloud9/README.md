@@ -1,6 +1,6 @@
 # Create Cloud9 (EC2) Environment
 
-Cloud9 has a feature known as "AWS managed temporary credentials". Before creating our Cloud9 environment we need to disable this feature which allows the underlying EC2 instance to acknowledge its assigned IAM Role. It is not (currently) possible to programatically disable this feature directly from the Cloud9 API however we can assign an inline IAM policy to the currently active principal which acheives the same aim:
+Cloud9 has a feature known as "AWS managed temporary credentials". Before creating our Cloud9 environment we need to disable this feature which allows the underlying EC2 instance to acknowledge its assigned IAM Role. It is not (currently) possible to programatically disable this feature directly from the Cloud9 API however we can assign an inline IAM policy to the currently active principal which has been proven to acheive the same aim:
 ```bash
 arn=$(aws sts get-caller-identity --query Arn --output text)
 context="user"
