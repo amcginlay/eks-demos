@@ -4,7 +4,7 @@ This EKS cluster will be created in Oregon (us-west-2) simply because it's tried
 
 Navigate to https://us-west-2.console.aws.amazon.com/cloudshell
 
-Cloudshell regularly tracks behind the latest AWS CLI so it needs updating:
+Cloudshell regularly tracks behind the latest AWS CLI so it will need updating whenever CloudShell is started:
 ```bash
 rm -rf /usr/local/bin/aws 2> /dev/null
 rm -rf /usr/local/aws-cli 2> /dev/null
