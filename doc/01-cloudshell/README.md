@@ -1,4 +1,4 @@
-# Prepare your CloudShell environment
+# Prepare Your CloudShell Environment
 
 This EKS cluster will be created in Oregon (us-west-2) simply because it's tried and tested there. Feel free to modify as appropriate. 
 
