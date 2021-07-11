@@ -1,5 +1,7 @@
 # Prepare your CloudShell environment
 
+This environment will be created in Oregon (us-west-2) simply because it's tried and tested there. Feel free to modify as appropriate. 
+
 Navigate to https://us-west-2.console.aws.amazon.com/cloudshell
 
 Update the AWS CLI.
