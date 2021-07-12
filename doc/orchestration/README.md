@@ -91,7 +91,7 @@ kubectl create deployment boot-orch --image ${boot_orch_repo}:1.0.0
 sleep 10 && kubectl get deployments,pods -o wide
 ```
 
-At this point we have instructed Kubernetes to run a single pod instance. It has made a comparison between actual versus desired states and taken steps to match the actual number of running pods (previously zero) with the desired number (one). This is not a one-off activity. Kubernetes is under instruction to constantly monitor the actual number of running pods and take the appropriate action, whether that be addition or subtraction.
+At this point we have instructed Kubernetes to run a single pod instance. It has assessed the state of its pods and taken action to match the actual number of running pods (previously zero) with the desired number (one). This is not a one-off activity. Kubernetes is under instruction to constantly monitor the actual number of running pods and take the appropriate action, whether that be addition or subtraction.
 
 To prove the point, exec into the pod to invoke the local `/shudown` endpoint.
 ```bash
