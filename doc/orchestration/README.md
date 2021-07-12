@@ -22,6 +22,7 @@ curl https://start.spring.io/starter.zip \
   -d packageName=com.eks.boot-orch \
   -d dependencies=web,actuator \
   -o ~/environment/eks-demos/src/boot-orch/app.zip
+  
 unzip ~/environment/eks-demos/src/boot-orch/app.zip -d ~/environment/eks-demos/src/boot-orch/
 ```
 
