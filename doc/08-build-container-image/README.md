@@ -37,7 +37,7 @@ Invoke the webserver from outside the container.
 curl localhost:8081                                                 # show that the corresponding EXTERNAL port is mapped to a high-order port (8081) on the c9 instance
 ```
 
-Inspect the internal network.
+If you wondered why the localhostIP now differs from the ec2IP ...
 ```bash
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet      # see why the ec2IP is no longer equivalent to the localhostIP
 ```
