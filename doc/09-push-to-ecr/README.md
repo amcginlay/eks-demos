@@ -21,6 +21,6 @@ docker images
 docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 ```
 
-The EKS cluster can now locate this image by its tag
+The EKS cluster can now locate this image by its version tag
 
 [Return To Main Menu](/README.md)
