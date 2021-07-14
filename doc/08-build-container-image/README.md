@@ -25,9 +25,25 @@ docker images                                                       # see what y
 docker ps                                                           # nothing running ...
 container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP_NAME}) # request docker to instantiate a single container as a background process
 docker ps                                                           # ... now one container running
+```
+
+Invoke the webserver from inside the container.
+```bash
 docker exec -it ${container_id} curl localhost:80                   # shell INTO that container and curl the INTERNAL port (80)
+```
+
+Invoke the webserver from outside the container.
+```bash
 curl localhost:8081                                                 # show that the corresponding EXTERNAL port is mapped to a high-order port (8081) on the c9 instance
+```
+
+Inspect the internal network.
+```bash
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet      # see why the ec2IP is no longer equivalent to the localhostIP
+```
+
+Wrap things up with Docker.
+```bash
 docker stop ${container_id}                                         # stop the container (which will be terminated because we ran it with the --rm flag)
 ```
 
