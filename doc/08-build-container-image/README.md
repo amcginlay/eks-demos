@@ -42,7 +42,7 @@ If you wondered why the localhostIP now differs from the ec2IP ...
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet
 ```
 
-We're done with Docker. Stop the container (which will be terminated because we ran it with the --rm flag).
+We're done with Docker for now so stop the container (which will be terminated because we ran it with the --rm flag).
 ```bash
 docker stop ${container_id}
 ```
