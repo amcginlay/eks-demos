@@ -17,7 +17,7 @@ kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadat
 
 Introduce the service.
 ```bash
-kubectl get services                                           # our service should not currently exist so delete if present
+kubectl get services
 kubectl expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
 kubectl get services
 ```
