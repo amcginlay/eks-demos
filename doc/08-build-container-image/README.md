@@ -29,22 +29,22 @@ docker ps                                                           # ... now on
 
 Invoke the webserver from inside the container.
 ```bash
-docker exec -it ${container_id} curl localhost:80                   # shell INTO that container and curl the INTERNAL port (80)
+docker exec -it ${container_id} curl localhost:80
 ```
 
 Invoke the webserver from outside the container.
 ```bash
-curl localhost:8081                                                 # show that the corresponding EXTERNAL port is mapped to a high-order port (8081) on the c9 instance
+curl localhost:8081
 ```
 
 If you wondered why the localhostIP now differs from the ec2IP ...
 ```bash
-docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet      # see why the ec2IP is no longer equivalent to the localhostIP
+docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet
 ```
 
-Wrap things up with Docker.
+We're done with Docker. Stop the container (which will be terminated because we ran it with the --rm flag).
 ```bash
-docker stop ${container_id}                                         # stop the container (which will be terminated because we ran it with the --rm flag)
+docker stop ${container_id}
 ```
 
 [Return To Main Menu](/README.md)
