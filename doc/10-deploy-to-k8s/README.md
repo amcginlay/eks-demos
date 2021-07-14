@@ -16,7 +16,7 @@ kubectl get deployments,pods -o wide                                 # one deplo
 
 Exec into the first pod to perform curl test.
 ```bash
-kubectl exec -it $(kubectl get pods -l app=${EKS_APP_NAME} -o jsonpath='{.items[0].metadata.name}') -- curl localhost:80
+kubectl exec -it $(kubectl get pods -l app=${EKS_APP_NAME} -o name | head -1) -- curl localhost:80
 ```
 
 Do not delete this deployment. We will need it later.
