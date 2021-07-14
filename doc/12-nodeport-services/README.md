@@ -16,7 +16,7 @@ node_port=$(kubectl get service -l app=${EKS_APP_NAME} -o jsonpath='{.items[0].s
 Worker nodes will now distribute inbound requests to underlying pods. We curl from inside the nginx pod to avoid having to update security groups w.r.t the high-order node port.
 ```bash
 echo ${worker_nodes[0]}:${node_port}
-kubectl exec -it $(kubectl get pods -l app=nginx -o jsonpath='{.items[0].metadata.name}') -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
+kubectl exec -it $(kubectl get pods -l app=nginx -o name | head -1) -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
 ```
 
 Observe the ec2IP and localhostIP changing with each of the invocations ... these requests were sent to just one of the worker nodes, yet serviced by both of them? That's netfilter/iptables at work. When pods belonging to services are started/stopped, the k8s node-proxy agent on each worker node modifies its routes, creating a kernel-level load balancer per service
