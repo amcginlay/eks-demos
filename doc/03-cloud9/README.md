@@ -23,7 +23,7 @@ echo ${instance_id}                                            # if blank, wait 
 aws ec2 associate-iam-instance-profile --instance-id ${instance_id} --iam-instance-profile Name=Role-EC2-EKSClusterAdmin
 ```
 
-Execute the following command then navigate your browser to the URL produced before exiting/closing your CloudShell session
+Execute the following command then navigate your browser to the URL it displays before exiting/closing your CloudShell session
 ```bash
 echo "https://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}"
 ```
