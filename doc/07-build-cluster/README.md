@@ -27,8 +27,7 @@ managedNodeGroups:
   - name: ng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
     spot: true
-    instanceType: t3.small
-    # instanceTypes: ["c3.small","c4.small","c5.small","c5d.small","c5n.small","c5a.small"]
+    instanceTypes: ["t3.small","t3a.small","t3g.small"]
     desiredCapacity: 2
     maxSize: 6
     ssh:
