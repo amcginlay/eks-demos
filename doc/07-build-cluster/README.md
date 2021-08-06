@@ -19,7 +19,7 @@ kind: ClusterConfig
 metadata:
   name: ${EKS_CLUSTER_NAME}
   region: ${AWS_DEFAULT_REGION}
-  version: "${K8S_VERSION}"
+  version: "${EKS_K8S_VERSION}"
 availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
 secretsEncryption:
   keyARN: ${key_metadata[1]}
