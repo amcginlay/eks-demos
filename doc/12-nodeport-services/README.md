@@ -13,7 +13,7 @@ worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.t
 node_port=$(kubectl get service -l app=${EKS_APP_NAME} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 ```
 
-Worker nodes will now distribute inbound requests to underlying pods. We curl from inside the jumpbox pod (created when we built the original ClusterIP service) to avoid having to update security groups w.r.t the high-order node port.
+Worker nodes will now distribute inbound requests to underlying pods. We `curl` from inside the jumpbox pod (created when we built the original ClusterIP service) to avoid having to update security groups in respect of the node port.
 ```bash
 echo ${worker_nodes[0]}:${node_port}
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
