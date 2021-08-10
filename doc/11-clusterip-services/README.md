@@ -3,7 +3,7 @@
 This section assumes that the `php-echo` app is deployed and scaled to 3 instances.
 
 To test ClusterIP services we first need to gain "private" access to our deployments, just as we might do with a regular EC2 jumpbox (or bastion host).
-To keep matters simple we can deploy [nginx](https://www.nginx.com) as a standalone pod which suits this purpose.
+To keep matters simple we can deploy [nginx](https://www.nginx.com) as a standalone pod which conveniently suits this purpose.
 ```bash
 kubectl run jumpbox --image=nginx
 sleep 5 && kubectl exec -it jumpbox -- curl localhost:80
