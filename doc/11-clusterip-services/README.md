@@ -2,17 +2,16 @@
 
 This section assumes that the `php-echo` app is deployed and scaled to 3 instances.
 
-Create a second deployment (nginx) for ClusterIP demo purposes.
-NOTE we will utilize our nginx deployment as a form of jumpbox, to gain "private" access to our app
+To test ClusterIP services we first need to gain "private" access to our deployments, just as we might do with a regular EC2 jumpbox (or bastion host).
+To keep matters simple we can deploy [nginx](https://www.nginx.com) as a standalone pod which suits this purpose.
 ```bash
-kubectl create deployment nginx --image nginx
-kubectl get deployments,pods -o wide                           # two deployments, four pods
-sleep 5 && kubectl exec -it $(kubectl get pods -l app=nginx -o name | head -1) -- curl localhost:80
+kubectl run jumpbox --image=nginx
+sleep 5 && kubectl exec -it jumpbox -- curl localhost:80
 ```
 
 Remote into nginx to demonstrate pod-to-pod communication ... which fails, because no such service exists yet ...
 ```bash
-kubectl exec -it $(kubectl get pods -l app=nginx -o name | head -1) -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
+kubectl exec -it jumpbox -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 ```
 
 Introduce the service.
@@ -24,7 +23,7 @@ kubectl get services
 
 Now pods can reach each other via services.
 ```bash
-kubectl exec -it $(kubectl get pods -l app=nginx -o name | head -1) -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80; done"
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80; done"
 # ctrl+c to quit loop
 ```
 
