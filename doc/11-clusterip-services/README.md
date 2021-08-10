@@ -27,9 +27,6 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80
 # ctrl+c to quit loop
 ```
 
-Terminate the jumpbox as it's not required for now
-```bash
-kubectl delete pod jumpbox
-```
+We will use the jumpbox pod again so leave it in place for now.
 
 [Return To Main Menu](/README.md)
