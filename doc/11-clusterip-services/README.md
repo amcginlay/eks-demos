@@ -14,14 +14,14 @@ Remote into nginx to demonstrate pod-to-pod communication ... which fails, becau
 kubectl exec -it jumpbox -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 ```
 
-Introduce the service.
+Introduce the service
 ```bash
 kubectl get services
 kubectl expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
 kubectl get services
 ```
 
-Now pods can reach each other via services.
+Now pods can reach each other via services
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}:80; done"
 # ctrl+c to quit loop
