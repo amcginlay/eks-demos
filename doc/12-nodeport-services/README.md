@@ -1,7 +1,7 @@
 # K8s NodePort Services - because workloads outside the cluster need to talk to pods
 
 NodePort services incorporate and extend the functionailty of the ClusterIP service.
-NodePort services provide access to the underlying ClusterIP service via a designated high-order port on every worker node.
+They provide access to the underlying ClusterIP service via a designated high-order port on every worker node.
 
 Upgrade the ClusterIP service to a NodePort service then check the services.
 ```bash
