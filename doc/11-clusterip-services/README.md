@@ -34,7 +34,8 @@ Observe the ec2IP and localhostIP changing with each of the invocations.
 These requests were sent to the jumpbox pod, which exists on just one of the worker nodes.
 However the replicas, which are spread across all the worker nodes, were all involved in servicing the requests.
 That's netfilter/iptables at work.
-When pods belonging to services are started/stopped, the k8s node-proxy agent on all worker nodes modify their routes, creating a kernel-level load balancer per service.
+When pods belonging to services are started/stopped, the k8s node-proxy agent on all worker nodes simultaneously modify their routes, creating a kernel-level load balancer per service.
+As a result, it doesn't matter which worker node receives the request, the routing behaviour is consistently well distributed.
 
 We will use the jumpbox pod again so leave it in place for now.
 
