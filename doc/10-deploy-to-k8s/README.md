@@ -1,11 +1,15 @@
 # Deploy From ECR To Kubernetes
 
+### `kubectl` manifest generation (a side note)
+
 Kubernetes objects, such as deployments, require manifests in order to be created. `kubectl` supports a number of `create` commands which can conveniently build simple objects whilst internalizing the complex detail of the manifest itself and obviating the need to have those manifests persisted to disk.
 
 `kubectl` also supports dry runs, thereby enabling those `create` commands to double-up as manifest generators. This behaviour can be observed when executing the following non-destructive command. NOTE the command also makes use of the `kubectl neat` add-on which simplifies generated manifests down to their essential elements.
 ```bash
 kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yaml | kubectl neat
 ```
+
+### Deploy our application at scale
 
 Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and scale to 3 pods.
 ```bash
