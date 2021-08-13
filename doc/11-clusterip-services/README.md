@@ -6,15 +6,18 @@ To test ClusterIP services we first need to gain "private" access to our deploym
 We can deploy [nginx](https://www.nginx.com) as a standalone pod which conveniently suits this purpose.
 ```bash
 kubectl -n ${EKS_APP_NAME} run jumpbox --image=nginx
-sleep 5 && kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- curl localhost:80 # <---- NGINX welcome page
+sleep 5 && kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- curl localhost:80 # <---- test the NGINX welcome page
 ```
 
-Remote into nginx to demonstrate pod-to-pod communication ... which fails, because no such service exists yet, therefore the private DNS lookup - which is namespace-scoped - will fail.
+Remote into nginx and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
 ```bash
 kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 ```
 
-Introduce the service.
+Upon creation, each service is allocated a long-term internal IP address which is auto-registered within namespace-scoped DNS servers.
+No service means no IP address and no DNS entry.
+
+Now we can introduce our basic ClusterIP service and test again.
 ```bash
 kubectl -n ${EKS_APP_NAME} get services
 kubectl -n ${EKS_APP_NAME} expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
