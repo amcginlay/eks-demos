@@ -9,7 +9,7 @@ kubectl -n ${EKS_APP_NAME} run jumpbox --image=nginx
 sleep 5 && kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- curl localhost:80 # <---- NGINX welcome page
 ```
 
-Remote into nginx to demonstrate pod-to-pod communication ... which fails, because no such service exists yet.
+Remote into nginx to demonstrate pod-to-pod communication ... which fails, because no such service exists yet, therefore the DNS lookup will fail.
 ```bash
 kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 ```
