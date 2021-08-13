@@ -1,5 +1,7 @@
 # K8s LoadBalancer Services - because the world needs to talk to our cluster
 
+LoadBalancer services incorporate and extend the functionailty of the NodePort service.
+
 The NodePort service solves one problem but exposes another.
 If our worker nodes belong to a functioning auto-scaling group then we can never really know for sure how many there are or what their private IP addresses are.
 If this was a regular fleet of EC2s we would now introduce a load balancer, and this situation is no different.
