@@ -4,7 +4,7 @@ Kubernetes objects, such as deployments, require manifests in order to be create
 
 `kubectl` also supports dry runs, thereby enabling those `create` commands to double-up as manifest generators. This behaviour can be observed when executing the following non-destructive command. NOTE the command also makes use of the `kubectl neat` add-on which simplifies generated manifests down to their essential elements.
 ```bash
-kubectl create deployment demo --image nginx --dry-run=client -o yaml | kubectl neat
+kubectl create deployment generated-deployment-manifest --image dummy --dry-run=client -o yaml | kubectl neat
 ```
 
 Use `kubectl create deployment` to deploy the app from ECR to Kubernetes and scale to 3 pods.
