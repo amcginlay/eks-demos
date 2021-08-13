@@ -4,7 +4,11 @@ LoadBalancer services incorporate and extend the functionailty of the NodePort s
 They provide access to the underlying NodePort service via a classic AWS load balancer.
 
 The NodePort service solved one problem but exposed another.
-If our EC2 instances belong to a functioning auto-scaling group then how can we know how many are currently active and what their private IP addresses are.
+If our EC2 instances belong to a functioning auto-scaling group then how can we know:
+
+- How many instances are currently active?
+- What their private IP addresses are?
+
 A load balancer is designed to solve this exact type of problem.
 
 Kubernetes components, known as controllers, can consume applied manifests and perform whatever tasks are necessary to reconcile that which is desired against that which currently exists. Sometimes the required reconciliation actions require the controller to reach beyond the cluster and in the host environment. LoadBalancer services are a classic example of this pattern which is designed to keep the developer focused on one set of tools to deploy both their applications and the wider infrastructure components used.
