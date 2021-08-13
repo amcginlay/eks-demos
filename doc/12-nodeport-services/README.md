@@ -23,6 +23,4 @@ echo ${worker_nodes[0]}:${node_port}
 kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
 ```
 
-Observe the ec2IP and localhostIP changing with each of the invocations ... these requests were sent to just one of the worker nodes, yet serviced by both of them? That's netfilter/iptables at work. When pods belonging to services are started/stopped, the k8s node-proxy agent on each worker node modifies its routes, creating a kernel-level load balancer per service
-
 [Return To Main Menu](/README.md)
