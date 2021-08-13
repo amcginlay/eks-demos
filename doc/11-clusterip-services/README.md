@@ -1,6 +1,6 @@
 # K8s ClusterIP Services - because pods need to talk to each other
 
-This section assumes that the `php-echo` app is deployed and scaled to 3 instances.
+This section assumes that the `php-echo` (EKS_APP_NAME) app is deployed and scaled to 3 instances.
 
 To test ClusterIP services we first need to gain "private" access to our deployments, just as we might do with a regular EC2 jumpbox (or bastion host).
 We can deploy [nginx](https://www.nginx.com) as a standalone pod which conveniently suits this purpose.
