@@ -4,7 +4,7 @@ The NodePort service solves one problem but exposes another.
 If our worker nodes belong to a functioning auto-scaling group then we can never really know for sure how many there are or what their private IP addresses are.
 If this was a regular fleet of EC2s we would now introduce a load balancer, and this situation is no different.
 
-Upgrade to a LoadBalancer service which also supports external request distribution over an AWS ELB, then check the services.
+Upgrade the NodePort service to a LoadBalancer service which supports external request distribution over an AWS ELB, then check the services.
 ```bash
 kubectl -n ${EKS_APP_NAME} delete service ${EKS_APP_NAME}
 kubectl -n ${EKS_APP_NAME} expose deployment ${EKS_APP_NAME} --port=80 --type=LoadBalancer
