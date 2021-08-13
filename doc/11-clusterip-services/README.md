@@ -16,9 +16,9 @@ kubectl exec -it jumpbox -- curl ${EKS_APP_NAME}:80 # <---- FAILURE!
 
 Introduce the service.
 ```bash
-kubectl get services
-kubectl expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
-kubectl get services
+kubectl -n ${EKS_APP_NAME} get services
+kubectl -n ${EKS_APP_NAME} expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
+kubectl -n ${EKS_APP_NAME} get services
 ```
 
 Now pods can reach each other via services.
