@@ -30,7 +30,7 @@ kubectl -n ${EKS_APP_NAME} exec -it jumpbox -- /bin/bash -c "while true; do curl
 # ctrl+c to quit loop
 ```
 
-You can observe from the responses how the service distributes requests across all of the active pod replicas (see `localhostIP`)
+Observe from the responses how the service distributes requests across all of the active pod replicas (see `localhostIP`)
 
 We will use the jumpbox pod again so leave it in place for now.
 
