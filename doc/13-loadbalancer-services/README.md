@@ -9,7 +9,7 @@ If our EC2 instances belong to a functioning auto-scaling group then how can we 
 - How many instances are currently active?
 - What their private IP addresses are?
 
-A load balancer is designed to solve this exact type of problem by providing a single access point.
+A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
 
 Kubernetes components, known as controllers, can consume applied manifests and perform whatever tasks are necessary to reconcile that which is desired against that which currently exists. Sometimes the required reconciliation actions require the controller to reach beyond the cluster and in the host environment. LoadBalancer services are a classic example of this pattern which is designed to keep the developer focused on one set of tools to deploy both their applications and the wider infrastructure components used.
 
