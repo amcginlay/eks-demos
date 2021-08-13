@@ -6,7 +6,7 @@ To test ClusterIP services we first need to gain "private" access to our deploym
 We can deploy [nginx](https://www.nginx.com) as a standalone pod which conveniently suits this purpose. Note we do not specify a namespace, therefore our jumpbox pod will be placed into the `default` namespace
 ```bash
 kubectl run jumpbox --image=nginx
-sleep 5 && kubectl exec -it jumpbox -- curl localhost:80
+sleep 5 && kubectl exec -it jumpbox -- curl localhost:80 # <---- NGINX welcome page
 ```
 
 Remote into nginx to demonstrate pod-to-pod communication ... which fails, because no such service exists yet.
