@@ -11,7 +11,7 @@ sleep 5 && kubectl exec -it jumpbox -- curl localhost:80 # <---- test the NGINX 
 
 Remote into nginx and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
 ```bash
-kubectl exec -it jumpbox -- curl ${EKS_APP_NAME}.${EKS_APP_NAME}-blue.svc.cluster.local:80 # <---- FAILURE!
+kubectl exec -it jumpbox -- curl ${EKS_APP_NAME}.${EKS_NS_BLUE}.svc.cluster.local:80 # <---- FAILURE!
 ```
 
 Upon creation, each service is allocated a long-term internal IP address which is auto-registered within namespace-scoped DNS servers.
@@ -19,14 +19,14 @@ No service means no IP address and no DNS entry.
 
 Now we can introduce our basic ClusterIP service and test again.
 ```bash
-kubectl -n ${EKS_APP_NAME}-blue get services
-kubectl -n ${EKS_APP_NAME}-blue expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
-kubectl -n ${EKS_APP_NAME}-blue get services
+kubectl -n ${EKS_NS_BLUE} get services
+kubectl -n ${EKS_NS_BLUE} expose deployment ${EKS_APP_NAME} --port=80 --type=ClusterIP
+kubectl -n ${EKS_NS_BLUE} get services
 ```
 
 Now pods can reach each other via services.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}.${EKS_APP_NAME}-blue.svc.cluster.local:80; done"
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}.${EKS_NS_BLUE}.svc.cluster.local:80; done"
 # ctrl+c to quit loop
 ```
 
