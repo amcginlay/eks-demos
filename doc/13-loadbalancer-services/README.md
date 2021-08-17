@@ -26,4 +26,11 @@ lb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get service -l app=${EKS_APP_NAME} -o jso
 while true; do curl http://${lb_dnsname}; done
 ```
 
+It is not our intention to use the AWS Classic Load Balancer so, before we move on, **downgrade** back to a NodePort service then check the services.
+```bash
+kubectl -n ${EKS_NS_BLUE} delete service ${EKS_APP_NAME}
+kubectl -n ${EKS_NS_BLUE} expose deployment ${EKS_APP_NAME} --port=80 --type=NodePort
+kubectl -n ${EKS_NS_BLUE} get services
+```
+
 [Return To Main Menu](/README.md)
