@@ -12,6 +12,8 @@ export EKS_CLUSTER_NAME=dev
 export EKS_K8S_VERSION=1.20
 
 export EKS_APP_NAME=php-echo
+export EKS_NS_BLUE=\${EKS_APP_NAME}-blue
+export EKS_NS_GREEN=\${EKS_APP_NAME}-green
 export EKS_APP_VERSION=1.0.42
 export EKS_APP_ECR_REPO=\${AWS_ACCOUNT_ID}.dkr.ecr.\${AWS_DEFAULT_REGION}.amazonaws.com/\${EKS_APP_NAME}
 EOF
