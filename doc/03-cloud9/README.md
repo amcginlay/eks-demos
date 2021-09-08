@@ -16,7 +16,7 @@ aws iam put-${context}-policy \
   --policy-document file://<(echo '{"Version": "2012-10-17","Statement": [{"Effect": "Deny","Action": "cloud9:UpdateEnvironment","Resource": "*"}]}')
 ```
 
-Create your Cloud9 environment from your CloudShell session and associate `Role-EC2-EKSClusterAdmin` with this instance.
+Create your Cloud9 environment in the default VPC from your CloudShell session and associate `Role-EC2-EKSClusterAdmin` with this instance.
 ```bash
 cluster_name=dev
 subnet_id=$(aws ec2 describe-subnets --filters "Name=availability-zone,Values=${AWS_DEFAULT_REGION}a" "Name=default-for-az,Values=true" --query "Subnets[].SubnetId" --output text)
