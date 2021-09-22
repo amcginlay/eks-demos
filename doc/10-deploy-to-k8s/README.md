@@ -14,10 +14,10 @@ kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yam
 Create a `blue` namespace which will host the first deployment then use `kubectl create deployment` to deploy the app from ECR to Kubernetes and scale to 3 pods.
 ```bash
 kubectl create namespace ${EKS_NS_BLUE}
-kubectl -n ${EKS_NS_BLUE} create deployment ${EKS_APP_NAME} --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
-sleep 10 && kubectl -n ${EKS_NS_BLUE} get all -o wide               # one deployment, one pod
-kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
-kubectl -n ${EKS_NS_BLUE} get all -o wide                           # one deployment, three pods
+kubectl -n ${EKS_NS_BLUE} create deployment ${EKS_APP_NAME} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION} # begin with zero replicas
+kubectl -n ${EKS_NS_BLUE} set resources deployment ${EKS_APP_NAME} --requests=cpu=200m                                  # right-size the pods
+kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3                                                 # start 3 instances
+sleep 10 && kubectl -n ${EKS_NS_BLUE} get all -o wide                                                                   # inspect objects
 ```
 
 Exec into the first pod to perform curl test.
