@@ -23,6 +23,7 @@ watch "kubectl get nodes; echo; kubectl -n ${EKS_NS_BLUE} get pods -o wide"
 ```
 
 In another dedicated terminal window, begin tailing the Cluster Autoscaler log file to observe as it decides to intervene.
+The log is quite noisy so to help pick out the key moment the phrase "Scale-up" will be highlighted.
 ```bash
 sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 'Scale-up\|$' --color
 ```
