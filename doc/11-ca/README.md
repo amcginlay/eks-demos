@@ -15,7 +15,7 @@ kubectl apply -f <( \
 ```
 
 In a moment we're going to request to increase the number of pods in our existing deployment.
-Before we do so, get ready to monitor what is happening.
+Before we do so, get ready to monitor what is happening inside our cluster.
 
 In a dedicated terminal window prepare to observe the nodes and pods as their status changes.
 ```bash
