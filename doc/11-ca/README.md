@@ -14,7 +14,7 @@ kubectl apply -f <( \
 )
 ```
 
-In a moment we're going to scale our existing deployment.
+In a moment we're going to request increase the number of pods in our existing deployment.
 Before we do so, get prepared to monitor what is happening.
 
 In a dedicated terminal window prepare to observe the nodes and pods as their status changes.
