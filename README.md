@@ -15,15 +15,17 @@ A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazo
 * [09. Push Container Image To ECR](doc/09-push-to-ecr/README.md)
 * [10. Deploy From ECR To Kubernetes](doc/10-deploy-to-k8s/README.md)
 
-## K8s Services
-* [11. K8s ClusterIP Services](doc/11-clusterip-services/README.md) - because pods need to talk to each other
-* [12. K8s NodePort Services](doc/12-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
-* [13. K8s LoadBalancer Services](doc/13-loadbalancer-services/README.md) - because the world needs to talk to our cluster
-* TODO [14. AWS Load Balancer Controller](doc/14-aws-loadbalancer-controller/README.md) - because one load balancer per service is wasteful
+## Autoscaling (pt. 1)
+* [11. Cluster Autoscaler](doc/11-ca/README.md) - because no one likes a pending pod
 
-## Autoscaling
-* TODO [15. Horizonal Pod Autoscaler](doc/15-hpa/README.md) - because demand for pods can grow
-* TODO [16. Cluster Autoscaler](doc/16-ca/README.md) - because no one likes a pending pod
+## K8s Services
+* [11. K8s ClusterIP Services](doc/12-clusterip-services/README.md) - because pods need to talk to each other
+* [12. K8s NodePort Services](doc/13-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
+* [13. K8s LoadBalancer Services](doc/14-loadbalancer-services/README.md) - because the world needs to talk to our cluster
+* TODO [14. AWS Load Balancer Controller](doc/15-aws-loadbalancer-controller/README.md) - because one load balancer per service is wasteful
+
+## Autoscaling (pt. 2)
+* TODO [15. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
 
 ## Extensions
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
