@@ -44,7 +44,7 @@ kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
 
 Best practice suggests that scale-out operations should occur quickly whilst scale-in operations should be slow and graceful.
-Eventually, the Cluster Autoscaler will revert to the previous number of nodes.
+After about 10 minutes the Cluster Autoscaler would begin scaling-in the number of nodes and eventually revert to the previous size.
 To save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
 eksctl scale nodegroup --cluster ${EKS_CLUSTER_NAME} --name ng-${EKS_CLUSTER_NAME} --nodes 2
