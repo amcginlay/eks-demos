@@ -36,14 +36,14 @@ Note how some pods start without an ip addresses because they're stuck in the Pe
 Once more nodes get added (maximum of 6) the pending pods will move to a running state.
 The Cluster Autoscaler will take about 2 minutes to scale-out the nodes and thereby allow all the pods to reach a Running state.
 
-Once the pods are running, revert the pods to their previous scale.
+Once all the pods are running, revert their replicset to its previous size.
 ```bash
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
 
 A common scaling practice is to scale-out quickly whilst scaling-in slowly.
 The Cluster Autoscaler will eventually revert to the previous number of nodes.
-To save time, revert the desired number of nodes manually before moving on
+To save time, revert the desired number of nodes manually and monitor this to completion before moving on
 ```bash
 eksctl scale nodegroup --cluster ${EKS_CLUSTER_NAME} --name ng-${EKS_CLUSTER_NAME} --nodes 2
 ```
