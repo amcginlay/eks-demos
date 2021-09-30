@@ -37,7 +37,7 @@ Note how some pods start without an IP addresses because they're stuck in the Pe
 Once more nodes get added (maximum of 6) the Pending pods will move to a Running state and an IP address will be allocated.
 The Cluster Autoscaler will take about 2 minutes to scale-out the nodes and thereby allow all the pods to reach a Running state.
 
-Once all the pods are running, revert their replicset to its previous size.
+Once all the pods are Running, revert their replicset to its previous size.
 ```bash
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
