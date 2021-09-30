@@ -4,9 +4,9 @@ These steps assume you have already deployed the the PHP app we built previously
 
 Our two-node cluster cannot run an infinite number of pods.
 If we scale our deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
-The Cluster Autoscaler monitors for Pending pods that failed to run due to insufficient resources and attempts to resolve the situation by scaling-up the number of available nodes and scaling them back when the pressure recedes.
+The [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html) monitors for Pending pods that failed to run due to insufficient resources and attempts to resolve the situation by scaling-up the number of available nodes and scaling them back when the pressure recedes.
 
-Install the Cluster Autoscaler.
+Install the Cluster Autoscaler following documented best practices for EKS.
 ```bash
 kubectl apply -f <( \
   curl --silent https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml | \
