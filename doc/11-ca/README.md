@@ -2,7 +2,7 @@
 
 Our two-node cluster cannot run an infinite number of pods.
 If we scale our deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
-The Cluster Autoscaler monitors for pods that failed to run due to insufficient resources and attempts to resolve the situation by scaling-up the number of available nodes.
+The Cluster Autoscaler monitors for pods that failed to run due to insufficient resources and attempts to resolve the situation by scaling-up the number of available nodes and scaling them back when the pressure recedes.
 
 Install the Cluster Autoscaler:
 ```bash
