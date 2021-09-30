@@ -38,7 +38,7 @@ Once additional nodes get introduced (up to our current maximum of 6) the Pendin
 The Cluster Autoscaler will take about 2 minutes to scale-out the nodes and thereby allow all the pods to start.
 
 Once all the pods are in a Running state the demo is complete.
-Revert the replicset to its previous size.
+Revert the replicaset to its previous size.
 ```bash
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
