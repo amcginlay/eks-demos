@@ -23,6 +23,7 @@ metadata:
 availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
 secretsEncryption:
   keyARN: ${key_metadata[1]}
+  
 managedNodeGroups:
   - name: ng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
@@ -40,6 +41,7 @@ managedNodeGroups:
         albIngress: true
         xRay: true
         cloudWatch: true
+        
 fargateProfiles:
   - name: fp-${EKS_CLUSTER_NAME}
     selectors:
