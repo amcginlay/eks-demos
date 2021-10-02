@@ -16,7 +16,7 @@ This deployment will start scaled down to zero so we can right-size the CPU requ
 ```bash
 kubectl create namespace ${EKS_NS_BLUE}
 kubectl -n ${EKS_NS_BLUE} create deployment ${EKS_APP_NAME} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION} # begin with zero replicas
-kubectl -n ${EKS_NS_BLUE} set resources deployment ${EKS_APP_NAME} --requests=cpu=200m                                  # right-size the pods
+kubectl -n ${EKS_NS_BLUE} set resources deployment ${EKS_APP_NAME} --requests=cpu=200m,memory=200Mi                     # right-size the pods
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3                                                 # start 3 instances
 sleep 10 && kubectl -n ${EKS_NS_BLUE} get all -o wide                                                                   # inspect objects
 ```
