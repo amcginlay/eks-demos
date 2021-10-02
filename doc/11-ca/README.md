@@ -10,8 +10,8 @@ Install the Cluster Autoscaler following documented best practices for EKS.
 ```bash
 kubectl apply -f <( \
   curl --silent https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml | \
-    sed "s/v1\.[[:digit:]]*\.0/v${EKS_K8S_VERSION}.0/g" \
-    sed "s/<YOUR CLUSTER NAME>/${EKS_CLUSTER_NAME}\n            - --balance-similar-node-groups\n            - --skip-nodes-with-system-pods=false/g" \  
+    sed "s/v1\.[[:digit:]]*\.0/v${EKS_K8S_VERSION}.0/g" | \
+    sed "s/<YOUR CLUSTER NAME>/${EKS_CLUSTER_NAME}\n            - --balance-similar-node-groups\n            - --skip-nodes-with-system-pods=false/g" \
 )
 ```
 
