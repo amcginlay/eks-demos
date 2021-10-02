@@ -1,6 +1,6 @@
 # Cluster Autoscaler - because no one likes a pending pod
 
-These steps assume you have already deployed the the PHP app we built previously.
+This section assumes that the `EKS_APP_NAME` (i.e. `php-echo`) app is deployed and scaled to 3 instances.
 
 Our two-node cluster cannot run an infinite number of pods.
 If we scale our deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
