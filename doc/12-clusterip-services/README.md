@@ -32,7 +32,7 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}.${
 
 Observe the ec2IP and localhostIP changing with each of the invocations.
 These requests were sent to the jumpbox pod, which exists on just one of the worker nodes.
-However the replicas, which are spread across all the worker nodes, were all involved in servicing the requests.
+However the `EKS_APP_NAME` replicas, which are spread across all the worker nodes, were all involved in servicing the requests.
 That's netfilter/iptables at work.
 When pods belonging to services are started/stopped, the k8s node-proxy agent on all worker nodes simultaneously modify their routes, creating a kernel-level load balancer per service.
 As a result, it doesn't matter which worker node receives the request, the routing behaviour is consistently well distributed.
