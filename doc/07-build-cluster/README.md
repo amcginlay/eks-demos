@@ -32,8 +32,6 @@ managedNodeGroups:
     spot: true
     desiredCapacity: 2
     maxSize: 6
-    ssh:
-      enableSsm: true
     iam:
       withAddonPolicies:
         autoScaler: true
