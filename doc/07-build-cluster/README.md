@@ -26,8 +26,9 @@ secretsEncryption:
 managedNodeGroups:
   - name: ng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
-    spot: true
     instanceTypes: ["t3.small","t3a.small"]
+    privateNetworking: true
+    spot: true
     desiredCapacity: 2
     maxSize: 6
     ssh:
