@@ -44,6 +44,7 @@ kubectl -n kube-system get deployment aws-load-balancer-controller
 Create an Application Load Balancer object to take the place of the LoadBalancer service.
 Note this new resource directly depends upon the underlying NodePort service which is why we left it running.
 ```bash
+# TODO !!! NOT WORKING !!!
 kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP_NAME} --rule="/=${EKS_APP_NAME}:80"
 ```
 
