@@ -7,7 +7,7 @@ For this reason we recommend using the [AWS Load Balancer Controller](https://do
 This controller supports the use of [Application Load Balancers](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) and [Network Load Balancers](https://aws.amazon.com/elasticloadbalancing/network-load-balancer/) which are the preferred modern solutions.
 
 The AWS Load Balancer Controller does not come installed as standard on EKS clusters so we need to follow the documented installation instructions which are presented in short form below.
-These instructions use the `helm` CLI tool which we have not yet encountered but will do so in a later section.
+These instructions install the deployment using `helm` - a package manager for Kubernetes which we have not yet encountered but will do so in a later section.
 
 ```bash
 aws iam create-policy \
