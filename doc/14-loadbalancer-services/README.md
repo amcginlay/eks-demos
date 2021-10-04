@@ -4,7 +4,7 @@ LoadBalancer services incorporate and extend the functionailty of the NodePort s
 They provide access to the underlying NodePort service via a classic AWS load balancer.
 
 The NodePort service solved one problem but exposed another.
-If our EC2 instances belong to a functioning auto-scaling group, as they do, then how can we know:
+If our EC2 instances belong to a functioning auto-scaling group, as they do, then how can we determine:
 
 - How many EC2 instances are currently active?
 - What their private IP addresses are?
