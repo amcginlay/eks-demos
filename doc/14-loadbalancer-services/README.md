@@ -6,7 +6,7 @@ They provide access to the underlying NodePort service via a classic AWS load ba
 The NodePort service solved one problem but exposed another.
 If our EC2 instances belong to a functioning auto-scaling group then how can we know:
 
-- How many instances are currently active?
+- How many EC2 instances are currently active?
 - What their private IP addresses are?
 
 A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
