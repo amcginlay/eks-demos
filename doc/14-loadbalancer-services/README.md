@@ -12,7 +12,7 @@ If our EC2 instances belong to a functioning auto-scaling group then this raises
 
 A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
 
-Kubernetes components, known as controllers, can react to the presence of specific kinds of object instances and perform whatever tasks are necessary to reconcile the system state which is desired against that which currently exists. Sometimes the required reconciliation actions require the controller to reach beyond the cluster and in the host environment. LoadBalancer services are a classic example of this pattern which is designed to keep the developer focused on one set of tools to deploy both their applications and the wider infrastructure components used.
+Kubernetes components, known as controllers, can react to the presence of specific kinds of object instances and perform whatever tasks are necessary to reconcile the system state which is desired against that which currently exists. Sometimes the reconciliation actions require the controller to reach beyond the cluster and in the host environment. LoadBalancer services are a classic example of this pattern which is designed to keep the developer focused on one set of tools to deploy both their applications and the wider infrastructure components used.
 
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
