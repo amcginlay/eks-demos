@@ -8,7 +8,7 @@ If our EC2 instances belong to a functioning auto-scaling group then this raises
 
 - How many EC2 instances are currently active?
 - What their private IP addresses are?
-- What is the EC2 instance we're currently using is terminated?
+- What if the EC2 instance we're currently using is terminated?
 
 A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
 
