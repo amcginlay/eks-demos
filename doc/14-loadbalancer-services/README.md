@@ -1,6 +1,6 @@
 # K8s LoadBalancer Services - because the world needs to talk to our cluster
 
-LoadBalancer services incorporate and extend the functionailty of the NodePort service which, in tuen, extends the functionality of the ClusterIP service.
+LoadBalancer services incorporate and extend the functionailty of the NodePort service which, in turn, extends the functionality of the ClusterIP service.
 They provide access to the underlying NodePort service via a classic AWS load balancer.
 
 The NodePort service solved one problem but exposed another.
