@@ -11,7 +11,7 @@ key_metadata=($(aws kms create-key --query KeyMetadata.[KeyId,Arn] --output text
 aws kms create-alias --alias-name alias/cmk-eks-${EKS_CLUSTER_NAME}-$(cut -c-8 <<< ${key_metadata[0]}) --target-key-id ${key_metadata[1]}
 ```
 
-Create a manifest describing the EKS cluster with a managed node group and fargate profile.
+Create a manifest describing the EKS cluster with a managed node group (using spot instances) alongside a fargate profile.
 ```bash
 cat > ~/environment/${EKS_CLUSTER_NAME}-cluster-config.yaml << EOF
 apiVersion: eksctl.io/v1alpha5
