@@ -44,7 +44,7 @@ Revert the replicaset to its previous size.
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
 
-Best practice suggests that scale-out operations should occur quickly whilst scale-in operations should be slow and graceful.
+Best practice suggests that automated scale-out operations should occur quickly whilst automated scale-in operations should be slow and graceful.
 After about 10 minutes the Cluster Autoscaler would begin scaling-in the number of nodes and eventually revert to its previous size.
 To save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
