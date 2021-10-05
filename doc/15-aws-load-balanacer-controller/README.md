@@ -47,7 +47,8 @@ Note this new resource depends directly upon the underlying NodePort service whi
 kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP_NAME} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
-  --rule="/=${EKS_APP_NAME}:80"
+  --rule="/alt-path/*=${EKS_APP_NAME}:80"
+  --rule="/*=${EKS_APP_NAME}:80"
 ```
 
 External port 80 requests are now load balanced across the underlying NodePort service. Grab the load balancer DNS name and put the following curl command in a loop as the AWS resource will not be immediately resolved (2-3 mins). If you receive any curl errors, just wait a little longer.
