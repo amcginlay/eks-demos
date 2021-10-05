@@ -54,7 +54,7 @@ kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP_NAME} \
 External port 80 requests are now load balanced across the underlying NodePort service. Grab the load balancer DNS name and put the following curl command in a loop as the AWS resource will not be immediately resolved (2-3 mins). If you receive any curl errors, just wait a little longer.
 ```bash
 alb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get ingress ${EKS_APP_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-while true; do curl http://${lb_dnsname}; sleep 1; done
+while true; do curl http://${alb_dnsname}; sleep 1; done
 ```
 
 [Return To Main Menu](/README.md)
