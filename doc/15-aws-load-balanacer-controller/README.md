@@ -47,7 +47,7 @@ Note this new resource depends directly upon the underlying NodePort service whi
 kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP_NAME} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
-  --rule="/alt-path/*=${EKS_APP_NAME}:80"
+  --rule="/alt-path/*=${EKS_APP_NAME}:80" \
   --rule="/*=${EKS_APP_NAME}:80"
 ```
 
