@@ -24,7 +24,7 @@ sleep 5 && kubectl -n ${EKS_NS_BLUE} get service
 External port 80 requests are now load balanced across the negotiated node port of all worker nodes. Grab the load balancer DNS name and put the following curl command in a loop as the AWS resource will not be immediately resolved (2-3 mins). If you receive any `curl` errors, just wait a little longer.
 ```bash
 lb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get service ${EKS_APP_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-while true; do curl http://${lb_dnsname}; sleep 0.5; done
+while true; do curl http://${lb_dnsname}; sleep 0.25; done
 ```
 
 The [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer) is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
