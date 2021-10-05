@@ -59,7 +59,8 @@ while true; do curl http://${alb_dnsname}; sleep 0.25; done
 ```
 
 One of the benefits of the Application Load Balancer is that it can support path-based routing within its rules to allow a single load balancer to support mappings between paths and target groups.
-Send a request to the `alt-path` to see how, in this case, two different endpoint paths can resolve to the same NodePort service.
+You may have noticed that we supplied two rules above.
+Send a request to `alt-path` to see how, in this case, two different endpoint paths can resolve to the same NodePort service.
 ```bash
 http://${alb_dnsname}/alt-path/
 ```
