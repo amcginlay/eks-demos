@@ -62,7 +62,7 @@ One of the benefits of the Application Load Balancer is that it can support path
 You may have noticed that we supplied two rules in our call to `create ingress` above.
 Send a curl request to `alt-path` to see how, in this case, two different endpoint paths can resolve to the same NodePort service.
 ```bash
-http://${alb_dnsname}/alt-path/
+curl http://${alb_dnsname}/alt-path/
 ```
 
 [Return To Main Menu](/README.md)
