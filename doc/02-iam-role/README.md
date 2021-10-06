@@ -15,7 +15,7 @@ If, however, your receive a `NoSuchEntity` error, that's your signal to stay her
 Identify the AWS managed `AdministratorAccess` policy then create the Role-EC2-EKSClusterAdmin role, ensuring both the current user and EC2 instances are able to assume it.
 
 ```bash
-NOTE cluster creators should IDEALLY prepare least-privilege credentials - see here -> https://eksctl.io/usage/minimum-iam-policies/
+# NOTE cluster creators should IDEALLY prepare least-privilege credentials - see here -> https://eksctl.io/usage/minimum-iam-policies/
 admin_policy_arn=$(aws iam list-policies --query "Policies[?PolicyName=='AdministratorAccess'].Arn" --output text)
 
 principal=$( \
