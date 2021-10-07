@@ -21,6 +21,17 @@ docker images
 docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 ```
 
-The EKS cluster can now locate this image by its version tag
+Before we move on, push out the next version of our simple app so we've got something extra to play with.
+This might usually involve some real code changes.
+In this case we're just incrementing the value of the `VERSION` environment variable inside the container image.
+
+```bash
+sed -i "s/ENV VERSION=${EKS_APP_VERSION}/ENV VERSION=${EKS_APP_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
+docker build -t ${EKS_APP_NAME} ~/environment/eks-demos/src/${EKS_APP_NAME}/
+docker tag ${EKS_APP_NAME}:latest ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT}
+docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT}
+```
+
+The EKS cluster can now locate these images by their version tags.
 
 [Return To Main Menu](/README.md)
