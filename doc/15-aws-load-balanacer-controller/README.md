@@ -41,6 +41,15 @@ Verify that the controller is installed.
 kubectl -n kube-system get deployment aws-load-balancer-controller
 ```
 
+With the help of the Application Load Balancer, the AWS Load Balancer Controller is able to support path-based routing which means a single load balancer resource is able to route traffic to multiple deployments simultaneously.
+Deploy the next iteration of our app alongside the current one so we can see this feature in practice.
+```bash
+kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_GREEN} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT} # begin with zero replicas
+kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_GREEN} --requests=cpu=200m,memory=200Mi                          # right-size the pods
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_GREEN} --replicas 3
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=NodePort
+```
+
 Create an Application Load Balancer object to take the place of the LoadBalancer service.
 Note this new resource depends directly upon the underlying NodePort service which is why we left it running.
 ```bash
