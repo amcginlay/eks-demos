@@ -24,7 +24,7 @@ kubectl -n ${EKS_NS_BLUE} expose deployment ${EKS_APP_NAME} --port=80 --type=Clu
 kubectl -n ${EKS_NS_BLUE} get services
 ```
 
-Perform a `dig` operation to test the private mapping from the DNS name of the service to its corresponding ClusterIP address.
+Note the ClusterIP address, then perform a `dig` operation to test the private mapping from the DNS name of the service to its corresponding ClusterIP address.
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c \
   "apt-get update && apt-get install dnsutils -y && \
