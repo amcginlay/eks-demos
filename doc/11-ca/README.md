@@ -18,12 +18,12 @@ kubectl apply -f <( \
 In a moment we're going to request to increase the number of pods in our existing deployment.
 Before we do so, get ready to monitor what is happening inside our cluster.
 
-In a dedicated terminal window prepare to observe the nodes and pods as their status changes.
+In a **dedicated terminal** window prepare to observe the nodes and pods as their status changes.
 ```bash
 watch "kubectl get nodes; echo; kubectl -n ${EKS_NS_BLUE} get pods -o wide"
 ```
 
-In another dedicated terminal window, begin tailing the Cluster Autoscaler log file to observe as it decides to intervene.
+In another **dedicated terminal** window, begin tailing the Cluster Autoscaler log file to observe as it decides to intervene.
 Events related to scaling-up will be highlighted in red.
 ```bash
 sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 'scale-up\|scaleup\|scale up\|$' --color
