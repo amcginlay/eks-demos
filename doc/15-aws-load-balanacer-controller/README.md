@@ -53,7 +53,7 @@ kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=Nod
 Create an Application Load Balancer object to take the place of the LoadBalancer service.
 Note this new resource depends directly upon the underlying NodePort service which is why we left it running.
 ```bash
-kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
+kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
   --rule="/test/*=${EKS_APP_GREEN}:80" \
