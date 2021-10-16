@@ -5,6 +5,7 @@ They negotiate access to the underlying ClusterIP service via an auto-assigned h
 
 Upgrade the ClusterIP service to a NodePort service then check the services.
 ```bash
+kubectl -n ${EKS_APP_NS} get services
 kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=NodePort # this will auto-assign a high-order port on ALL worker nodes
 kubectl -n ${EKS_APP_NS} get services
