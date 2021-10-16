@@ -4,11 +4,11 @@ Services of type LoadBalancer incorporate and extend the functionailty of NodePo
 In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html).
 
 The NodePort service solved one problem but exposed another.
-If our EC2 instances belong to a functioning auto-scaling group then we are faced with some important questions:
+If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group then we are faced with some important questions:
 
-- How many EC2 instances are currently active?
+- How many nodes are currently active?
 - What are their private IP addresses?
-- What if the EC2 instance we were targeting a moment ago has now been terminated?
+- What if the node we were targeting a moment ago has now been terminated?
 
 A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
 
