@@ -10,7 +10,7 @@ If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group the
 - What are their IP addresses and are they reachable by your clients?
 - What if the node we were targeting a moment ago has now been terminated?
 
-A load balancer is designed to negate these questions by providing an active single point of access which guards us from the underlying complexity.
+In general, load balancers are designed to negate these questions by providing an active single point of access which guards us from the underlying complexity.
 
 Kubernetes components, known as controllers, can react to the presence of specific kinds of object instances and perform whatever tasks are necessary to reconcile the system state which is desired against that which currently exists. Sometimes the reconciliation actions require the controller to reach out beyond the cluster and into the host environment itself - in this case AWS. Services of type LoadBalancer are a classic example of this pattern which is designed to help the developer remain focused on one set of tools to deploy both their applications and the wider set infrastructure components used.
 
