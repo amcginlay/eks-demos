@@ -24,6 +24,6 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}
 # ctrl+c to quit loop
 ```
 
-So now resources outside our cluster, such as regular EC2 instances inside our VPC, can successfully communicate with our underlying ClusterIP services.
+Resources outside our cluster, such as regular EC2 instances inside our VPC, can now successfully communicate with our underlying ClusterIP services.
 
 [Return To Main Menu](/README.md)
