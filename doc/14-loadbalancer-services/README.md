@@ -11,7 +11,7 @@ In general, load balancers are designed to negate these questions by providing a
 Kubernetes services of type LoadBalancer incorporate and extend the functionailty of NodePort services which, in turn, extend the functionality of the ClusterIP services.
 In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
 
-Kubernetes clusters provide extensibilty via the components known as [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) which can be plugged in and customized for a variety of purposes.
+Kubernetes clusters provide extensibilty via components known as [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) which can be plugged in and customized for a variety of purposes.
 Controllers take their instructions from the application of type-matched Kubernetes objects.
 When newly created objects are observed within a cluster the associated controller(s) will react by taking whatever action necessary to reconcile.
 It is the same pattern of behaviour we see for all native Kubernetes objects so this idea of reconciliation (i.e. desired vs. actual) should feel familiar.
