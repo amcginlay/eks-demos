@@ -8,7 +8,6 @@ If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group the
 - What if the node we were targeting a moment ago has now been terminated?
 
 In general, load balancers are designed to negate these questions by providing an active single point of access which guards us from the underlying complexity.
-
 Services of type LoadBalancer incorporate and extend the functionailty of NodePort services which, in turn, extend the functionality of the ClusterIP services.
 In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
 
