@@ -16,7 +16,7 @@ Controllers take their instructions from the application of type-matched Kuberne
 When newly created objects are observed within a cluster the associated controller(s) will react by taking whatever action necessary to reconcile.
 It is the same pattern of behaviour we see for all native Kubernetes objects so this idea of reconciliation (i.e. desired vs. actual) should feel familiar.
 The reconciliation actions may require the controller to reach out beyond the cluster and into the cloud provider environment itself.
-This pattern helps the developer remain focused on one set of tools to deploy both their applications and the wider set of infrastructure components used.
+This pattern helps the developer remain focused on one set of tools (i.e. Kubernetes manifests) to deploy both their applications and the wider set of infrastructure components used.
 Services of type LoadBalancer in EKS are a good example of a custom controller.
 
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
