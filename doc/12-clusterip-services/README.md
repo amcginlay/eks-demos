@@ -26,7 +26,7 @@ kubectl -n ${EKS_APP_NS} get services
 Note the `CLUSTER-IP` address, then perform a `dig` operation to test the private mapping from the DNS name of the service to its corresponding ClusterIP address.
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c \
-  "apt-get update && apt-get install dnsutils -y && \
+  "apt-get update > /dev/null && apt-get install dnsutils -y > /dev/null && \
   dig +short ${EKS_APP_BLUE}.${EKS_APP_NS}.svc.cluster.local"
 ```
 
