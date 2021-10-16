@@ -4,7 +4,7 @@
 
 Kubernetes objects, such as deployments, require manifests in order to be created. `kubectl` supports a number of convenient `create` commands which can build and apply k8s objects whilst avoiding the need to get hands-on with their underlying manifests.
 
-`kubectl` also supports dry runs, thereby enabling those `create` commands to double-up as manifest generators. This behaviour can be observed when executing the following non-destructive command. NOTE the command also makes use of the `kubectl neat` add-on which reduces generated manifests down to their essential elements.
+`kubectl create` also supports dry runs, enabling `create` commands to double-up as manifest generators. This behaviour can be observed when executing the following non-destructive command. NOTE the command also makes use of the `kubectl neat` add-on which reduces generated manifests down to their essential elements.
 ```bash
 kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yaml | kubectl neat
 ```
