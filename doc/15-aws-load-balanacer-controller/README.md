@@ -47,6 +47,7 @@ Note this new resource depends directly upon the underlying NodePort service whi
 kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
+  --rule="/test/*=${EKS_APP_GREEN}:80" \
   --rule="/*=${EKS_APP_BLUE}:80"
 ```
 
