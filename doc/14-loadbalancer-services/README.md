@@ -28,7 +28,7 @@ sleep 5 && kubectl -n ${EKS_NS_BLUE} get service
 
 The `EXTERNAL-IP`, which was previously set as `<none>`, now contains the publicly addressible DNS name for an AWS Load Balancer.
 Port 80 requests arriving at this endpooint are now even distributed across all worker nodes using their node port as before.
-Grab the load balancer DNS name and put the following curl command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
+Grab the load balancer DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
 If you receive any `curl` errors, just wait a little longer.
 ```bash
 lb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get service ${EKS_APP_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
