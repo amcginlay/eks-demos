@@ -44,7 +44,7 @@ Revert the replicaset to its previous size.
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 3
 ```
 
-If the underlying nodes are present, pods can be scaled in a matter of seconds. The nodes (i.e. virtual machines) take a little longer to stand up so best practice suggests they are scaled-out as rapidly as possible and scaled-in slowly in order to cope with the possibility of spiky workloads.
+If the underlying nodes are present, new pods can be created in a matter of seconds. The nodes (i.e. virtual machines) take a little longer to stand up so best practice suggests they are scaled-out as rapidly as possible and scaled-in slowly in order to cope with the possibility of spiky workloads.
 After about 10 minutes the Cluster Autoscaler would normally begin scaling-in the number of nodes and eventually revert to its previous size.
 To save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
