@@ -1,7 +1,7 @@
 # K8s LoadBalancer Services - because the world needs to talk to our cluster
 
 Services of type LoadBalancer incorporate and extend the functionailty of NodePort services which, in turn, extend the functionality of the ClusterIP services.
-In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html).
+In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
 
 The NodePort service solved one problem but exposed another.
 If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group then we are faced with some important questions:
@@ -28,7 +28,7 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-The [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer) is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
+The AWS Classic Load Balancer is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
 This may take a few seconds to complete.
 ```bash
 kubectl -n ${EKS_NS_BLUE} delete service ${EKS_APP_NAME}
