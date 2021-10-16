@@ -21,6 +21,7 @@ Services of type LoadBalancer in EKS are a good example of a custom controller.
 
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
+kubectl -n ${EKS_APP_NS} get service
 kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_NAME}
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_NAME} --port=80 --type=LoadBalancer
 sleep 5 && kubectl -n ${EKS_APP_NS} get service
