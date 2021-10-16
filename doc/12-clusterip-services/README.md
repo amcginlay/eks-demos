@@ -24,6 +24,11 @@ kubectl -n ${EKS_NS_BLUE} expose deployment ${EKS_APP_NAME} --port=80 --type=Clu
 kubectl -n ${EKS_NS_BLUE} get services
 ```
 
+Perform a `dig` operation to observe the private mapping from DNS name to ClusterIP address.
+```bash
+kubectl exec -it jumpbox -- /bin/bash -c "apt-get update && apt-get install dnsutils -y && dig ${EKS_APP_NAME}.${EKS_NS_BLUE}.svc.cluster.local"
+```
+
 Now pods can reach each other via services.
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${EKS_APP_NAME}.${EKS_NS_BLUE}.svc.cluster.local:80; done"
