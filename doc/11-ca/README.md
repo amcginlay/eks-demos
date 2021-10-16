@@ -29,7 +29,7 @@ Events related to scaling-up will be highlighted in red.
 sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 'scale-up\|scaleup\|scale up\|$' --color
 ```
 
-Re-scale our deployment to intentionally exceed the capacity of the nodes.
+In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
 ```bash
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP_NAME} --replicas 30
 ```
