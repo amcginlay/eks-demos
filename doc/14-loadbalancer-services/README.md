@@ -6,11 +6,11 @@ In EKS, these services provide access to the underlying NodePort service via an 
 The NodePort service solved one problem but exposed another.
 If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group then we are faced with some important questions:
 
-- How many nodes are currently active?
-- What are their private IP addresses?
+- How many nodes are currently active and can I distribute the traffic evenly among them?
+- What are their IP addresses and are they reachable by your clients?
 - What if the node we were targeting a moment ago has now been terminated?
 
-A load balancer is designed to solve this exact type of problem by providing a single point of access which guards us from the underlying complexity.
+A load balancer is designed to answer these questions by providing an active single point of access which guards us from the underlying complexity.
 
 Kubernetes components, known as controllers, can react to the presence of specific kinds of object instances and perform whatever tasks are necessary to reconcile the system state which is desired against that which currently exists. Sometimes the reconciliation actions require the controller to reach out beyond the cluster and into the host environment itself - in this case AWS. LoadBalancer services are a classic example of this pattern which is designed to help the developer remain focused on one set of tools to deploy both their applications and the wider set infrastructure components used.
 
