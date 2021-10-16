@@ -10,14 +10,14 @@ kubectl -n ${EKS_NS_BLUE} expose deployment ${EKS_APP_NAME} --port=80 --type=Nod
 kubectl -n ${EKS_NS_BLUE} get services
 ```
 
-Capture the private IP addresses of the worker nodes and the designated port for later use (this high-order port this will be in the 30000+ range).
+Capture the private IP addresses of the worker nodes and the designated node port for later use (this high-order port this will be in the 30000+ range).
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
 node_port=$(kubectl -n ${EKS_NS_BLUE} get service -l app=${EKS_APP_NAME} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 ```
 
 All worker nodes will now forward inbound requests on the designated port to the underlying ClusterIP service.
-We `curl` from inside the jumpbox pod (created when we built the original ClusterIP service) to avoid having to update security groups in respect of the node port.
+We `curl` from inside the jumpbox pod to avoid having to update security groups in respect of the node port.
 ```bash
 echo ${worker_nodes[0]}:${node_port}
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
