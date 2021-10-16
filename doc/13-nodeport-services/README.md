@@ -21,6 +21,7 @@ We `curl` from inside the jumpbox pod to avoid having to update security groups 
 ```bash
 echo ${worker_nodes[0]}:${node_port}
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
+# ctrl+c to quit loop
 ```
 
 So now resources outside our cluster, such as regular EC2 instances inside our VPC, can successfully communicate with our underlying ClusterIP services.
