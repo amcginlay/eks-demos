@@ -1,7 +1,7 @@
 # K8s LoadBalancer Services - because the world needs to talk to our cluster
 
-LoadBalancer services incorporate and extend the functionailty of the NodePort service which, in turn, extends the functionality of the ClusterIP service.
-They provide access to the underlying NodePort service via a classic AWS load balancer.
+Services of type LoadBalancer incorporate and extend the functionailty of NodePort services which, in turn, extend the functionality of the ClusterIP services.
+In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer (https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html).
 
 The NodePort service solved one problem but exposed another.
 If our EC2 instances belong to a functioning auto-scaling group then this raises some important questions:
