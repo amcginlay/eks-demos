@@ -22,8 +22,8 @@ Services of type LoadBalancer in EKS are a good example of a custom controller.
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
 kubectl -n ${EKS_APP_NS} get service
-kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_NAME}
-kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_NAME} --port=80 --type=LoadBalancer
+kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=LoadBalancer
 sleep 5 && kubectl -n ${EKS_APP_NS} get service
 ```
 
@@ -32,7 +32,7 @@ Port 80 requests arriving at this endpooint are now even distributed across all 
 Grab the load balancer DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
-lb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP_NAME} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+lb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP_BLUE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${lb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
@@ -40,8 +40,8 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 The AWS Classic Load Balancer is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
 This may take a few seconds to complete.
 ```bash
-kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_NAME}
-kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_NAME} --port=80 --type=NodePort
+kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=NodePort
 kubectl -n ${EKS_APP_NS} get services
 ```
 
