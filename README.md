@@ -1,5 +1,5 @@
 # eks-demos
-A guide through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
+A selection of demos guiding you through the maze of [Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks)
 
 ## Setup
 * [01. Prepare Your CloudShell Environment](doc/01-cloudshell/README.md)
