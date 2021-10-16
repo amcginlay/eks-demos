@@ -19,7 +19,6 @@ No service means no IP address and no DNS entry.
 
 Now we can introduce our basic ClusterIP service and test again.
 ```bash
-kubectl -n ${EKS_APP_NS} get services
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=ClusterIP
 kubectl -n ${EKS_APP_NS} get services
 ```
