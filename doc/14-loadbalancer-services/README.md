@@ -21,10 +21,10 @@ Services of type LoadBalancer in EKS are a good example of a custom controller.
 
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
-kubectl -n ${EKS_APP_NS} get service
+kubectl -n ${EKS_APP_NS} get services
 kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=LoadBalancer
-sleep 5 && kubectl -n ${EKS_APP_NS} get service
+sleep 5 && kubectl -n ${EKS_APP_NS} get services
 ```
 
 The `EXTERNAL-IP`, which was previously set as `<none>`, now contains the publicly addressible DNS name for an AWS Load Balancer.
@@ -40,6 +40,7 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 The AWS Classic Load Balancer is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
 This may take a few seconds to complete.
 ```bash
+kubectl -n ${EKS_APP_NS} get services
 kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=NodePort
 kubectl -n ${EKS_APP_NS} get services
