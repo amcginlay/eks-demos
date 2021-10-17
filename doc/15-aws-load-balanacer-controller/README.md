@@ -54,11 +54,19 @@ kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=Nod
 
 Create an Application Load Balancer object with separate paths to the two underlying NodePort services, identified as `EKS_APP_BLUE` and `EKS_APP_GREEN`.
 ```bash
-kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP} \
+kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_GREEN} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
-  --rule="/*=${EKS_APP_BLUE}:80" \
-  --rule="/*=${EKS_APP_GREEN}:80"
+  --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
+  --annotation alb.ingress.kubernetes.io/group.order=1 \
+  --rule="/test=${EKS_APP_GREEN}:80"
+
+kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
+  --annotation kubernetes.io/ingress.class=alb \
+  --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
+  --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
+  --annotation alb.ingress.kubernetes.io/group.order=2 \
+  --rule="/*=${EKS_APP_BLUE}:80"
 ```
 
 External port 80 requests are now load balanced across the two underlying deployments/services. Grab the load balancer DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins). If you receive any errors, just wait a little longer.
