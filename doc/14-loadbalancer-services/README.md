@@ -17,7 +17,7 @@ When newly created objects appear within a cluster the associated controller(s) 
 It is the same pattern of behaviour we see for all native Kubernetes objects so this idea of reconciliation (i.e. desired vs. actual) should feel familiar.
 The reconciliation actions may require the controller to reach out beyond the cluster and into the cloud provider environment itself.
 This pattern helps the developer remain focused on one set of tools (i.e. Kubernetes manifests) to deploy both their applications and the wider set of associated infrastructure resources.
-Services of type LoadBalancer in EKS are a good example of a custom controller.
+Services of type LoadBalancer in EKS are a prime example of the use of custom controllers.
 
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
