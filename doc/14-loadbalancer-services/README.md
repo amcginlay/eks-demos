@@ -37,6 +37,6 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 ```
 
 It is important to recognise the shared genes that run through the Kubernetes service types.
-Services of type **LoadBalancer** are, behind the scenes, extended from **NodePort** services which, in turn, are built directly upon the features of **ClusterIP** services.
+Services of type **LoadBalancer** are, behind the scenes, extended from **NodePort** services which are, in turn, built directly upon the features of **ClusterIP** services.
 
 [Return To Main Menu](/README.md)
