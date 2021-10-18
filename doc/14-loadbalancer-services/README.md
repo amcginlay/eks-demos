@@ -36,4 +36,8 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
+It is important to recognise the chain of inheritance that runs through services.
+Services of type LoadBalancer are, behind the scenes, also NodePort services.
+Likewise, services of type NodePort are internally built upon ClusterIP services.
+
 [Return To Main Menu](/README.md)
