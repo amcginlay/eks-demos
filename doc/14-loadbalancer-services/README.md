@@ -36,13 +36,4 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-The AWS Classic Load Balancer is being used here but it's a little too basic for our needs so, before we move on, **downgrade** back to a NodePort service then check the services.
-This may take a few seconds to complete.
-```bash
-kubectl -n ${EKS_APP_NS} get services
-kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
-kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=NodePort
-kubectl -n ${EKS_APP_NS} get services
-```
-
 [Return To Main Menu](/README.md)
