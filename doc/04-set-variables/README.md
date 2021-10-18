@@ -3,13 +3,13 @@
 From a terminal session inside your Cloud9 environment, prepare your EC2 variables file:
 ```bash
 cat > ~/.env << EOF
-alias k="kubectl"                                                        # a common shortcut for the CLI
+alias k="kubectl"                                                           # a common shortcut for the CLI
 
 export AWS_ACCOUNT_ID=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document|grep accountId|awk -F\" '{print $4}')
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=""
 
-export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git # if you fork this repo, change this!
+export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git    # if you fork this repo, change this!
 export EKS_CLUSTER_NAME=dev
 export EKS_K8S_VERSION=1.20
 
