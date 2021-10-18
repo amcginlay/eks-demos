@@ -12,7 +12,7 @@ Kubernetes services of type LoadBalancer incorporate and extend the functionailt
 In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
 
 Kubernetes clusters provide extensibilty via pluggable components known as [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) which can be customized for a variety of purposes.
-Controllers take their instructions from the application of type-matched Kubernetes objects.
+Controllers take their instructions from type-matched Kubernetes objects when they are applied to the cluster.
 When newly created objects are observed within a cluster the associated controller(s) will react by taking whatever action necessary to reconcile.
 It is the same pattern of behaviour we see for all native Kubernetes objects so this idea of reconciliation (i.e. desired vs. actual) should feel familiar.
 The reconciliation actions may require the controller to reach out beyond the cluster and into the cloud provider environment itself.
