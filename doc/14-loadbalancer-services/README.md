@@ -22,8 +22,7 @@ Services of type LoadBalancer in EKS are a prime example of the use of custom co
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
 kubectl -n ${EKS_APP_NS} get services
-kubectl -n ${EKS_APP_NS} delete service ${EKS_APP_BLUE}
-kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BLUE} --port=80 --type=LoadBalancer
+kubectl -n ${EKS_APP_NS} patch service ${EKS_APP_BLUE} --patch '{"spec": {"type": "LoadBalancer"}}' # extend the service to expose a new AWS Load Balancer
 sleep 5 && kubectl -n ${EKS_APP_NS} get services
 ```
 
