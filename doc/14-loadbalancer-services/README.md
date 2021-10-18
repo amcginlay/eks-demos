@@ -37,6 +37,6 @@ while true; do curl http://${lb_dnsname}; sleep 0.25; done
 ```
 
 It is important to recognise the chain of inheritance that runs through Kubernetes services.
-Services of type **LoadBalancer** are, behind the scenes, also **NodePort** services whic, in turn are internally built upon **ClusterIP** services.
+Services of type **LoadBalancer** are, behind the scenes, also **NodePort** services which, in turn, are internally built upon **ClusterIP** services.
 
 [Return To Main Menu](/README.md)
