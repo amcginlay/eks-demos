@@ -50,6 +50,9 @@ kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_GREEN} --replicas 3
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=NodePort
 ```
 
+As noted in the previous section, Kubernetes services of type **LoadBalancer** are derived from services of type **NodePort**.
+As such, either type of service can technically used as building blocks for use with the AWS Load Balancer Controller.
+
 **TODO this section needs some work**
 
 Create an Application Load Balancer object with separate paths to the two underlying NodePort services, identified as `EKS_APP_BLUE` and `EKS_APP_GREEN`.
