@@ -47,7 +47,7 @@ We are done with running images in Docker for now so stop the container (which w
 docker stop ${container_id}
 ```
 
-Have Docker build the next version of our simple app so we've got something extra to play with later on.
+Before we move on, instruct Docker to build the **next** version of our simple app so we've got something extra to play with later on.
 This might usually involve some real code changes.
 In this case we're just incrementing the value of the `VERSION` environment variable inside the Dockerfile and rebuilding the container image.
 
