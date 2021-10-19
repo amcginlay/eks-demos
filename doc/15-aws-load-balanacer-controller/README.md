@@ -87,11 +87,11 @@ while true; do curl http://${alb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-One of the benefits of the Application Load Balancer is that it can support path-based routing within its rules to allow a single load balancer to support mappings between paths and target groups.
+One of the benefits of the Application Load Balancer is that it can support path-based routing within its rules to allow a single load balancer to support mappings between URL **paths** and **target groups**.
 You may have noticed that we supplied two rules in our call to `create ingress` above.
 Send a curl request to `alt-path` to see how, in this case, two different endpoint paths can resolve to the same NodePort service.
 ```bash
-curl http://${alb_dnsname}/alt-path/
+curl http://${alb_dnsname}/alt-path
 ```
 
 [Return To Main Menu](/README.md)
