@@ -42,6 +42,15 @@ If you wondered why the localhostIP now differs from the ec2IP ...
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet
 ```
 
+Have Docker build the next version of our simple app so we've got something extra to play with later on.
+This might usually involve some real code changes.
+In this case we're just incrementing the value of the `VERSION` environment variable inside the container image.
+
+```bash
+sed -i "s/ENV VERSION=${EKS_APP_VERSION}/ENV VERSION=${EKS_APP_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
+docker build -t ${EKS_APP}:${EKS_APP_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP}/
+```
+
 We're done with Docker for now so stop the container (which will be terminated because we ran it with the --rm flag).
 ```bash
 docker stop ${container_id}
