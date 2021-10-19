@@ -55,8 +55,6 @@ The AWS Load Balancer Controller depends upon NodePort services to build its rou
 Hence, either service type can be referenced as targets within these rules.
 Use of NodePort services will however, in this context, require fewer AWS resources and be cost optimal.
 
-**TODO this section needs some work**
-
 Create an Application Load Balancer object with separate paths to the two underlying NodePort services, identified as `EKS_APP_BLUE` and `EKS_APP_GREEN`.
 ```bash
 kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_GREEN} \
@@ -74,9 +72,9 @@ kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
   --rule="/*=${EKS_APP_BLUE}:80"
 ```
 
-External port 80 requests are now load balanced across the two underlying deployments/services. Grab the load balancer DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins). If you receive any errors, just wait a little longer.
+External port 80 requests are now load balanced across the two underlying deployments/services. Grab the load balancer DNS name (from either ingress object) and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins). If you receive any errors, just wait a little longer.
 ```bash
-alb_dnsname=$(kubectl -n ${EKS_APP_NS} get ingress ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+alb_dnsname=$(kubectl -n ${EKS_APP_NS} get ingress ${EKS_APP_BLUE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${alb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
