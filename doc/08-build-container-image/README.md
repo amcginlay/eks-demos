@@ -20,8 +20,7 @@ cat ~/environment/eks-demos/src/php-echo/Dockerfile
 
 Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the newly containerized app.
 ```bash
-docker build -t ${EKS_APP} ~/environment/eks-demos/src/${EKS_APP}/
-docker tag ${EKS_APP}:latest ${EKS_APP}:${EKS_APP_VERSION}
+docker build -t ${EKS_APP}:${EKS_APP_VERSION} ~/environment/eks-demos/src/${EKS_APP}/
 docker images                                                                     # see what you produced
 docker ps                                                                         # nothing running ...
 container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP}:${EKS_APP_VERSION}) # request docker to instantiate a single container as a background process
