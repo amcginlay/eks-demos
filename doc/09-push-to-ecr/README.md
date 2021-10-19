@@ -16,7 +16,7 @@ NOTE the generated repo name, which is output by the above command, should match
 Push the Docker image to ECR repository.
 ```bash
 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${EKS_APP_ECR_REPO}
-docker tag ${EKS_APP}:latest ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
+docker tag ${EKS_APP}:${EKS_APP_VERSION} ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 docker images
 docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION}
 ```
@@ -27,8 +27,8 @@ In this case we're just incrementing the value of the `VERSION` environment vari
 
 ```bash
 sed -i "s/ENV VERSION=${EKS_APP_VERSION}/ENV VERSION=${EKS_APP_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
-docker build -t ${EKS_APP} ~/environment/eks-demos/src/${EKS_APP}/
-docker tag ${EKS_APP}:latest ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT}
+docker build -t ${EKS_APP}:${EKS_APP_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP}/
+docker tag ${EKS_APP}:${EKS_APP_VERSION_NEXT} ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT}
 docker push ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT}
 ```
 
