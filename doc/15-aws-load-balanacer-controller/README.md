@@ -62,7 +62,7 @@ kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_GREEN} \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
   --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
   --annotation alb.ingress.kubernetes.io/group.order=1 \
-  --rule="/test=${EKS_APP_GREEN}:80"
+  --rule="/alt-path=${EKS_APP_GREEN}:80"
 
 kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
   --annotation kubernetes.io/ingress.class=alb \
