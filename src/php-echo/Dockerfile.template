@@ -1,6 +1,6 @@
 FROM php:8.0.1-apache
 ENV VERSION=${EKS_APP_VERSION}
 COPY index.php /var/www/html/
-RUN mkdir /etc/httpd/conf.d/ \
-    echo FallbackResource /index.php > /etc/httpd/conf.d/all-paths-go-home.conf \
-    chmod a+rx *.php
+RUN chmod a+rx *.php \
+    mkdir /etc/httpd/conf.d/ \
+    echo FallbackResource /index.php > /etc/httpd/conf.d/all-paths-go-home.conf
