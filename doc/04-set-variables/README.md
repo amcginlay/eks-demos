@@ -29,4 +29,9 @@ echo "source ~/.env" >> ~/.bashrc
 source ~/.env
 ```
 
+Familiarize yourself with these variable settings
+```bash
+env | sort | grep "AWS\|EKS"
+```
+
 [Return To Main Menu](/README.md)
