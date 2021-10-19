@@ -17,7 +17,7 @@ This deployment will start scaled down to zero so we can right-size the CPU requ
 kubectl create namespace ${EKS_APP_NS}
 kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_BLUE} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION} # begin with zero replicas
 kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_BLUE} --requests=cpu=200m,memory=200Mi                     # right-size the pods
-kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_GREEN} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
+kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_BLUE} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
 kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BLUE} --replicas 3                                                 # start 3 instances
 sleep 10 && kubectl -n ${EKS_APP_NS} get all -o wide                                                                   # inspect objects
 ```
