@@ -50,10 +50,10 @@ docker stop ${container_id}
 Before we move on, instruct Docker to build the **next** version of our simple app so we've got something extra to play with later on.
 This might usually involve some real code changes.
 In this case we're just incrementing the value of the `VERSION` environment variable inside the Dockerfile and rebuilding the container image.
-
 ```bash
 sed -i "s/ENV VERSION=${EKS_APP_VERSION}/ENV VERSION=${EKS_APP_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
 docker build -t ${EKS_APP}:${EKS_APP_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP}/
+docker images
 ```
 
 [Return To Main Menu](/README.md)
