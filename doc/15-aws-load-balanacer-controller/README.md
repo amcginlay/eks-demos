@@ -46,6 +46,7 @@ Deploy the next iteration of our app alongside the current one so we can see thi
 ```bash
 kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_GREEN} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT} # begin with zero replicas
 kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_GREEN} --requests=cpu=200m,memory=200Mi                          # right-size the pods
+kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_GREEN} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
 kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_GREEN} --replicas 3
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=NodePort
 ```
