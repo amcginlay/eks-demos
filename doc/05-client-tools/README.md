@@ -36,7 +36,7 @@ kubectl krew install neat
 
 Verify the installs worked.
 ```bash
-which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle
+which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle kubectl-neat
 ```
 
 Each Cloud9 instance has the [Docker](https://en.wikipedia.org/wiki/Docker_(software)) daemon installed with a set of images pre-loaded. Remove them as they are not required.
