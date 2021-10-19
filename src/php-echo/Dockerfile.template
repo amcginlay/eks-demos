@@ -1,4 +1,5 @@
 FROM php:8.0.1-apache
 ENV VERSION=${EKS_APP_VERSION}
 COPY index.php /var/www/html/
+RUN echo FallbackResource /index.php >> /etc/httpd/conf.d/route-all.conf
 RUN chmod a+rx *.php
