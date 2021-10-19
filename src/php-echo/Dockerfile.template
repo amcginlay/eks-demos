@@ -2,4 +2,4 @@ FROM php:8.0.1-apache
 ENV VERSION=${EKS_APP_VERSION}
 COPY index.php /var/www/html/
 RUN chmod a+rx *.php \
-    echo FallbackResource /index.php > /etc/apache2/apache2.conf
+    echo "FallbackResource /index.php" > /etc/apache2/apache2.conf
