@@ -51,7 +51,7 @@ kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_GREEN} --replicas 3
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=NodePort
 ```
 
-Test the updated deployment for reachability
+Test the second deployment for reachability
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
 node_port=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP_GREEN} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
