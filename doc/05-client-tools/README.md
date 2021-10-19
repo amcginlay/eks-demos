@@ -19,7 +19,6 @@ curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install gradle
 rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm
-
 # finally, install the kubectl neat add-on (https://krew.sigs.k8s.io/docs/user-guide/setup/install/ | https://github.com/itaysk/kubectl-neat)
 (
   set -x; cd "$(mktemp -d)" &&
@@ -30,7 +29,6 @@ rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm
   tar zxvf "${KREW}.tar.gz" &&
   ./"${KREW}" install krew
 )
-
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
 kubectl krew install neat
