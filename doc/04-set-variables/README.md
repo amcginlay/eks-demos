@@ -7,7 +7,7 @@ alias k="kubectl"                                                           # a 
 
 export AWS_ACCOUNT_ID=$(curl --silent http://169.254.169.254/latest/dynamic/instance-identity/document|grep accountId|awk -F\" '{print $4}')
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
-export AWS_PAGER=""
+export AWS_PAGER=                                                           # intentionally blank
 
 export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git    # if you fork this repo, change this!
 export EKS_CLUSTER_NAME=dev
