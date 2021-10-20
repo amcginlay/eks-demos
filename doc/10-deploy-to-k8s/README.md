@@ -19,7 +19,7 @@ kubectl -n ${EKS_NS_BLUE} create deployment ${EKS_APP} --replicas 0 --image ${EK
 kubectl -n ${EKS_NS_BLUE} set resources deployment ${EKS_APP} --requests=cpu=200m,memory=200Mi                     # right-size the pods
 kubectl -n ${EKS_NS_BLUE} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
 kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP} --replicas 3                                                 # start 3 instances
-sleep 10 && kubectl -n ${EKS_NS_BLUE} get all -o wide                                                              # inspect objects
+sleep 10 && kubectl -n ${EKS_NS_BLUE} get deployments pods -o wide                                                 # inspect objects
 ```
 
 Exec into the first pod to perform curl test.
