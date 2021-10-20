@@ -52,7 +52,7 @@ kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
   --rule="/*=${EKS_APP}:80"
 ```
 
-Grab the load balancer DNS name and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
+Grab the ALB DNS name and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
 alb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get ingress ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
@@ -85,8 +85,8 @@ node_port=$(kubectl -n ${EKS_NS_GREEN} get service -l app=${EKS_APP} -o jsonpath
 kubectl exec -it jumpbox -- /bin/bash -c "curl ${worker_nodes[0]}:${node_port}"
 ```
 
-Now extend the load balancer definition by creating a second ingress resource alongside our new deployment.
-The `group-name` matches our first ingress, so it will be associated with the same load balancer as before, but the `group-order` is lower so this path will be evaluated for a pattern match first.
+Now extend the ALB definition by creating a second ingress resource alongside our new deployment.
+The `group-name` matches our first ingress, so it will be associated with the same ALB as before, but the `group-order` is lower so this path will be evaluated for a pattern match first.
 ```bash
 kubectl -n ${EKS_NS_GREEN} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
