@@ -31,7 +31,7 @@ sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 
 
 In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
 ```bash
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BLUE} --replicas 30
+kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP} --replicas 30
 ```
 
 Note how some pods start without an IP addresses because they're stuck in the Pending state and cannot be scheduled.
@@ -41,7 +41,7 @@ The Cluster Autoscaler will take about 2 minutes to scale-out the nodes and ther
 Once all the pods are in a Running state the demo is complete.
 Revert the replicaset to its previous size.
 ```bash
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BLUE} --replicas 3
+kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP} --replicas 3
 ```
 
 If the underlying nodes are present and have spare capacity, new pods can be created in a matter of seconds. The nodes (i.e. virtual machines) take a little longer to stand up so best practice suggests they are scaled-out as rapidly as possible and scaled-in slowly in order to cope with the possibility of spiky workloads.
