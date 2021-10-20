@@ -16,7 +16,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 ```bash
 kubectl describe deployment metrics-server -n kube-system
 kubectl top nodes                                              # this may take a minute to produce results
-kubectl top pods
+kubectl top pods --all-namespaces
 ```
 
 # activate the Horizontal Pod Autoscaler (hpa) for the first time
