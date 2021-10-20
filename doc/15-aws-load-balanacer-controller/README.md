@@ -44,17 +44,18 @@ kubectl -n kube-system get deployment aws-load-balancer-controller
 With the help of the Application Load Balancer, the AWS Load Balancer Controller is able to support path-based routing which means a single load balancer resource is able to route traffic to multiple deployments simultaneously.
 Deploy the next iteration of our app alongside the current one so we can see this feature in practice.
 ```bash
-kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_GREEN} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT} # begin with zero replicas
-kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_GREEN} --requests=cpu=200m,memory=200Mi                          # right-size the pods
-kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_GREEN} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_GREEN} --replicas 3
-kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_GREEN} --port=80 --type=NodePort
+kubectl create namespace ${EKS_NS_GREEN}
+kubectl -n ${EKS_NS_GREEN} create deployment ${EKS_APP} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT} # begin with zero replicas
+kubectl -n ${EKS_NS_GREEN} set resources deployment ${EKS_APP} --requests=cpu=200m,memory=200Mi                          # right-size the pods
+kubectl -n ${EKS_NS_GREEN} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
+kubectl -n ${EKS_NS_GREEN} scale deployment ${EKS_APP} --replicas 3
+kubectl -n ${EKS_NS_GREEN} expose deployment ${EKS_APP} --port=80 --type=NodePort
 ```
 
 Test the second deployment for reachability
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
-node_port=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP_GREEN} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+node_port=$(kubectl -n ${EKS_NS_GREEN} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 kubectl exec -it jumpbox -- /bin/bash -c "curl ${worker_nodes[0]}:${node_port}"
 ```
 
@@ -65,24 +66,24 @@ Use of NodePort services will however, in this context, require fewer AWS resour
 
 Create an Application Load Balancer object with separate paths to the two underlying NodePort services, identified as `EKS_APP_BLUE` and `EKS_APP_GREEN`.
 ```bash
-kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_GREEN} \
+kubectl -n ${EKS_NS_GREEN} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
   --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
   --annotation alb.ingress.kubernetes.io/group.order=1 \
-  --rule="/alt-path/*=${EKS_APP_GREEN}:80"
+  --rule="/alt-path/*=${EKS_APP}:80"
 
-kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP_BLUE} \
+kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
   --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
   --annotation alb.ingress.kubernetes.io/group.order=2 \
-  --rule="/*=${EKS_APP_BLUE}:80"
+  --rule="/*=${EKS_APP}:80"
 ```
 
 External port 80 requests are now load balanced across the two underlying deployments/services. Grab the load balancer DNS name (from either ingress object) and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins). If you receive any errors, just wait a little longer.
 ```bash
-alb_dnsname=$(kubectl -n ${EKS_APP_NS} get ingress ${EKS_APP_BLUE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+alb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get ingress ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${alb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
