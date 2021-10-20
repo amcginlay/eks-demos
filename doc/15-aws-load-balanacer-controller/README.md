@@ -66,7 +66,7 @@ The AWS Load Balancer Controller depends upon NodePort services to build its rou
 Hence, either service type can be referenced as targets within these rules.
 Use of NodePort services will however, in this context, require fewer AWS resources and be cost optimal.
 
-Create an Application Load Balancer object with separate paths to the two underlying NodePort services, identified as `EKS_APP_BLUE` and `EKS_APP_GREEN`.
+Create an Application Load Balancer object with separate paths to the two underlying NodePort services running in different Kubernetes namespaces.
 ```bash
 kubectl -n ${EKS_NS_GREEN} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
@@ -83,8 +83,6 @@ kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
   --rule="/*=${EKS_APP}:80"
 ```
 
-External port 80 requests are now load balanced across the two underlying deployments.
-The use of the `group-name` annotation permits these deployments to span multiple namespaces.
 Grab the load balancer DNS name (from either ingress object) and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
@@ -93,9 +91,7 @@ while true; do curl http://${alb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-One of the benefits of the Application Load Balancer is that it can support path-based routing within its rules to allow a single load balancer to support mappings between URL **paths** and **target groups**.
-You may have noticed that we supplied two rules in our call to `create ingress` above.
-Send a curl request to `alt-path` to see how one load balancer can support traffic to multiple deployments.
+Send a curl request to `alt-path` to see how a single load balancer can now support traffic to multiple deployments.
 ```bash
 curl http://${alb_dnsname}/alt-path
 ```
