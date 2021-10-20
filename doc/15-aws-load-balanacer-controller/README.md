@@ -50,6 +50,7 @@ kubectl -n ${EKS_NS_GREEN} set resources deployment ${EKS_APP} --requests=cpu=20
 kubectl -n ${EKS_NS_GREEN} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
 kubectl -n ${EKS_NS_GREEN} scale deployment ${EKS_APP} --replicas 3
 kubectl -n ${EKS_NS_GREEN} expose deployment ${EKS_APP} --port=80 --type=NodePort
+sleep 10 && kubectl -n ${EKS_NS_GREEN} get deployments,pods,services -o wide
 ```
 
 Test the second deployment for reachability
