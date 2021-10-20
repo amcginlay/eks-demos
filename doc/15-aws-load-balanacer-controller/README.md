@@ -96,9 +96,10 @@ kubectl -n ${EKS_NS_GREEN} create ingress ${EKS_APP} \
   --rule="/alt-path/*=${EKS_APP}:80"
 ```
 
-Send a curl request to `alt-path` to see how a single ALB can support traffic to multiple deployments.
+Send separate curl requests to observe how a single ALB can forward traffic to multiple deployments.
 ```bash
 curl http://${alb_dnsname}/alt-path
+curl http://${alb_dnsname}
 ```
 
 [Return To Main Menu](/README.md)
