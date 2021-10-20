@@ -1,6 +1,6 @@
 # Horizontal Pod Autoscaler - because demand for pods can grow
 
-# TODO
+# TODO this all need tidying up ...
 
 # see that metrics server is missing
 ```bash
