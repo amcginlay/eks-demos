@@ -20,7 +20,7 @@ Before we do so, get ready to monitor what is happening inside our cluster.
 
 In a **dedicated terminal** window prepare to observe the nodes and pods as their status changes.
 ```bash
-watch "kubectl get nodes; echo; kubectl -n ${EKS_APP_NS} get pods -o wide"
+watch "kubectl get nodes; echo; kubectl -n ${EKS_NS_BLUE} get pods -o wide"
 ```
 
 In another **dedicated terminal** window, begin tailing the Cluster Autoscaler log file to observe as it decides to intervene.
