@@ -83,8 +83,8 @@ kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
   --rule="/*=${EKS_APP}:80"
 ```
 
-External port 80 requests are now load balanced across the two underlying deployments/services.
-The use of the `node-group` annotation permits us to provision a single load balancer with rules targeting deployments spanning multiple namespaces.
+External port 80 requests are now load balanced across the two underlying deployments.
+The use of the `group-name` annotation permits these deployments to span multiple namespaces.
 Grab the load balancer DNS name (from either ingress object) and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
