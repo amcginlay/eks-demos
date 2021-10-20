@@ -11,7 +11,7 @@ kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yam
 
 ### Deploy our application at scale
 
-Create a `blue` namespace which will host the first deployment then use `kubectl create deployment` to deploy the app from ECR to Kubernetes.
+Create a namespace which will host the first deployment then use `kubectl create deployment` to deploy the app from ECR to Kubernetes.
 This deployment will start scaled down to zero so we can right-size the CPU requests setting before spinning up the 3 instances.
 ```bash
 kubectl create namespace ${EKS_NS_BLUE}
