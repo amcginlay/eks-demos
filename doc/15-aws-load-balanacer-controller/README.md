@@ -53,7 +53,7 @@ kubectl -n ${EKS_NS_GREEN} expose deployment ${EKS_APP} --port=80 --type=NodePor
 sleep 10 && kubectl -n ${EKS_NS_GREEN} get deployments,pods,services -o wide
 ```
 
-Test the second deployment for reachability
+Test the second deployment for reachability and note the updated version attribute
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
 node_port=$(kubectl -n ${EKS_NS_GREEN} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
