@@ -2,6 +2,8 @@
 
 # TODO this all need tidying up ...
 
+NOTE this section currently requires a load balancer service to already be present.
+
 # see that metrics server is missing
 ```bash
 kubectl top nodes
