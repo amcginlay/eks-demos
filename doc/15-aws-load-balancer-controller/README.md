@@ -42,7 +42,7 @@ kubectl -n kube-system get deployment aws-load-balancer-controller
 ```
 
 Start by re-implementing what we had in the previous section - a single load balancer forwarding all traffic to one deployment via its service.
-This time will be creating an Application Load Balancer (ALB).
+This time we will be creating an Application Load Balancer (ALB).
 ```bash
 kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
