@@ -75,7 +75,7 @@ kubectl create namespace ${EKS_APP_ALT_NS}
 kubectl -n ${EKS_APP_ALT_NS} create deployment ${EKS_APP_ALT} --replicas 0 --image gcr.io/google_containers/echoserver:1.10 # begin with zero replicas
 kubectl -n ${EKS_APP_ALT_NS} set resources deployment ${EKS_APP_ALT} --requests=cpu=200m,memory=200Mi                       # right-size the pods
 kubectl -n ${EKS_APP_ALT_NS} patch deployment ${EKS_APP_ALT} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP_ALT}\",\"imagePullPolicy\":\"Always\"}]}}}}"
-kubectl -n ${EKS_APP_ALT_NS} scale deployment ${EKS_APP_ALT} --replicas 3
+kubectl -n ${EKS_APP_ALT_NS} scale deployment ${EKS_APP_ALT} --replicas 1
 kubectl -n ${EKS_APP_ALT_NS} expose deployment ${EKS_APP_ALT} --port=80 --target-port=8080 --type=NodePort                  # echoserver uses port 8080 internally
 sleep 10 && kubectl -n ${EKS_APP_ALT_NS} get deployments,pods,services -o wide
 ```
