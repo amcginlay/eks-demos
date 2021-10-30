@@ -14,12 +14,12 @@ Capture the private IP addresses of the worker nodes and the designated node por
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
 node_port=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+echo ${worker_nodes[0]}:${node_port}
 ```
 
 All worker nodes will now forward inbound requests on the designated port to the underlying ClusterIP service.
 We `curl` from inside the jumpbox pod to avoid having to update security groups in respect of the node port.
 ```bash
-echo ${worker_nodes[0]}:${node_port}
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${worker_nodes[0]}:${node_port}; done"
 # ctrl+c to quit loop
 ```
