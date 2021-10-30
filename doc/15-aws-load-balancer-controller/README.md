@@ -66,8 +66,9 @@ Hence, either service type can be referenced as targets within these rules.
 Use of NodePort services would however, in this context, require fewer AWS resources and be cost optimal.
 
 If we're going to test multiple routes we need an alternate deployment.
-Deploy the GCP echo server into an alternate namespace.
+Deploy a different, but equally simple, echo server app into an alternate namespace.
 This deployment has an accompanying NodePort service which will become a new target for the ALB.
+Note that this container image exposes port 8080 so we set an appropriate `target-port` mapping to align the deployment ports.
 ```bash
 EKS_APP_ALT=alt-echo
 EKS_APP_ALT_NS=${EKS_APP_ALT}
