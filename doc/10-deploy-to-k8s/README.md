@@ -14,18 +14,18 @@ kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yam
 Create a namespace which will host the first deployment then use `kubectl create deployment` to deploy the app from ECR to Kubernetes.
 This deployment will start scaled down to zero so we can right-size the CPU requests setting before spinning up the 3 instances.
 ```bash
-kubectl create namespace ${EKS_NS_BLUE}
-kubectl -n ${EKS_NS_BLUE} create deployment ${EKS_APP} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION} # begin with zero replicas
-kubectl -n ${EKS_NS_BLUE} set resources deployment ${EKS_APP} --requests=cpu=200m,memory=200Mi                     # right-size the pods
-kubectl -n ${EKS_NS_BLUE} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
-kubectl -n ${EKS_NS_BLUE} scale deployment ${EKS_APP} --replicas 3                                                 # start 3 instances
-sleep 10 && kubectl -n ${EKS_NS_BLUE} get deployments,pods -o wide                                                 # inspect objects
+kubectl create namespace ${EKS_APP_NS}
+kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION} # begin with zero replicas
+kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP} --requests=cpu=200m,memory=200Mi                     # right-size the pods
+kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP} --replicas 3                                                 # start 3 instances
+sleep 10 && kubectl -n ${EKS_APP_NS} get deployments,pods -o wide                                                 # inspect objects
 ```
 
 Exec into the first pod to perform curl test.
 ```bash
-first_pod=$(kubectl -n ${EKS_NS_BLUE} get pods -l app=${EKS_APP} -o name | head -1)
-kubectl -n ${EKS_NS_BLUE} exec -it ${first_pod} -- curl localhost:80
+first_pod=$(kubectl -n ${EKS_APP_NS} get pods -l app=${EKS_APP} -o name | head -1)
+kubectl -n ${EKS_APP_NS} exec -it ${first_pod} -- curl localhost:80
 ```
 
 Do not delete this deployment. We will need it later.
