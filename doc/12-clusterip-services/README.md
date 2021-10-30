@@ -3,7 +3,7 @@
 This section assumes that the `EKS_APP` (i.e. `php-echo`) app is deployed and scaled to 3 instances.
 
 To test ClusterIP services we first need to gain "private" access to our deployments, just as we might do with a regular EC2 jumpbox (or bastion host).
-We can deploy [nginx](https://www.nginx.com) as a standalone pod in the default namespace which conveniently suits this purpose however it should be noted, without an associated deployment, Kubernetes is not responsible for its replacement in the event of a failure.
+We can deploy [nginx](https://www.nginx.com) as a standalone pod in the default namespace which conveniently suits this purpose however it should be noted, in the absence of an associated deployment, it will not be replaced in the event of a failure.
 ```bash
 kubectl run jumpbox --image=nginx
 sleep 10 && kubectl exec -it jumpbox -- curl localhost:80 # <---- test the NGINX welcome page
