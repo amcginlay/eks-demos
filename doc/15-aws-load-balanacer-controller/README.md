@@ -3,7 +3,7 @@
 The previous section introduced the Kubernetes LoadBalancer service.
 The EKS implementation of this creates one [Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer/) per service.
 Whilst this provides a working solution it is not best suited for modern deployments built upon VPC infrastructure and is not as configurable as we would like.
-For exmaaple, it would be preferable to support multiple deployments from a single load balancer.
+For example, it would be preferable to support multiple deployments from a single load balancer.
 For this reason we recommend using the [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
 This controller supports the use of [Application Load Balancers](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) and [Network Load Balancers](https://aws.amazon.com/elasticloadbalancing/network-load-balancer/) which are the preferred modern solutions.
 
@@ -41,13 +41,21 @@ Verify that the controller is installed.
 kubectl -n kube-system get deployment aws-load-balancer-controller
 ```
 
+As a proof of concept we will implement a single load balancer that is capable of forwarding traffic to two distinct NodePort-enabled services.
+We already have one for `EKS_APP`.
+Let us now create one for the single nginx instance 
+
+--------------- TODO ----------------
+
+
+
 Start by re-implementing what we had in the previous section - a single load balancer forwarding all traffic to one deployment via its service.
 This time will be creating an Application Load Balancer (ALB).
 ```bash
-kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
+kubectl -n ${EKS_APP_NS} create ingress ${EKS_APP} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
-  --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
+  --annotation alb.ingress.kubernetes.io/group.name=shared \
   --annotation alb.ingress.kubernetes.io/group.order=200 \
   --rule="/*=${EKS_APP}:80"
 ```
@@ -55,7 +63,7 @@ kubectl -n ${EKS_NS_BLUE} create ingress ${EKS_APP} \
 Grab the ALB DNS name and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
-alb_dnsname=$(kubectl -n ${EKS_NS_BLUE} get ingress ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+alb_dnsname=$(kubectl -n ${EKS_APP_NS} get ingress ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${alb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```
