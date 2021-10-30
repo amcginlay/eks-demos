@@ -102,8 +102,8 @@ kubectl -n ${EKS_APP_ALT_NS} create ingress ${EKS_APP_ALT} \
 
 Send separate curl requests to observe how a single ALB can forward traffic to multiple deployments in different namespaces.
 ```bash
-curl http://${alb_dnsname}
-curl http://${alb_dnsname}/${EKS_APP_ALT}
+curl http://${alb_dnsname}                # our original app
+curl http://${alb_dnsname}/${EKS_APP_ALT} # our alternative app
 ```
 
 [Return To Main Menu](/README.md)
