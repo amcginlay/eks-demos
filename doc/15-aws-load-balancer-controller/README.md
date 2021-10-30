@@ -81,7 +81,8 @@ kubectl -n ${EKS_APP_ALT_NS} expose deployment ${EKS_APP_ALT} --port=80 --target
 sleep 10 && kubectl -n ${EKS_APP_ALT_NS} get deployments,pods,services -o wide
 ```
 
-Test this new service for internal reachability, checking for the incremented `version` attribute to confirm we have the correct container image.
+Test this new service for internal reachability.
+The output is notably different to our previously deployed application.
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
 node_port=$(kubectl -n ${EKS_APP_ALT_NS} get service -l app=${EKS_APP_ALT} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
