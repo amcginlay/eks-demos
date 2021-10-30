@@ -3,7 +3,7 @@
 The previous section introduced the Kubernetes LoadBalancer service.
 The EKS implementation of this creates one [Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer/) per service.
 Whilst this provides a working solution it is not best suited for modern deployments built upon VPC infrastructure and is not as configurable as we would like.
-For example, it would be preferable to support multiple deployments from a single load balancer.
+For exmaaple, it would be preferable to support multiple deployments from a single load balancer.
 For this reason we recommend using the [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
 This controller supports the use of [Application Load Balancers](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) and [Network Load Balancers](https://aws.amazon.com/elasticloadbalancing/network-load-balancer/) which are the preferred modern solutions.
 
@@ -41,14 +41,6 @@ Verify that the controller is installed.
 kubectl -n kube-system get deployment aws-load-balancer-controller
 ```
 
-As a proof of concept we will implement a single load balancer that is capable of forwarding traffic to two distinct NodePort-enabled services.
-We already have one for `EKS_APP`.
-Let us now create one for the single nginx instance 
-
---------------- TODO ----------------
-
-
-
 Start by re-implementing what we had in the previous section - a single load balancer forwarding all traffic to one deployment via its service.
 This time will be creating an Application Load Balancer (ALB).
 ```bash
@@ -74,40 +66,42 @@ Hence, either service type can be referenced as targets within these rules.
 Use of NodePort services would however, in this context, require fewer AWS resources and be cost optimal.
 
 If we're going to test multiple routes we need an alternate deployment.
-Deploy the **next** iteration of our app into an alternate namespace.
+Deploy the GCP echo server into an alternate namespace.
 This deployment has an accompanying NodePort service which will become a new target for the ALB.
 ```bash
-kubectl create namespace ${EKS_NS_GREEN}
-kubectl -n ${EKS_NS_GREEN} create deployment ${EKS_APP} --replicas 0 --image ${EKS_APP_ECR_REPO}:${EKS_APP_VERSION_NEXT} # begin with zero replicas
-kubectl -n ${EKS_NS_GREEN} set resources deployment ${EKS_APP} --requests=cpu=200m,memory=200Mi                          # right-size the pods
-kubectl -n ${EKS_NS_GREEN} patch deployment ${EKS_APP} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP}\",\"imagePullPolicy\":\"Always\"}]}}}}"
-kubectl -n ${EKS_NS_GREEN} scale deployment ${EKS_APP} --replicas 3
-kubectl -n ${EKS_NS_GREEN} expose deployment ${EKS_APP} --port=80 --type=NodePort
-sleep 10 && kubectl -n ${EKS_NS_GREEN} get deployments,pods,services -o wide
+EKS_APP_ALT=alt-echo
+EKS_APP_ALT_NS=${EKS_APP_ALT}
+kubectl create namespace ${EKS_APP_ALT_NS}
+kubectl -n ${EKS_APP_ALT_NS} create deployment ${EKS_APP_ALT} --replicas 0 --image gcr.io/google_containers/echoserver:1.10 # begin with zero replicas
+kubectl -n ${EKS_APP_ALT_NS} set resources deployment ${EKS_APP_ALT} --requests=cpu=200m,memory=200Mi                       # right-size the pods
+kubectl -n ${EKS_APP_ALT_NS} patch deployment ${EKS_APP_ALT} --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP_ALT}\",\"imagePullPolicy\":\"Always\"}]}}}}"
+kubectl -n ${EKS_APP_ALT_NS} scale deployment ${EKS_APP_ALT} --replicas 3
+kubectl -n ${EKS_APP_ALT_NS} expose deployment ${EKS_APP_ALT} --port=80 --target-port=8080 --type=NodePort                  # echoserver uses port 8080 internally
+sleep 10 && kubectl -n ${EKS_APP_ALT_NS} get deployments,pods,services -o wide
 ```
 
 Test this new service for internal reachability, checking for the incremented `version` attribute to confirm we have the correct container image.
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
-node_port=$(kubectl -n ${EKS_NS_GREEN} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+node_port=$(kubectl -n ${EKS_APP_ALT_NS} get service -l app=${EKS_APP_ALT} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 kubectl exec -it jumpbox -- /bin/bash -c "curl ${worker_nodes[0]}:${node_port}"
 ```
 
 Now extend the ALB definition by creating a second ingress resource alongside our new deployment.
 The `group-name` matches our first ingress, so it will be associated with the same ALB as before, but the `group-order` is lower so this path will be evaluated for a pattern match first.
 ```bash
-kubectl -n ${EKS_NS_GREEN} create ingress ${EKS_APP} \
+kubectl -n ${EKS_APP_ALT_NS} create ingress ${EKS_APP_ALT} \
   --annotation kubernetes.io/ingress.class=alb \
   --annotation alb.ingress.kubernetes.io/scheme=internet-facing \
-  --annotation alb.ingress.kubernetes.io/group.name=${EKS_APP} \
+  --annotation alb.ingress.kubernetes.io/group.name=shared \
   --annotation alb.ingress.kubernetes.io/group.order=100 \
-  --rule="/alt-path/*=${EKS_APP}:80"
+  --rule="/${EKS_APP_ALT}/*=${EKS_APP_ALT}:80"
 ```
 
 Send separate curl requests to observe how a single ALB can forward traffic to multiple deployments in different namespaces.
 ```bash
-curl http://${alb_dnsname}/alt-path
 curl http://${alb_dnsname}
+curl http://${alb_dnsname}/${EKS_APP_ALT}
 ```
 
 [Return To Main Menu](/README.md)
