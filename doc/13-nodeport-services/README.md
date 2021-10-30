@@ -5,15 +5,15 @@ They negotiate access to the underlying ClusterIP service via an auto-assigned h
 
 Upgrade the ClusterIP service to a NodePort service then check the services.
 ```bash
-kubectl -n ${EKS_NS_APP} get services
-kubectl -n ${EKS_NS_APP} patch service ${EKS_APP} --patch '{"spec": {"type": "NodePort"}}' # this will auto-assign a high-order port on ALL worker nodes
-kubectl -n ${EKS_NS_APP} get services
+kubectl -n ${EKS_APP_NS} get services
+kubectl -n ${EKS_APP_NS} patch service ${EKS_APP} --patch '{"spec": {"type": "NodePort"}}' # this will auto-assign a high-order port on ALL worker nodes
+kubectl -n ${EKS_APP_NS} get services
 ```
 
 Capture the private IP addresses of the worker nodes and the designated node port for later use (this high-order port this will be in the 30000+ range).
 ```bash
 worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
-node_port=$(kubectl -n ${EKS_NS_APP} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+node_port=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP} -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 ```
 
 All worker nodes will now forward inbound requests on the designated port to the underlying ClusterIP service.
