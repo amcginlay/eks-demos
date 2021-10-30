@@ -3,7 +3,7 @@
 The previous section introduced the Kubernetes LoadBalancer service.
 The EKS implementation of this creates one [Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer/) per service.
 Whilst this provides a working solution it is not best suited for modern deployments built upon VPC infrastructure and is not as configurable as we would like.
-For exmaaple, it would be preferable to support multiple deployments from a single load balancer.
+For example, it would be preferable to support multiple deployments from a single load balancer.
 For this reason we recommend using the [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
 This controller supports the use of [Application Load Balancers](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) and [Network Load Balancers](https://aws.amazon.com/elasticloadbalancing/network-load-balancer/) which are the preferred modern solutions.
 
