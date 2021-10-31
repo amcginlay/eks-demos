@@ -1,6 +1,6 @@
 # Horizontal Pod Autoscaler - because demand for pods can grow
 
-This next section assumes that you you have completed the previous section on **LoadBalancer services** and have a load balancer available.
+This next section assumes that you you have completed the earlier section on **LoadBalancer services** and have a load balancer available.
 
 When your workloads come under pressure their CPU consumption will rise.
 Cloud native best practices suggest that the response to this situation is to increase the number of workload replicas which spreads the load.
