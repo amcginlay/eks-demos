@@ -31,6 +31,7 @@ The `bitnami/apache` release is a simple package/release comprising a `deploymen
 It could include `configmaps`, `serviceaccounts` or any other YAML-defined object your cluster is capable of consuming.
 
 If we misconfigure something down the line we can re-install Apache by applying the same command.
+Go ahead and do this now.
 ```bash
 helm -n apache upgrade -i apache bitnami/apache
 ```
