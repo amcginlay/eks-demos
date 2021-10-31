@@ -76,7 +76,7 @@ eksctl create iamidentitymapping \
 
 Behind the scenes `eksctl` is updating the `aws-auth` config map which acts as a bridge between AWS IAM **authentication** and Kubernetes RBAC **authorization**.
 Without an entry in this config map, all IAM users and roles are forbidden from interacting with the cluster.
-The exception to this rule is the cluster creator identity (in this example Role-EC2-EKSClusterAdmin) which is always implicitly a member of the `system:masters` group.
+The exception to this rule is the cluster creator identity (in this example, that is Role-EC2-EKSClusterAdmin) which is always implicitly a member of the `system:masters` group.
 You can view the config map at any time using the following.
 ```bash
 kubectl -n kube-system get configmap aws-auth -o yaml | kubectl neat
