@@ -25,7 +25,7 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [15. AWS Load Balancer Controller](doc/15-aws-load-balancer-controller/README.md) - because one load balancer per service is wasteful
 
 ## Autoscaling (pt. 2)
-* TODO [16. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
+* [16. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
 
 ## Extensions
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
