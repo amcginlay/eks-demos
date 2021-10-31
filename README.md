@@ -18,7 +18,7 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 ## Autoscaling (pt. 1)
 * [11. Cluster Autoscaler](doc/11-ca/README.md) - because no one likes a pending pod
 
-## K8s Services and Controllers
+## Load Distribution
 * [12. K8s ClusterIP Services](doc/12-clusterip-services/README.md) - because pods need to talk to each other
 * [13. K8s NodePort Services](doc/13-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
 * [14. K8s LoadBalancer Services](doc/14-loadbalancer-services/README.md) - because the world needs to talk to our cluster
