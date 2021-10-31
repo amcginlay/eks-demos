@@ -105,7 +105,7 @@ curl http://${alb_dnsname}/${EKS_APP_ALT} # our alternative app
 ```
 
 We only require one load balancer but we currently have two.
-In a production environment we would likely favour the ALB over the CLB but for demo purposes the CLB will suffice so you may choose to unwind all the resources generated in this demo as follows.
+In a production environment we would likely favour the ALB over the CLB but for demo purposes the CLB will suffice so we recommend that you unwind all the resources generated in this demo as follows.
 ```bash
 kubectl -n ${EKS_APP_ALT_NS} delete ingress ${EKS_APP_ALT}
 kubectl -n ${EKS_APP_NS} delete ingress ${EKS_APP}

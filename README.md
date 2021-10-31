@@ -25,6 +25,9 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [15. Cluster Autoscaler](doc/15-ca/README.md) - because no one likes a pending pod
 * [16. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
 
+## Release Management
+* [17. Helm](doc/17-helm/README.md) - because packages need managing
+
 ## Extensions
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
 
