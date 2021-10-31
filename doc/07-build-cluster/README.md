@@ -62,4 +62,24 @@ We can further validate our permissions by observing the pods initally deployed 
 kubectl -n kube-system get pods -o wide
 ```
 
+Your Cloud9 environment is assuming the Role-EC2-EKSClusterAdmin role you created earlier.
+As such, only the Cloud9 environment is currently a trusted administrator of the cluster.
+If you wish to add further admin identities (IAM users or role) for different IAM identities you can add their ARNs as follows.
+ARNs can be loacted and copied directly from the IAM console.
+```bash
+eksctl create iamidentitymapping \
+  --cluster dev \
+  --group system:masters \
+  --arn <IAM_USER_OR_ROLE_ARN> \
+  --username <UNIQUE_NAME>
+```
+
+Behind the scenes `eksctl` is updating the `aws-auth` config map which acts as a bridge between AWS IAM **authentication** and Kubernetes RBAC **authorization**.
+Without an entry in this config map, all IAM users and roles are forbidden from interacting with the cluster.
+The exception to this rule is the cluster creator identity (in this example Role-EC2-EKSClusterAdmin) which is always implicitly a member of the `system:masters` group.
+You can view the config map at any time using the following.
+```bash
+kubectl -n kube-system get configmap aws-auth -o yaml | kubectl neat
+```
+
 [Return To Main Menu](/README.md)
