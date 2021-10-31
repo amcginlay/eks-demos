@@ -132,7 +132,7 @@ helm -n ${EKS_APP_NS} upgrade -i ${EKS_APP} ~/environment/helm-charts/${EKS_APP}
 
 Now hop over to the **dedicated** terminal window and watch as the `curl` responses reveal the old pod replicas being rapidly superceded with new ones.
 This should only take few seconds and reveals something extremely valuable about running cloud native workloads on Kubernetes.
-Application updates with zero downtime.
+Application updates with **zero downtime**.
 
 If we do not like the result of what we just did, Helm has your back.
 One simple command can roll back any deployment that fails to meet your expectations.
