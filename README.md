@@ -15,16 +15,14 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [09. Push Container Image To ECR](doc/09-push-to-ecr/README.md)
 * [10. Deploy From ECR To Kubernetes](doc/10-deploy-to-k8s/README.md)
 
-## Autoscaling (pt. 1)
-* [11. Cluster Autoscaler](doc/11-ca/README.md) - because no one likes a pending pod
-
 ## Load Distribution
-* [12. K8s ClusterIP Services](doc/12-clusterip-services/README.md) - because pods need to talk to each other
-* [13. K8s NodePort Services](doc/13-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
-* [14. K8s LoadBalancer Services](doc/14-loadbalancer-services/README.md) - because the world needs to talk to our cluster
-* [15. AWS Load Balancer Controller](doc/15-aws-load-balancer-controller/README.md) - because one load balancer per service is wasteful
+* [11. K8s ClusterIP Services](doc/11-clusterip-services/README.md) - because pods need to talk to each other
+* [12. K8s NodePort Services](doc/12-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
+* [13. K8s LoadBalancer Services](doc/13-loadbalancer-services/README.md) - because the world needs to talk to our cluster
+* [14. AWS Load Balancer Controller](doc/14-aws-load-balancer-controller/README.md) - because one load balancer per service is wasteful
 
-## Autoscaling (pt. 2)
+## Autoscaling
+* [15. Cluster Autoscaler](doc/15-ca/README.md) - because no one likes a pending pod
 * [16. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
 
 ## Extensions
