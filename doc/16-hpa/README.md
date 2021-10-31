@@ -37,7 +37,7 @@ watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
 ```
 
 The command to activate an HPA for an existing deployment is `autoscale`.
-Activate the Horizontal Pod Autoscaler for our running deployment.
+Activate the HPA for our running deployment.
 ```bash
 kubectl -n ${EKS_APP_NS} autoscale deployment ${EKS_APP} --cpu-percent=50 --min=3 --max=25
 ```
