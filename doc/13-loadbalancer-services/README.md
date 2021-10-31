@@ -9,7 +9,7 @@ If our nodes (i.e. EC2 instances) belong to a functioning auto-scaling group the
 
 In general, load balancers are designed to negate these questions by providing an active single point of access which guards us from the underlying complexity.
 Kubernetes services of type LoadBalancer incorporate and extend the functionailty of NodePort services which, in turn, extend the functionality of the ClusterIP services.
-In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
+In EKS, these services provide access to the underlying NodePort service via an [AWS Classic Load Balancer (CLB)](https://aws.amazon.com/elasticloadbalancing/classic-load-balancer).
 
 Kubernetes clusters provide extensibilty via pluggable components known as [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) which can be customized for a variety of purposes.
 Controllers take their instructions from type-matched Kubernetes objects when they are applied to the cluster.
@@ -28,7 +28,7 @@ sleep 5 && kubectl -n ${EKS_APP_NS} get services
 
 The `EXTERNAL-IP`, which was previously set as `<none>`, now contains the publicly addressible DNS name for an AWS Load Balancer.
 Port 80 requests arriving at this endpooint are now even distributed across all worker nodes using their node port as before.
-Grab the load balancer DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
+Grab the CLB DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
 clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')

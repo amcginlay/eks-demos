@@ -30,18 +30,6 @@ kubectl -n apache get all                       # view the objects created
 The `bitnami/apache` release is a simple package/release comprising a `deployment` with an associated `service` of type LoadBalancer but it could be much larger.
 It could include `configmaps`, `serviceaccounts` or any other YAML-defined object your cluster is capable of consuming.
 
-If we misconfigure something down the line we can re-install Apache by applying the same command.
-Go ahead and do this now.
-```bash
-helm -n apache upgrade -i apache bitnami/apache
-```
-
-In our case, the previous command changed nothing but with Helm now taking responsibility for deploying our applications we can ask it what it has done.
-```bash
-helm list --all-namespaces                      # Helm operations are namespaced by default
-helm -n apache history apache
-```
-
 But we are more interested in packaging our own applications so uninstall Apache and unwind what we have done.
 ```bash
 helm -n apache uninstall apache
@@ -96,7 +84,7 @@ Helm offers a dry run option which allows us to "kick the tyres" and look for an
 helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/${EKS_APP}
 ```
 
-This dry run fails because we would be asking Helm to deploy over the top of an existing deployment which is not under its control.
+This dry run **fails** because we would be asking Helm to deploy over the top of an existing deployment which is not under its control.
 Throwing caution to the wind, just delete the `EKS_APP_NS` namespace which, in turn, obliterates our entire application.
 We can then recreate the empty namespace and try the dry run again.
 ```bash
@@ -110,11 +98,55 @@ This time the dry run will produce no errors and we can just go for it.
 helm -n ${EKS_APP_NS} upgrade -i ${EKS_APP} ~/environment/helm-charts/${EKS_APP}
 ```
 
-Remember our application incorporates a CLB so this may take a couple of minutes to become reachable.
+Remember our application incorporates a CLB.
+In a **dedicated** terminal window, grab the CLB DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
+Leave this looped request running and we will return to view it again later.
 ```bash
 clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${clb_dnsname}; sleep 0.25; done
-# ctrl+c to quit loop
 ```
+
+We have seen how Helm can help us deploy in a repeatable way but we also stated that it was configurable.
+The manifests, which are stored in a directory named `templates`, include hard-coded references to things like container images, so deploying new versions would requires updates to those source files.
+The clue is in the word "template", suggesting the manifests could contain placeholders that are dynamically re-written at the point of use.
+Helm supports templating with the use of `{{ define }}` directives inside our manifests.
+
+Modify the `deployment` manifest to make it a version agnostic template and perform a dry run to test this.
+```bash
+sed -i "s/${EKS_APP_VERSION}/{{ .Values.version }}/g" ~/environment/helm-charts/${EKS_APP}/templates/deployment.yaml
+helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/${EKS_APP}
+```
+
+This dry run **fails** as Helm is unable to resolve any value for the new `{{ .Values.version }}` directive inside our `deployment` manifest.
+The simplest way to resolve this is to the set the missing variable on the command line.
+```bash
+helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/${EKS_APP} --set version=${EKS_APP_VERSION_NEXT}
+```
+
+The output reveals the templated replacement which looks as intended.
+Run this once more for real. 
+```bash
+helm -n ${EKS_APP_NS} upgrade -i ${EKS_APP} ~/environment/helm-charts/${EKS_APP} --set version=${EKS_APP_VERSION_NEXT}
+```
+
+Now hop over to the **dedicated** terminal window and watch as the `curl` responses reveal the old pod replicas being rapidly superceded with new ones.
+This should only take few seconds and reveals something extremely valuable about running cloud native workloads on Kubernetes.
+Zero downtime.
+
+If we do not like the result of what we just did, Helm has your back.
+One simple command can roll back any deployment that fails to meet your expectations.
+Keep an eye on the looped `curl` request as the following command is executed.
+```bash
+helm -n ${EKS_APP_NS} rollback ${EKS_APP}
+```
+
+If, at any point, we want Helm to reveal where we currently are and the path we took to get there, here are a few more commands to look at.
+```bash
+helm list --all-namespaces                      # Helm operations are namespaced by default
+helm -n ${EKS_APP_NS} status ${EKS_APP}
+helm -n ${EKS_APP_NS} history ${EKS_APP}
+```
+
+Finally, if you want to publish your own repo, take a look at [this](https://medium.com/containerum/how-to-make-and-share-your-own-helm-package-50ae40f6c221) or [this](https://github.com/komljen/helm-charts) for more information on how to do so.
 
 [Return To Main Menu](/README.md)
