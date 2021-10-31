@@ -19,8 +19,7 @@ eksctl utils associate-iam-oidc-provider \
   --cluster ${EKS_CLUSTER_NAME} \
   --approve
   
-eksctl create iamserviceaccount \
-  --namespace=kube-system \
+eksctl -n kube-system create iamserviceaccount \
   --cluster=${EKS_CLUSTER_NAME} \
   --name=aws-load-balancer-controller \
   --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
@@ -29,8 +28,7 @@ eksctl create iamserviceaccount \
 
 helm repo add eks https://aws.github.io/eks-charts
 
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  --namespace kube-system \
+helm -n kube-system install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=${EKS_CLUSTER_NAME} \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
