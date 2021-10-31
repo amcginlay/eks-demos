@@ -29,7 +29,7 @@ Confirm the Metrics Server was installed.
 kubectl get deployment metrics-server -n kube-system
 ```
 
-The newly installed Metrics Server may take a mimute to begin producing results.
+The newly installed Metrics Server may take a minute to begin producing results.
 Use a `watch` command to observe as the Metrics Server comes online.
 ```bash
 watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
