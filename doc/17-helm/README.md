@@ -134,7 +134,7 @@ Now hop over to the **dedicated** terminal window and watch as the `curl` respon
 This should only take few seconds and reveals something extremely valuable about running cloud native workloads on container orchestration platforms like Kubernetes.
 Application updates with **zero downtime**.
 
-If we do not like the result of what we just did, Helm has your back.
+If you do not like the result of your rollout, Helm has your back.
 One simple command can roll back any deployment that fails to meet your expectations.
 Keep an eye on the looped `curl` request as the following command is executed.
 ```bash
