@@ -13,7 +13,7 @@ We can use Helm to both consume and produce software in a simple, repeatable and
 
 We start by showing how to consume popular open-source software published to a Helm repo.
 A Helm repo consists of a collection of packages/releases which can be readily deployed to Kubernetes.
-Start by adding (i.e. importing) a popular repo and displaying a menu from which we can now choose.
+Add (i.e. import) a popular repo which provides us a menu of packages/releases from which we can choose.
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm search repo
