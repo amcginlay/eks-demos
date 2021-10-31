@@ -97,7 +97,8 @@ helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/
 ```
 
 This dry run fails because we would be asking Helm to deploy over the top of an existing deployment which is not under its control.
-Throwing caution to the wind, just delete the `EKS_APP_NS` namespace then recreate it and try the dry run again.
+Throwing caution to the wind, just delete the `EKS_APP_NS` namespace which, in turn, discards our entire application.
+We can then recreate the empty namespace and try the dry run again.
 ```bash
 kubectl delete namespace ${EKS_APP_NS}
 kubectl create namespace ${EKS_APP_NS}
