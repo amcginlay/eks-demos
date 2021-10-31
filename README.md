@@ -29,3 +29,4 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 
 ## Extensions
 * [Orchestration](doc/orchestration/README.md) - balancing desired against actual
+
