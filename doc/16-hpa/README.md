@@ -60,7 +60,7 @@ Under heavy load the TARGET ratio will be high and the number of replicas will i
 At this point you will observe that new pod IP addresses are unable to be allocated and a number of pods will remain in a Pending state.
 As seen in an earlier section, the CA will shortly step in to add new nodes and within a couple of minutes all 25 pods will be Running as expected.
 
-Switch back the terminal window displaying the `siege` results.
+Switch back to the terminal window displaying the `siege` results.
 Instead of stopping the load entirely, which is a little unnatural, we are just going to dial it back from high to low.
 ```bash
 # ctrl+c to quit the high-load siege command
