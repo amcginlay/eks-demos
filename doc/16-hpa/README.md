@@ -56,7 +56,7 @@ siege -c 5 ${clb_dnsname}                                    # simulate 5 concur
 This will cause the HPA to autoscale the pods upwards towards its max setting.
 Switch back to the terminal window displaying the `watch` results, paying attention to the HPA values shown under TARGETS / REPLICAS.
 Also, observe the list of pods as it grows.
-Under heavy load the TARGET ratio will be high and the number of replicas will increase rapidly until the resources in the nodes are exhausted.
+Under heavy load the TARGETS ratio will be high and the number of replicas will increase rapidly until the resources in the nodes are exhausted.
 At this point you will observe that new pod IP addresses are unable to be allocated and a number of pods will remain in a Pending state.
 As seen in an earlier section, the CA will step in to add new nodes and within a couple of minutes all 25 pods will be Running as expected.
 
@@ -67,7 +67,7 @@ Instead of stopping the load entirely, which is a little unnatural, we are just 
 siege -c 1 ${clb_dnsname}                                    # simulate 1 concurrent users
 ```
 
-The HPA TARGET ratio will start to drop and, after a couple of minutes, the values shown under REPLICAS will drop and excess pods will be terminated.
+The HPA TARGETS ratio will start to drop and, after a couple of minutes, the values shown under REPLICAS will drop and excess pods will be terminated.
 Eventually the CA will follow and nodes will be terminated but this will not happen for over 10 minutes.
 Feel free to move on if you are not prepared to wait to see any of this.
 
