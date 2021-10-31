@@ -119,6 +119,7 @@ helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/
 
 This dry run **fails** as Helm is unable to resolve any value for the new `{{ .Values.version }}` directive inside our `deployment` manifest.
 The simplest way to resolve this is to the set the missing variable on the command line.
+Perform another dry run to test this.
 ```bash
 helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/${EKS_APP} --set version=${EKS_APP_VERSION_NEXT}
 ```
