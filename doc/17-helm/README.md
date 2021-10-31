@@ -125,7 +125,7 @@ helm -n ${EKS_APP_NS} upgrade -i --dry-run ${EKS_APP} ~/environment/helm-charts/
 ```
 
 The output reveals the templated replacement which looks as intended.
-Run this once more for real. 
+Run this once more, this time **for real**. 
 ```bash
 helm -n ${EKS_APP_NS} upgrade -i ${EKS_APP} ~/environment/helm-charts/${EKS_APP} --set version=${EKS_APP_VERSION_NEXT}
 ```
