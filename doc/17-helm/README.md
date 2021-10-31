@@ -77,7 +77,7 @@ EOF
 
 Extract the manifests for the `deployment` and `service` objects of our application.
 We use `kubectl neat` to keep our captured YAML manifests lean and we strip out the namespace for the purpose of generalization.
-The resulta are acceptable but they can certainly be further refined.
+The results are acceptable but they can certainly be further refined.
 For example it is not ideal to be hardcoding `clusterIP` addresses or `nodePort` values as these may already be in use on the target cluster which will result in a failed installation.
 ```bash
 kubectl -n ${EKS_APP_NS} get deployment ${EKS_APP} -o yaml | \
