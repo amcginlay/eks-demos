@@ -67,7 +67,7 @@ Instead of stopping the load entirely, which is a little unnatural, we are just 
 siege -c 1 ${clb_dnsname}                                    # simulate 1 concurrent users
 ```
 
-The HPA TARGET ratio will start to drop and, after a couple of minutes, the values shown under REPLICAS will drop and pods will be terminated.
+The HPA TARGET ratio will start to drop and, after a couple of minutes, the values shown under REPLICAS will drop and excess pods will be terminated.
 Eventually the CA will follow but this will not happen for over 10 minutes.
 Feel free to move on if you are not prepared to wait to see any of this.
 
