@@ -60,7 +60,7 @@ rm -rf ./dummy-app
 
 The package/release we want Helm to capture is the application we already have in our `EKS_APP_NS` namespace.
 If we can achieve this, then our friends and customers can deploy our software on their own clusters in the exact manner we inteded.
-We can begin by creating a local home for our new chart.
+We can prepare by creating a local home for our new chart.
 ```bash
 mkdir -p ~/environment/helm-charts/${EKS_APP}/templates
 ```
