@@ -9,7 +9,7 @@ But what if your workloads come under CPU pressure and no one is present to make
 
 The [Horizontal Pod Autoscaler (HPA)](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) aims to right-size the number of replicas in your deployments as a  reaction to realtime changes in workload pressure.
 For a given deployment, you can create an HPA object which specifies the min/max limits for the `replicas` attribute and a target CPU percentage.
-From that point the HPA will, within its limits, continually evaluate the CPU and adjust the `replicas` attribute to suit.
+From that point the HPA will, within its limits, continually evaluate the CPU pressure on your deployment and adjust the `replicas` attribute to suit.
 
 Although the HPA is natively installed, it depends upon the [Kubernetes Metrics Server](https://github.com/kubernetes-sigs/metrics-server) which is not.
 A good way to test if the Metrics Server is missing is to run the following `top` command **which will fail**.
