@@ -5,7 +5,7 @@ This next section assumes that you you have completed the earlier section on **L
 Linux has [yum and apt](https://www.baeldung.com/linux/yum-and-apt).
 Mac has [Homebrew](https://brew.sh/).
 Windows has [Chocolatey](https://chocolatey.org/).
-These are all package/dependency managers which help users consistently consume software in the manner inteded by its authors.
+These are all package/dependency managers which help users consistently consume software in the manner inteded by their authors.
 
 If the arrival of Kubernetes means [the operating system no longer matters](https://www.infoworld.com/article/3322120/sorry-linux-kubernetes-is-now-the-os-that-matters.html), then it too needs a package manager.
 This is what [Helm](https://helm.sh/) is all about and, like Kubernetes, it is a graduated project of the [Cloud Native Computing Foundation (CNCF)](https://www.cncf.io/).
