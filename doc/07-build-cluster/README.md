@@ -40,6 +40,7 @@ managedNodeGroups:
         xRay: true
         cloudWatch: true
 
+# we do not want to concern ourselves with self managed nodes, but here's how eksctl handles them
 # nodeGroups:
 #   - name: ng-${EKS_CLUSTER_NAME}
 #     availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]
