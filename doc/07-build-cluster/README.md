@@ -76,7 +76,7 @@ kubectl -n kube-system get pods -o wide
 ```
 
 Your Cloud9 environment is assuming the Role-EC2-EKSClusterAdmin role you created earlier.
-As such, only the Cloud9 environment is currently a trusted administrator of the cluster.
+As such, the Cloud9 environment is currently the **only** trusted administrator of the cluster.
 If you wish to add further admin identities (IAM users or role) for different IAM identities you can add their ARNs as follows.
 ARNs can be loacted and copied directly from the IAM console.
 ```bash
