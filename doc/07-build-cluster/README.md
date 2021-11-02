@@ -25,7 +25,7 @@ secretsEncryption:
   keyARN: ${key_metadata[1]}
   
 managedNodeGroups:
-  - name: ng-${EKS_CLUSTER_NAME}
+  - name: mng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
     instanceTypes: ["t3.small","t3a.small"]
     privateNetworking: true
@@ -39,7 +39,19 @@ managedNodeGroups:
         albIngress: true
         xRay: true
         cloudWatch: true
-        
+
+# nodeGroups:
+#   - name: ng-${EKS_CLUSTER_NAME}
+#     availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]
+#     instanceType: "t3.small"
+#     privateNetworking: true
+#     desiredCapacity: 1
+#     maxSize: 1
+#     taints:
+#       - key: node-type
+#         value: self-managed
+#         effect: NoSchedule
+
 fargateProfiles:
   - name: fp-${EKS_CLUSTER_NAME}
     selectors:
