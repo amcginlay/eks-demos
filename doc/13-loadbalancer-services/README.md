@@ -22,7 +22,7 @@ Services of type LoadBalancer in EKS are a prime example of the use of custom co
 Upgrade the NodePort service to a LoadBalancer service, then check the services.
 ```bash
 kubectl -n ${EKS_APP_NS} get services
-kubectl -n ${EKS_APP_NS} patch service ${EKS_APP} --patch '{"spec": {"type": "LoadBalancer"}}' # extend the service to expose a new AWS Load Balancer
+kubectl -n ${EKS_APP_NS} patch service ${EKS_APP_FE} --patch '{"spec": {"type": "LoadBalancer"}}' # extend the service to expose a new AWS Load Balancer
 sleep 5 && kubectl -n ${EKS_APP_NS} get services
 ```
 
@@ -31,7 +31,7 @@ Port 80 requests arriving at this endpooint are now even distributed across all 
 Grab the CLB DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
-clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP_FE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${clb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```

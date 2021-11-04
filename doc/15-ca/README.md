@@ -1,6 +1,6 @@
 # Cluster Autoscaler - because no one likes a pending pod
 
-This section assumes that the `EKS_APP_NAME` (i.e. `php-echo`) app is deployed and scaled to 3 instances.
+This section assumes that the `EKS_APP_FE` (i.e. `php-echo`) app is deployed and scaled to 3 instances.
 
 Our two-node cluster cannot run an infinite number of pods.
 If we scale our deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
@@ -31,7 +31,7 @@ sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 
 
 In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
 ```bash
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP} --replicas 30
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_FE} --replicas 30
 ```
 
 Note how some pods start without an IP addresses because they're stuck in the Pending state and cannot be scheduled.
@@ -41,14 +41,14 @@ The Cluster Autoscaler will take about 2 minutes to scale-out the nodes and ther
 Once all the pods are in a Running state the demo is complete.
 Revert the replicaset to its previous size.
 ```bash
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP} --replicas 3
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_FE} --replicas 3
 ```
 
 If the underlying nodes are present and have spare capacity, new pods can be created in a matter of seconds. The nodes (i.e. virtual machines) take a little longer to stand up so best practice suggests they are scaled-out as rapidly as possible and scaled-in slowly in order to cope with the possibility of spiky workloads.
 After about 10 minutes the Cluster Autoscaler would normally begin scaling-in the number of nodes and would eventually revert to its previous size.
 To save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
-eksctl scale nodegroup --cluster ${EKS_CLUSTER_NAME} --name ng-${EKS_CLUSTER_NAME} --nodes 2
+eksctl scale nodegroup --cluster ${EKS_CLUSTER_NAME} --name mng-${EKS_CLUSTER_NAME} --nodes 2
 ```
 
 [Return To Main Menu](/README.md)

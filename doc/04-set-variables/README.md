@@ -13,11 +13,12 @@ export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git    # if
 export EKS_CLUSTER_NAME=dev
 export EKS_K8S_VERSION=1.20
 
-export EKS_APP=php-echo
-export EKS_APP_NS=\${EKS_APP}
-export EKS_APP_VERSION=1.0.42
-export EKS_APP_VERSION_NEXT=1.0.43
-export EKS_APP_ECR_REPO=\${AWS_ACCOUNT_ID}.dkr.ecr.\${AWS_DEFAULT_REGION}.amazonaws.com/\${EKS_APP}
+export EKS_ECR_REGISTRY=\${AWS_ACCOUNT_ID}.dkr.ecr.\${AWS_DEFAULT_REGION}.amazonaws.com
+export EKS_APP_NS=apps
+export EKS_APP_FE=php-echo
+export EKS_APP_FE_VERSION=1.0.42
+export EKS_APP_FE_VERSION_NEXT=1.0.43
+export EKS_APP_FE_ECR_REPO=\${EKS_ECR_REGISTRY}/\${EKS_APP_FE}
 EOF
 ```
 

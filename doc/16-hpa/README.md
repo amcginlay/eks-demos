@@ -39,7 +39,7 @@ watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
 The command to activate an HPA for an existing deployment is `autoscale`.
 Activate the HPA for our running deployment.
 ```bash
-kubectl -n ${EKS_APP_NS} autoscale deployment ${EKS_APP} --cpu-percent=50 --min=3 --max=25
+kubectl -n ${EKS_APP_NS} autoscale deployment ${EKS_APP_FE} --cpu-percent=50 --min=3 --max=25
 ```
 
 Keep watching the k8s objects in a **dedicated** terminal window.
@@ -49,7 +49,7 @@ watch "kubectl get nodes; echo; kubectl -n ${EKS_APP_NS} get deployments,hpa,pod
 
 In another **dedicated** terminal window, use siege to put the app under heavy load.
 ```bash
-clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP} -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service -l app=${EKS_APP_FE} -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
 siege -c 5 ${clb_dnsname}                                    # simulate 5 concurrent users
 ```
 

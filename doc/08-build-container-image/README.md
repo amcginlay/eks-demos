@@ -20,11 +20,11 @@ cat ~/environment/eks-demos/src/php-echo/Dockerfile
 
 Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the newly containerized app.
 ```bash
-docker build -t ${EKS_APP}:${EKS_APP_VERSION} ~/environment/eks-demos/src/${EKS_APP}/
-docker images                                                                     # see what you produced
-docker ps                                                                         # nothing running ...
-container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP}:${EKS_APP_VERSION}) # request docker to instantiate a single container as a background process
-docker ps                                                                         # ... now one container running
+docker build -t ${EKS_APP_FE}:${EKS_APP_FE_VERSION} ~/environment/eks-demos/src/${EKS_APP_FE}/
+docker images                                                                           # see what you produced
+docker ps                                                                               # nothing running ...
+container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP_FE}:${EKS_APP_FE_VERSION}) # request docker to instantiate a single container as a background process
+docker ps                                                                               # ... now one container running
 ```
 
 Invoke the webserver from inside the container.
@@ -51,8 +51,8 @@ Before we move on, instruct Docker to build the **next** version of our simple a
 This might usually involve some real code changes.
 In this case we're just incrementing the value of the `VERSION` environment variable inside the Dockerfile before rebuilding the container image.
 ```bash
-sed -i "s/ENV VERSION=${EKS_APP_VERSION}/ENV VERSION=${EKS_APP_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
-docker build -t ${EKS_APP}:${EKS_APP_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP}/
+sed -i "s/ENV VERSION=${EKS_APP_FE_VERSION}/ENV VERSION=${EKS_APP_FE_VERSION_NEXT}/g" ./eks-demos/src/php-echo/Dockerfile
+docker build -t ${EKS_APP_FE}:${EKS_APP_FE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_FE}/
 docker images
 ```
 
