@@ -29,13 +29,13 @@ Each Cloud9 instance has the Docker daemon installed. Build the Docker image fro
 docker build -t ${EKS_APP_FE}:${EKS_APP_FE_VERSION} ~/environment/eks-demos/src/${EKS_APP_FE}/
 docker images                                                                             # see what you produced
 docker ps                                                                                 # nothing running ...
-container_id_1=$(docker run --detach --rm -p 8081:80 ${EKS_APP_FE}:${EKS_APP_FE_VERSION}) # request docker to instantiate a single container as a background process
+container_id=$(docker run --detach --rm -p 8081:80 ${EKS_APP_FE}:${EKS_APP_FE_VERSION}) # request docker to instantiate a single container as a background process
 docker ps                                                                                 # ... now one container running
 ```
 
 Invoke the webserver from inside the container.
 ```bash
-docker exec -it ${container_id_1} curl localhost:80
+docker exec -it ${container_id} curl localhost:80
 ```
 
 Invoke the webserver from outside the container.
