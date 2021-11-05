@@ -39,10 +39,4 @@ Verify the installs worked.
 which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle kubectl-neat
 ```
 
-Each Cloud9 instance has the [Docker](https://en.wikipedia.org/wiki/Docker_(software)) daemon installed with a set of images pre-loaded. Remove them as they are not required.
-```bash
-for i in $(docker ps -q); do docker kill $i; done
-docker system prune --all --force
-```
-
 [Return To Main Menu](/README.md)
