@@ -19,13 +19,24 @@ helm upgrade -i appmesh-controller eks/appmesh-controller \
 
 kubectl -n kube-system get deployment appmesh-controller
 
-# deploy v1 backend components (blue)
+# deploy primary set of backend components (blue)
 kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_BE}-blue --replicas 0 --image ${EKS_APP_BE_ECR_REPO}:${EKS_APP_BE_VERSION} # begin with zero replicas
 kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_BE}-blue --requests=cpu=200m,memory=200Mi                           # right-size the pods
 kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_BE}-blue --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP_BE}\",\"imagePullPolicy\":\"Always\"}]}}}}"
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BE}-blue --replicas 3                                                       # start 3 instances
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BE}-blue --replicas 2                                                       # start 2 instances
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BE}-blue --port=80 --type=ClusterIP
-sleep 10 && kubectl -n ${EKS_APP_NS} get deployments,services -o wide                                                          # inspect objects
+
+# deploy secondary set backend components (green)
+kubectl -n ${EKS_APP_NS} create deployment ${EKS_APP_BE}-green --replicas 0 --image ${EKS_APP_BE_ECR_REPO}:${EKS_APP_BE_VERSION_NEXT} # begin with zero replicas
+kubectl -n ${EKS_APP_NS} set resources deployment ${EKS_APP_BE}-green --requests=cpu=200m,memory=200Mi                                # right-size the pods
+kubectl -n ${EKS_APP_NS} patch deployment ${EKS_APP_BE}-green --patch="{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"${EKS_APP_BE}\",\"imagePullPolicy\":\"Always\"}]}}}}"
+kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_BE}-green --replicas 2                                                            # start 2 instances
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_BE}-green --port=80 --type=ClusterIP
+
+# inspect out two sets of backend objects
+sleep 10 && kubectl -n ${EKS_APP_NS} get deployments,services -o wide                                                                 # inspect objects
+
+# TODO TEST FROM HERE
 
 # create the mesh component itself - this contains all the virtual elements which define communications within its scope.
 mkdir -p ~/environment/eks-demos/src/apps-mesh
@@ -64,9 +75,14 @@ spec:
         protocol: http
   serviceDiscovery:
     dns:
-      hostname: ${EKS_APP_BE}-blue
+      hostname: ${EKS_APP_BE}-blue.${EKS_APP_NS}.svc.cluster.local
 EOF
 kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/vn-${EKS_APP_BE}-blue.yaml
+
+# create a virtual router to control traffic shifting
+
+
+
 
 kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_FE}
 kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_BE}-blue
