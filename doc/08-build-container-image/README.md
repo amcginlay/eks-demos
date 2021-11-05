@@ -63,7 +63,7 @@ docker build -t ${EKS_APP_FE}:${EKS_APP_FE_VERSION_NEXT} ~/environment/eks-demos
 envsubst < ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile.template > ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
 docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION} ~/environment/eks-demos/src/${EKS_APP_BE}/
 sed -i "s/ENV VERSION=${EKS_APP_BE_VERSION}/ENV VERSION=${EKS_APP_BE_VERSION_NEXT}/g" ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
-docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_FE}/
+docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_BE}/
 
 docker images
 ```
