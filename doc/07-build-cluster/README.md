@@ -23,6 +23,8 @@ metadata:
 availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
 secretsEncryption:
   keyARN: ${key_metadata[1]}
+iam:
+  withOIDC: true
   
 managedNodeGroups:
   - name: mng-${EKS_CLUSTER_NAME}
