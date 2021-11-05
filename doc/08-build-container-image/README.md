@@ -43,6 +43,11 @@ Invoke the webserver from outside the container.
 curl localhost:8081
 ```
 
+We are done with running images in Docker for now so stop the container (which will be terminated because we ran it with the --rm flag).
+```bash
+docker stop ${container_id}
+```
+
 If you wondered why the localhostIP now differs from the ec2IP ...
 ```bash
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet
@@ -61,26 +66,6 @@ sed -i "s/ENV VERSION=${EKS_APP_BE_VERSION}/ENV VERSION=${EKS_APP_BE_VERSION_NEX
 docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_BE}/
 
 docker images
-```
-
-Run a quick sanity check across the built container images
-```bash
-container_id_2=$(docker run --detach --rm -p 8082:80 ${EKS_APP_FE}:${EKS_APP_FE_VERSION_NEXT})
-container_id_3=$(docker run --detach --rm -p 8083:80 ${EKS_APP_BE}:${EKS_APP_BE_VERSION})
-container_id_4=$(docker run --detach --rm -p 8084:80 ${EKS_APP_BE}:${EKS_APP_BE_VERSION_NEXT})
-
-docker exec -it ${container_id_1} curl localhost:80
-docker exec -it ${container_id_2} curl localhost:80
-docker exec -it ${container_id_3} curl localhost:80
-docker exec -it ${container_id_4} curl localhost:80
-```
-
-We are done with running images in Docker for now so stop the containers (which will be terminated because we ran then with the --rm flag).
-```bash
-docker stop ${container_id_1}
-docker stop ${container_id_2}
-docker stop ${container_id_3}
-docker stop ${container_id_4}
 ```
 
 [Return To Main Menu](/README.md)
