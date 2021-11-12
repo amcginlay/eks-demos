@@ -46,6 +46,8 @@ kind: Mesh
 metadata:
   name: ${EKS_APP_NS}
 spec:
+  egressFilter:
+    type: ALLOW_ALL       # without this setting pods will have no external connectivity - I think this would also prohibit private DNS resolution, so it's a big deal!
   namespaceSelector:
     matchLabels:
       mesh: ${EKS_APP_NS}
@@ -91,7 +93,7 @@ aws appmesh list-virtual-nodes --mesh-name ${EKS_APP_NS} # check from the AWS as
 # confirm that the backend pods currently have one container each (READY 1/1)
 kubectl -n ${EKS_APP_NS} get pods
 
-# to see the effect of labeling the namespace and 
+# to see the effect of labeling the namespace
 # upon restart, each backend pod will be injected with two additional containers (sidecars)
 # one for envoy, the other is the x-ray daemon which we enabled when we installed the App Mesh controller
 for color in blue green; do
@@ -140,8 +142,8 @@ aws appmesh describe-route --mesh-name ${EKS_APP_NS} --virtual-router-name vr-${
 
 # it's important to ensure that a matching k8s service exists for each virtualservice
 # it doesn't need to resolve to any pods, it just need to surface a cluster IP address
-kubectl -n ${EKS_APP_NS} create service clusterip vs-backend --tcp=80 -o yaml --dry-run=client | kubectl neat > ~/environment/eks-demos/src/apps-mesh/svc-vs-${EKS_APP_BE}.yaml
-kubectl apply -f ~/environment/${namespace}/deployment/svc-vs-backend.yaml
+kubectl -n ${EKS_APP_NS} create service clusterip vs-${EKS_APP_BE} --tcp=80 -o yaml --dry-run=client | kubectl neat > ~/environment/eks-demos/src/apps-mesh/svc-vs-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/svc-vs-${EKS_APP_BE}.yaml
 
 # in the same way that k8s pods send requests to other pods via k8s services, 
 # virtualnodes (which wrap k8s services) send requests to other virtualnodes via virtualservices
@@ -189,7 +191,7 @@ spec:
         protocol: http
   serviceDiscovery:
     dns:
-      hostname: ${EKS_APP_FE}.${EKS_APP_NS}.svc.cluster.local
+      hostname: ${EKS_APP_FE}.${EKS_APP_NS}.svc.cluster.local                     # <<<<<<< probably not required. If not, then virtual nodes can be created together ^^^^^ !!!!!
   backends:
     - virtualService:
         virtualServiceRef:
@@ -201,10 +203,18 @@ kubectl apply -f ~/environment/eks-demos/src/apps-mesh/vn-${EKS_APP_FE}.yaml
 kubectl -n ${EKS_APP_NS} get virtualnodes                # check from the k8s aspect
 aws appmesh list-virtual-nodes --mesh-name ${EKS_APP_NS} # check from the AWS aspect
 
-# START AGAIN HERE !!!!!!!
+# the frontend will use an environment variable named BACKEND if present so set that variable now
+kubectl -n ${EKS_APP_NS} set env deployment ${EKS_APP_FE} BACKEND=vs-${EKS_APP_BE}                # current Envoy limitation on use of FQDNs
 
-# let's reconfigure the frontend and deploy it again
-
-
+# restart the frontend to see the new sidecars
 kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_FE}
-kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_BE}-blue
+watch kubectl -n ${EKS_APP_NS} get pods                   # ctrl+c to quit loop
+
+# In a **dedicated** terminal window observe the frontend routing 100% of traffic to the BLUE backend and 0% to green
+clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP_FE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+while true; do curl http://${clb_dnsname}; sleep 0.25; done
+
+# apply an updated manifest in which the weights are flipped to route 0% of traffic to the BLUE backend and 100% to green
+# then observe the **dedicated** terminal window as the backend traffic switched from BLUE to GREEN
+sed -i -e "s/weight: 100/weight: -1/g" -e "s/weight: 0/weight: 100/g" -e "s/weight: -1/weight: 0/g" ~/environment/eks-demos/src/apps-mesh/vr-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/vr-${EKS_APP_BE}.yaml
