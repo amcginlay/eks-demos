@@ -113,7 +113,6 @@ apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualRouter
 metadata:
   name: vr-${EKS_APP_BE}
-  namespace: ${EKS_APP_NS}
 spec:
   awsName: vr-${EKS_APP_BE}
   listeners:
@@ -134,7 +133,7 @@ spec:
               name: vn-${EKS_APP_BE}-green
             weight: 0
 EOF
-kubectl apply -f ~/environment/eks-demos/src/apps-mesh/vr-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/vr-${EKS_APP_BE}.yaml
 
 # observe the change
 kubectl -n ${EKS_APP_NS} get virtualrouters                                                                       # check from the k8s aspect
@@ -154,7 +153,6 @@ apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualService
 metadata:
   name: vs-${EKS_APP_BE}
-  namespace: ${EKS_APP_NS}
 spec:
   awsName: vs-${EKS_APP_BE}
   provider:
@@ -162,7 +160,7 @@ spec:
       virtualRouterRef:
         name: vr-${EKS_APP_BE}
 EOF
-kubectl apply -f ~/environment/eks-demos/src/apps-mesh/vs-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/vs-${EKS_APP_BE}.yaml
 
 # observe the change
 kubectl -n ${EKS_APP_NS} get virtualservices                                                           # check from the k8s aspect
@@ -179,7 +177,6 @@ apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualNode
 metadata:
   name: vn-${EKS_APP_FE}
-  namespace: ${EKS_APP_NS}
 spec:
   awsName: vn-${EKS_APP_FE}
   podSelector:
@@ -197,7 +194,7 @@ spec:
         virtualServiceRef:
           name: vs-${EKS_APP_BE}
 EOF
-kubectl apply -f ~/environment/eks-demos/src/apps-mesh/vn-${EKS_APP_FE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/apps-mesh/vn-${EKS_APP_FE}.yaml
 
 # observe the change
 kubectl -n ${EKS_APP_NS} get virtualnodes                # check from the k8s aspect
