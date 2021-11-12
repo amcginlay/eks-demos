@@ -21,7 +21,7 @@ envsubst < ~/environment/eks-demos/src/${EKS_APP_FE}/Dockerfile.template > ~/env
 
 Inspect the resultant Dockerfile which initializes a container-scoped environment variable named **VERSION**.
 ```bash
-cat ~/environment/eks-demos/src/e${EKS_APP_FE}/Dockerfile
+cat ~/environment/eks-demos/src/${EKS_APP_FE}/Dockerfile
 ```
 
 Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the newly containerized app.
@@ -53,18 +53,12 @@ If you wondered why the localhostIP now differs from the ec2IP ...
 docker network inspect bridge | jq  .[0].IPAM.Config[0].Subnet
 ```
 
-Before we move on, instruct Docker to build the **next** version of our simple app and a pair of back-end releases so we've got something extra to play with later on.
+Before we move on, instruct Docker to build the **next** version of our simple app so we've got something extra to play with later on.
 This might usually involve some real code changes.
 In this case we're just incrementing the value of the `VERSION` environment variable inside the Dockerfile before rebuilding the container images.
 ```bash
 sed -i "s/ENV VERSION=${EKS_APP_FE_VERSION}/ENV VERSION=${EKS_APP_FE_VERSION_NEXT}/g" ~/environment/eks-demos/src/${EKS_APP_FE}/Dockerfile
 docker build -t ${EKS_APP_FE}:${EKS_APP_FE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_FE}/
-
-envsubst < ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile.template > ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
-docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION} ~/environment/eks-demos/src/${EKS_APP_BE}/
-sed -i "s/ENV VERSION=${EKS_APP_BE_VERSION}/ENV VERSION=${EKS_APP_BE_VERSION_NEXT}/g" ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
-docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION_NEXT} ~/environment/eks-demos/src/${EKS_APP_BE}/
-
 docker images
 ```
 
