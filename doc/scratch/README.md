@@ -202,7 +202,7 @@ kubectl -n ${EKS_APP_NS} get virtualnodes                # check from the k8s as
 aws appmesh list-virtual-nodes --mesh-name ${EKS_APP_NS} # check from the AWS aspect
 
 # upon restart, each backend pod will be injected with two additional containers (sidecars)
-# one for envoy, the other is the x-ray daemon which we enabled when we installed the App Mesh controller
+# one is envoy, the other is the x-ray daemon which we enabled when we installed the App Mesh controller
 for color in blue green; do
   kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_BE}-${color}
 done
@@ -222,9 +222,19 @@ watch kubectl -n ${EKS_APP_NS} get pods                   # ctrl+c to quit loop
 clb_dnsname=$(kubectl -n ${EKS_APP_NS} get service ${EKS_APP_FE} -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${clb_dnsname}; sleep 0.25; done
 
-# apply an updated manifest in which the virtual router weights are flipped to route 0% of traffic to the BLUE backend and 100% to green
+# apply an updated manifest for the virtual router in which the weights are flipped to route 0% of traffic to the BLUE backend and 100% to green
 # observe in the **dedicated** terminal window as the backend traffic is switched from BLUE to GREEN (~5-10 secs)
 # this was achieved by reconfiguring the App Mesh configuration, which re-publishes that configuration down to all the appropriate envoy proxies, dynamically re-routing the requests flowing out through those containers
 # our application remains completely unaware that any of this reconfiguration is taking place
 sed -i -e "s/weight: 100/weight: -1/g" -e "s/weight: 0/weight: 100/g" -e "s/weight: -1/weight: 0/g" ~/environment/eks-demos/src/mesh-apps/vr-${EKS_APP_BE}.yaml
 kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS_APP_BE}.yaml
+
+# the virtual components you applied all have AWS counterparts which can be observed from the App Mesh console at https://console.aws.amazon.com/appmesh/meshes.
+# spend a moment to familiarize yourself with the service mesh but do not make any changes.
+# when you installed the App Mesh controller you essentially made a commitment to configure your service mesh through the exclusive use of k8s manifests (think, Infrastructure as Code) so you must resist the temptation to make stateful modifications via other tools (e.g. AWS Console/CLI).
+# this approach will protect you against configuration drift and make your deployments portable between EKS clusters.
+
+# you may recall we enabled x-ray when we installed the App Mesh controller so our application will also now be emiting trace diagnoistics to the X-Ray service.
+# head over the x-ray service map at https://us-west-2.console.aws.amazon.com/xray/home to observe as the traffic begins to shift from BLUE to GREEN
+# the default service map window is 5 minutes but you can reduce this to 1 minute.
+# as you refresh the service map you will observe the volume of recorded traffic drop from BLUE until the service icon disappears altogether
