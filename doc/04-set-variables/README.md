@@ -1,6 +1,6 @@
 # Set Variables
 
-From a terminal session inside your Cloud9 environment, prepare your EC2 variables file:
+From a terminal session inside your Cloud9 environment, prepare your EC2 variables file.
 ```bash
 cat > ~/.env << EOF
 alias k="kubectl"                                                           # a common shortcut for the CLI
@@ -28,7 +28,7 @@ export EKS_APP_BE_ECR_REPO=\${EKS_ECR_REGISTRY}/\${EKS_APP_BE}
 EOF
 ```
 
-Ensure these variables get set into every bash session then set the variables into your current shell so we can use them immediately:
+Ensure these variables get set into every bash session then set the variables into your current shell so we can use them immediately.
 ```bash
 echo "source ~/.env" >> ~/.bashrc
 source ~/.env
