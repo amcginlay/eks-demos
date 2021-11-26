@@ -1,28 +1,14 @@
 # Create Cloud9 (EC2) Environment
 
-Cloud9 has a feature known as "AWS managed temporary credentials". Before creating our Cloud9 environment we need to disable this feature. Doing so enables the underlying EC2 instance to correctly acknowledge its assigned IAM Role, in this case `Role-EC2-EKSClusterAdmin`. It is not (currently) possible to programatically disable this feature directly from the Cloud9 API however we can assign an inline IAM policy to the currently active principal which acheives the same aim.
-
-Execute the following from your CloudShell session.
-```bash
-arn=$(aws sts get-caller-identity --query Arn --output text)
-context="user"
-if grep -q assumed-role <<< ${arn}; then
-  context="role"
-fi
-principal=$(echo ${arn} | cut -d/ -f2)
-aws iam put-${context}-policy \
-  --${context}-name ${principal} \
-  --policy-name Policy-DisableCloud9Update \
-  --policy-document file://<(echo '{"Version": "2012-10-17","Statement": [{"Effect": "Deny","Action": "cloud9:UpdateEnvironment","Resource": "*"}]}')
-```
-
-Create your Cloud9 environment in the default VPC from your CloudShell session and associate `Role-EC2-EKSClusterAdmin` with this instance.
+As we create our Cloud9 environment we also disable the "AWS managed temporary credentials" feature.
+Doing so enables the underlying EC2 instance to correctly acknowledge its assigned IAM Role, in this case `Role-EC2-EKSClusterAdmin`.
 ```bash
 cluster_name=dev
 subnet_id=$(aws ec2 describe-subnets --filters "Name=availability-zone,Values=${AWS_DEFAULT_REGION}a" "Name=default-for-az,Values=true" --query "Subnets[].SubnetId" --output text)
 env_id=$(aws cloud9 create-environment-ec2 --name c9-eks-${cluster_name} --instance-type m5.large --image-id amazonlinux-2-x86_64 --subnet-id ${subnet_id} --automatic-stop-time-minutes 1440 --query "environmentId" --output text)
 sleep 30 && instance_id=$(aws ec2 describe-instances --filters "Name='tag:aws:cloud9:environment',Values='${env_id}'" --query "Reservations[].Instances[0].InstanceId" --output text)
-echo ${instance_id}                                            # if blank, wait (sleep) a little longer and repeat previous instruction
+echo ${instance_id}                                                                          # if blank, wait (sleep) a little longer and repeat previous instruction
+aws cloud9 update-environment --environment-id $env_id --managed-credentials-action DISABLE # disable "AWS managed temporary credentials"
 aws ec2 associate-iam-instance-profile --instance-id ${instance_id} --iam-instance-profile Name=Role-EC2-EKSClusterAdmin
 ```
 
