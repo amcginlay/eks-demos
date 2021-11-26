@@ -22,4 +22,35 @@ Once inside the Cloud9 environment, open a terminal session and run the followin
 aws sts get-caller-identity
 ```
 
+The standard Cloud9 environment has a small (10gb) root volume.
+To ensure we don't exhaust this storage extend the root volume to 30gb.
+```bash
+region=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
+
+volume_id=$(aws ec2 describe-instances \
+  --region ${region} \
+  --instance-id ${instance_id} \
+  --query "Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId" \
+  --output text
+)
+
+aws ec2 modify-volume \
+  --region ${region} \
+  --volume-id ${volume_id} \
+  --size 30
+
+while [ \
+  "$(aws ec2 describe-volumes-modifications \
+    --region ${region} \
+    --volume-id ${volume_id} \
+    --filters Name=modification-state,Values="optimizing","completed" \
+    --query "length(VolumesModifications)"\
+    --output text)" != "1" ]; do
+  sleep 1
+done
+
+sudo growpart /dev/nvme0n1 1
+sudo xfs_growfs -d /
+```
+
 [Return To Main Menu](/README.md)
