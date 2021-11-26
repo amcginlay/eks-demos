@@ -26,6 +26,7 @@ The standard Cloud9 environment has a small (10gb) root volume.
 To ensure we don't exhaust this storage extend the root volume to 30gb.
 ```bash
 region=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
+instance_id=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)
 
 volume_id=$(aws ec2 describe-instances \
   --region ${region} \
