@@ -4,4 +4,4 @@ WORKDIR /app/
 COPY echo-server.go .
 RUN go build -o echo-server && \
     apk add curl
-ENTRYPOINT [ "/app/echo-server" ]
+ENTRYPOINT [ "/echo-server" ]
