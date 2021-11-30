@@ -1,6 +1,10 @@
 # Horizontal Pod Autoscaler - because demand for pods can grow
 
-This next section assumes that you you have completed the earlier section on **LoadBalancer services** and have a load balancer available.
+If you have completed the earlier section on **LoadBalancer services** then you will already have a load balancer (CLB) in front of the `EKS_APP_FE` (i.e. `echo-frontend`) app.
+If you do not have this, execute the following (2-3 mins).
+```bash
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_FE} --port=80 --type=LoadBalancer
+```
 
 When your workloads come under pressure their CPU consumption will rise.
 Cloud native best practices suggest that the response to this situation is to increase the number of workload replicas which spreads the load.
