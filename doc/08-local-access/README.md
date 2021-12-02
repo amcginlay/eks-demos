@@ -1,7 +1,7 @@
 # Configure Local Machine Access
 
 This module is optional.
-Subsequent labs will only assume connectivity via Cloud9.
+Subsequent labs will only assume the existing connectivity via Cloud9.
 
 The EC2 instance hosting your Cloud9 environment is assuming the `Role-EC2-EKSClusterAdmin` IAM role you created earlier.
 This AWS "identity" will forever be perceived as the creator of your EKS cluster and is **implcitly** mapped to the k8s RBAC group named `system:masters` which represents all cluster administrators.
