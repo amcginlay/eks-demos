@@ -129,7 +129,7 @@ This configmap resides in the `kube-system` namespace.
 Everyone, except the cluster creator, is initally unauthorized to interact with the cluster until an appropriate entry is added to `aws-auth`.
 You can view the configmap from any authorized client device at any time using the following.
 ```bash
-kubectl -n kube-system get configmap aws-auth -o yaml | kubectl neat
+kubectl -n kube-system get configmap aws-auth -o yaml
 ```
 
 You may, of course, add entries to the `aws-auth` configmap manually but `eksctl create iamidentitymapping` is the safer option.
