@@ -3,10 +3,10 @@
 This module is optional.
 Subsequent labs will only assume connectivity via Cloud9.
 
-The EC2 instance hosting your Cloud9 environment is assuming the `Role-EC2-EKSClusterAdmin` role you created earlier.
-As the cluster creator, this role is **implcitly** a member of the k8s RBAC group named `system:masters` which represents the cluster administrators.
-As a result, this IAM role currently represents the one and only trusted administrator of the cluster.
-If you wish to include further administrator identities you can now introduce their these to the cluster.
+The EC2 instance hosting your Cloud9 environment is assuming the `Role-EC2-EKSClusterAdmin` IAM role you created earlier.
+This AWS "identity" will forever be perceived as the creator of your EKS cluster and is **implcitly** mapped to the k8s RBAC group named `system:masters` which represents all cluster administrators.
+As a result, `Role-EC2-EKSClusterAdmin` currently represents the sole administrator of the cluster.
+If you wish to include further administrator identities you can now introduce these to the cluster.
 
 A common expectation is to be able to connect to the cluster from a local machine.
 We assume this local machine already has up to date versions of the `aws` and `kubectl` tools installed.
