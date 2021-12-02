@@ -1,6 +1,6 @@
 # Build EKS Cluster
 
-Verify that your Cloud9 environment is currently assuming the Role-EC2-EKSClusterAdmin IAM role.
+Verify that your Cloud9 environment is currently assuming the `Role-EC2-EKSClusterAdmin` IAM role.
 ```bash
 aws sts get-caller-identity
 ```
@@ -79,26 +79,26 @@ kubectl -n kube-system get pods -o wide
 
 The EC2 instance hosting your Cloud9 environment is assuming the `Role-EC2-EKSClusterAdmin` role you created earlier.
 As the cluster creator, this role is implcitly a member of the k8s RBAC group named `system:masters` which represents the cluster administrators.
-As a result, this role is currently the **only** trusted administrator of the cluster.
+As a result, this IAM role currently represents the one and only trusted administrator of the cluster.
 If you wish to include further administrator identities you can now introduce their these to the cluster.
 
 A common expectation is to be able to connect to the cluster from a local machine.
 We assume this local machine already has up to date versions of the `aws` and `kubectl` tools installed.
 We also assume this local machine is [configured to access the AWS account](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) and can provide a Bash shell.
 
-As this cluster is unknown to your local machine it will need an appropriately configured kubeconfig file installed at `~/.kube/config`.
+As this cluster is unknown to your **local machine** it will need an appropriately configured kubeconfig file installed at `~/.kube/config`.
 This will get your local machine authenticated (but not yet authorized) with the cluster.
 ```bash
 cluster=dev
 aws eks update-kubeconfig --name ${cluster}
 ```
 
-The following command will confirm the **unauthorized** status of your local machine.
+The following command will confirm the **unauthorized** status of your **local machine**.
 ```bash
 kubectl get nodes
 ```
 
-To address this, first run the following Bash shell commands on your local machine to identify the ARN of the currently configured IAM principal.
+To address this, first run the following Bash shell commands on your **local machine** to identify the ARN of the currently configured IAM principal.
 ```bash
 arn=$(aws sts get-caller-identity --query Arn --output text)
 new_admin_arn=${arn}
@@ -108,7 +108,7 @@ fi
 echo ${new_admin_arn}
 ```
 
-Then, in the Cloud9 terminal, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
+Then, in the **Cloud9 terminal**, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
 This will introduce the new administrator to the cluster.
 ```bash
 new_admin_arn=<NEW_ADMIN_ARN>
@@ -119,7 +119,7 @@ eksctl create iamidentitymapping \
   --username $((rev | cut -d/ -f1 | rev) <<< ${new_admin_arn})
 ```
 
-Back on your local machine, run this command to confirm successful authorization.
+Back on your **local machine**, run this command to confirm successful authorization.
 ```bash
 kubectl get nodes
 ```
@@ -127,7 +127,7 @@ kubectl get nodes
 Behind the scenes, the call to `eksctl create iamidentitymapping` updated the `aws-auth` configmap which acts as a bridge between **authentication** (AWS IAM) and **authorization** (Kubernetes RBAC).
 This configmap resides in the `kube-system` namespace.
 Everyone, except the cluster creator, is initally unauthorized to interact with the cluster until an appropriate entry is added to `aws-auth`.
-You can view the configmap at any time using the following.
+You can view the configmap from any authorized client device at any time using the following.
 ```bash
 kubectl -n kube-system get configmap aws-auth -o yaml | kubectl neat
 ```
