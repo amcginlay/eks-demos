@@ -1,7 +1,7 @@
 # Configure Local Machine Access
 
 The EC2 instance hosting your Cloud9 environment is assuming the `Role-EC2-EKSClusterAdmin` role you created earlier.
-As the cluster creator, this role is implcitly a member of the k8s RBAC group named `system:masters` which represents the cluster administrators.
+As the cluster creator, this role is **implcitly** a member of the k8s RBAC group named `system:masters` which represents the cluster administrators.
 As a result, this IAM role currently represents the one and only trusted administrator of the cluster.
 If you wish to include further administrator identities you can now introduce their these to the cluster.
 
@@ -32,7 +32,7 @@ echo ${new_admin_arn}
 ```
 
 Then, in the **Cloud9 terminal**, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
-This will introduce the new administrator to the cluster.
+This will **explicitly** introduce the new administrator to the cluster.
 ```bash
 new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
