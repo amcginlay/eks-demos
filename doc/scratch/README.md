@@ -1,5 +1,12 @@
 **App Mesh WIP**
 
+If you have completed the earlier section on **LoadBalancer services** then you will already have a load balancer (CLB) in front of the `EKS_APP_FE` (i.e. `echo-frontend`) app.
+If you do not have this, execute the following (2-3 mins).
+```bash
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_FE} --port=80 --type=LoadBalancer
+```
+
+# if we don't create the service account via eksctl it will not activate IRSA (note the policy attachment)
 eksctl create iamserviceaccount \
   --cluster ${EKS_CLUSTER_NAME} \
   --namespace kube-system \
@@ -148,33 +155,31 @@ kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS
 kubectl -n ${EKS_APP_NS} get virtualrouters                                                                                # check from the k8s aspect
 aws appmesh describe-route --mesh-name ${EKS_APP_NS} --virtual-router-name vr-${EKS_APP_BE} --route-name vrr-${EKS_APP_BE} # check from the AWS aspect
 
-# with the virtual router in place we can now deploy a virtual service
-# however, we must first ensure that a matching k8s service exists for the virtual service
+# with the virtual router in place we can now deploy a virtual service and the matching underlying k8s service which it will provide a version independent target for backend traffic.
 # this ClusterIP service should never resolve to any pods in the traditional sense, it just surfaces a DNS name and IP address which the mesh can reference internally to perform its redirections
-kubectl -n ${EKS_APP_NS} create service clusterip vs-${EKS_APP_BE} --tcp=80 -o yaml --dry-run=client | kubectl neat > ~/environment/eks-demos/src/mesh-apps/svc-vs-${EKS_APP_BE}.yaml
-kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/svc-vs-${EKS_APP_BE}.yaml
-
 # in the same way that k8s pods send requests to other pods via k8s services,
 # virtualnodes send requests to other virtualnodes via virtualservices
 # we already have a virtualrouter, which knows how to locate the backend virtualnodes
 # now we create a single virtualservice that forwards all its traffic to the virtualrouter
-cat > ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml << EOF
+kubectl -n ${EKS_APP_NS} create service clusterip ${EKS_APP_BE} --tcp=80 -o yaml --dry-run=client | kubectl neat > ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml
+cat >> ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml << EOF
+---
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualService
 metadata:
-  name: vs-${EKS_APP_BE}
+  name: ${EKS_APP_BE}
 spec:
-  awsName: vs-${EKS_APP_BE}
+  awsName: ${EKS_APP_BE}
   provider:
     virtualRouter:
       virtualRouterRef:
         name: vr-${EKS_APP_BE}
 EOF
-kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml
 
 # observe the change
-kubectl -n ${EKS_APP_NS} get virtualservices                                                           # check from the k8s aspect
-aws appmesh describe-virtual-service --mesh-name ${EKS_APP_NS} --virtual-service-name vs-${EKS_APP_BE} # check from the AWS aspect
+kubectl -n ${EKS_APP_NS} get virtualservices                                                        # check from the k8s aspect
+aws appmesh describe-virtual-service --mesh-name ${EKS_APP_NS} --virtual-service-name ${EKS_APP_BE} # check from the AWS aspect
 
 # the final piece is the virtual node component which represents the frontend deployment.
 # we could have applied this manifest before now, but since it's dependencies were not yet available
@@ -193,7 +198,7 @@ spec:
   backends:
     - virtualService:
         virtualServiceRef:
-          name: vs-${EKS_APP_BE}
+          name: ${EKS_APP_BE}
 EOF
 kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vn-${EKS_APP_FE}.yaml
 
@@ -207,15 +212,11 @@ for color in blue green; do
   kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_BE}-${color}
 done
 
-# if present, the frontend will submit an internal request to an environment variable named BACKEND
+# if present, the frontend code will look for an environment variable named BACKEND and `curl` that endpoint
 # setting this now will cause the frontend deployment to also be restarted and for the backend to become utilized
-kubectl -n ${EKS_APP_NS} set env deployment ${EKS_APP_FE} BACKEND=vs-${EKS_APP_BE}                # current Envoy limitation, cannot use namespaced FQDNs
+kubectl -n ${EKS_APP_NS} set env deployment ${EKS_APP_FE} BACKEND=http://${EKS_APP_BE}:80      # current Envoy limitation, cannot use namespaced FQDNs
 
-# observe as the pods are restarted
-watch kubectl -n ${EKS_APP_NS} get pods                   # ctrl+c to quit loop
-
-# restart the frontend to see the new sidecars
-kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_FE}
+# observe as the pods are restarted. the new sidecar containers will be injected this time.
 watch kubectl -n ${EKS_APP_NS} get pods                   # ctrl+c to quit loop
 
 # In a **dedicated** terminal window observe the frontend routing 100% of traffic to the BLUE backend and 0% to green
@@ -234,7 +235,7 @@ kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS
 # when you installed the App Mesh controller you essentially made a commitment to configure your service mesh through the exclusive use of k8s manifests (think, Infrastructure as Code) so you must resist the temptation to make stateful modifications via other tools (e.g. AWS Console/CLI).
 # this approach will protect you against configuration drift and make your deployments portable between EKS clusters.
 
-# you may recall we enabled x-ray when we installed the App Mesh controller so our application will also now be emiting trace diagnoistics to the X-Ray service.
-# head over the x-ray service map at https://us-west-2.console.aws.amazon.com/xray/home to observe as the traffic begins to shift from BLUE to GREEN
+# you may recall we enabled x-ray when we installed the App Mesh controller so our application will also now be emiting trace diagnostics to the X-Ray service.
+# head over to the x-ray service map at https://us-west-2.console.aws.amazon.com/xray/home to observe as the traffic begins to shift from BLUE to GREEN
 # the default service map window is 5 minutes but you can reduce this to 1 minute.
 # as you refresh the service map you will observe the volume of recorded traffic drop from BLUE until the service icon disappears altogether
