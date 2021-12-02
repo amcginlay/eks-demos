@@ -47,10 +47,11 @@ Back on your **local machine**, run this command to confirm successful authoriza
 kubectl get nodes
 ```
 
-Behind the scenes, the call to `eksctl create iamidentitymapping` updated the `aws-auth` configmap which acts as a bridge between **authentication** (AWS IAM) and **authorization** (Kubernetes RBAC).
-This configmap resides in the `kube-system` namespace.
-Everyone, except the cluster creator, is initally unauthorized to interact with the cluster until an appropriate entry is added to `aws-auth`.
-You can view the configmap from any authorized client device at any time using the following.
+Behind the scenes, the call to `eksctl create iamidentitymapping` updated the `aws-auth` configmap which acts as a bridge between authentication (AWS IAM) and authorization (Kubernetes RBAC).
+This k8s configmap, which is unique to EKS clusters, resides in the `kube-system` namespace.
+Only the cluster creator is initially authorized to interact with the cluster.
+Appropriate entries in the `aws-auth` configmap are required before the cluster will acknowledge any others.
+You can view the configmap from any authorized client device using the following.
 ```bash
 kubectl -n kube-system get configmap aws-auth -o yaml
 ```
