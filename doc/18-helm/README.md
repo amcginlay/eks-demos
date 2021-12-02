@@ -1,6 +1,10 @@
 # Helm - because packages need managing
 
-This next section assumes that you you have completed the earlier section on **LoadBalancer services** and have a load balancer available.
+If you have completed the earlier section on **LoadBalancer services** then you will already have a load balancer (CLB) in front of the `EKS_APP_FE` (i.e. `echo-frontend`) app.
+If you do not have this, execute the following (2-3 mins).
+```bash
+kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_FE} --port=80 --type=LoadBalancer
+```
 
 Linux has [yum and apt](https://www.baeldung.com/linux/yum-and-apt).
 Mac has [Homebrew](https://brew.sh/).
