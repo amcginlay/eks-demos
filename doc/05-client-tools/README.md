@@ -1,6 +1,6 @@
 # Configure Client Tools
 
-Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, jq, helm, tree, siege and gradle.
+Install AWS CLI v2, eksctl, kubectl, AWS Session Manager plugin, dive, jq, helm, tree, siege, gradle and krew.
 ```bash
 sudo mv /usr/local/bin/aws /usr/local/bin/aws.old
 sudo mv /usr/bin/aws /usr/bin/aws.old
@@ -13,12 +13,14 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v${EKS_K8S_VE
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 curl --silent "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm" -o "session-manager-plugin.rpm"
-sudo yum install -y session-manager-plugin.rpm jq tree siege
+dive_latest=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+curl --silent --location https://github.com/wagoodman/dive/releases/download/${dive_latest}/dive_$(cut -c 2- <<< ${dive_latest})_linux_amd64.rpm -o dive.rpm 
+sudo yum install -y session-manager-plugin.rpm dive.rpm jq tree siege
 curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk install gradle
-rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm
+rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm dive.rpm
 # finally, install the kubectl neat add-on (https://krew.sigs.k8s.io/docs/user-guide/setup/install/ | https://github.com/itaysk/kubectl-neat)
 (
   set -x; cd "$(mktemp -d)" &&
@@ -36,7 +38,7 @@ kubectl krew install neat
 
 Verify the installs worked.
 ```bash
-which aws eksctl kubectl session-manager-plugin jq tree helm siege gradle kubectl-neat
+which aws eksctl kubectl session-manager-plugin dive jq tree helm siege gradle kubectl-neat
 ```
 
 [Return To Main Menu](/README.md)
