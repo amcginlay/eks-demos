@@ -155,15 +155,12 @@ kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS
 kubectl -n ${EKS_APP_NS} get virtualrouters                                                                                # check from the k8s aspect
 aws appmesh describe-route --mesh-name ${EKS_APP_NS} --virtual-router-name vr-${EKS_APP_BE} --route-name vrr-${EKS_APP_BE} # check from the AWS aspect
 
-# with the virtual router in place we can now deploy a virtual service and the matching underlying k8s service which it will provide a version independent target for backend traffic.
-# this ClusterIP service should never resolve to any pods in the traditional sense, it just surfaces a DNS name and IP address which the mesh can reference internally to perform its redirections
-# in the same way that k8s pods send requests to other pods via k8s services,
-# virtualnodes send requests to other virtualnodes via virtualservices
-# we already have a virtualrouter, which knows how to locate the backend virtualnodes
+# with the virtual router in place we can now deploy a virtual service and the matching underlying ClusterIP service which it will provide a version independent target for backend traffic.
+# the ClusterIP service should never resolve to any pods in the traditional sense, it just surfaces a DNS name and IP address which the mesh can reference internally to anchor its redirections.
+# in the same way that k8s pods send requests to other pods via k8s services, virtualnodes send requests to other virtualnodes via virtualservices
+# we already have a virtualrouter, which knows how to locate the blue and green backend virtualnodes
 # now we create a single virtualservice that forwards all its traffic to the virtualrouter
-kubectl -n ${EKS_APP_NS} create service clusterip ${EKS_APP_BE} --tcp=80 -o yaml --dry-run=client | kubectl neat > ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml
-cat >> ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml << EOF
----
+cat > ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml << EOF
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualService
 metadata:
@@ -174,8 +171,10 @@ spec:
     virtualRouter:
       virtualRouterRef:
         name: vr-${EKS_APP_BE}
+---
 EOF
-kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/svc-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} create service clusterip ${EKS_APP_BE} --tcp=80 -o yaml --dry-run=client | kubectl neat >> ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml
+kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml
 
 # observe the change
 kubectl -n ${EKS_APP_NS} get virtualservices                                                        # check from the k8s aspect
