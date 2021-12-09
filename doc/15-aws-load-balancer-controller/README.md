@@ -10,7 +10,7 @@ This controller supports the use of [Application Load Balancers](https://aws.ama
 The AWS Load Balancer Controller does not come installed as standard on EKS clusters so we need to follow the documented installation instructions which are presented in short form below.
 These instructions install the deployment using `helm` - a package manager for Kubernetes which we have not yet encountered but will do so in a later section.
 This section assumes that the OIDC provider of your cluster has been registered for use with IAM.
-This is accurate as we previously set `withOIDC: true` in the cluster config YAML file.
+This is accurate as we previously set `withOIDC: true` in the cluster config YAML file, but check out [this link](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html) if you need help re-applying the setting.
 ```bash
 # create this policy if it doe not alredy exist
 aws iam create-policy \
