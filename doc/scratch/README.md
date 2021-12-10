@@ -166,7 +166,7 @@ kind: VirtualService
 metadata:
   name: ${EKS_APP_BE}
 spec:
-  awsName: ${EKS_APP_BE}
+  awsName: ${EKS_APP_BE}.${EKS_APP_NS}.svc.cluster.local
   provider:
     virtualRouter:
       virtualRouterRef:
@@ -213,7 +213,7 @@ done
 
 # if present, the frontend code will look for an environment variable named BACKEND and `curl` that endpoint
 # setting this now will cause the frontend deployment to also be restarted and for the backend to become utilized
-kubectl -n ${EKS_APP_NS} set env deployment ${EKS_APP_FE} BACKEND=http://${EKS_APP_BE}:80      # current Envoy limitation, cannot use namespaced FQDNs
+kubectl -n ${EKS_APP_NS} set env deployment ${EKS_APP_FE} BACKEND=http://${EKS_APP_BE}.${EKS_APP_NS}.svc.cluster.local:80
 
 # observe as the pods are restarted. the new sidecar containers will be injected this time.
 watch kubectl -n ${EKS_APP_NS} get pods                   # ctrl+c to quit loop
