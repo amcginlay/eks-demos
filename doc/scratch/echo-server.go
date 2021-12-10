@@ -32,15 +32,13 @@ func getResponse() string {
     return res
 }
 
-func endpointHandler(w http.ResponseWriter, r *http.Request) {
-    resp := getResponse()
-    log.Printf("%s", resp)
-    fmt.Fprintf(w, "%s\n", resp)
-}
-
 func main() {
     mux := http.NewServeMux()
-    mux.HandleFunc("/", endpointHandler)
+    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        resp := getResponse()
+        log.Printf("%s", resp)
+        fmt.Fprintf(w, "%s\n", resp)
+    })
 
     port := os.Getenv("PORT")
     if port == "" {
