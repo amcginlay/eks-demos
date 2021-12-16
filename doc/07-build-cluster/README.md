@@ -25,7 +25,11 @@ secretsEncryption:
   keyARN: ${key_metadata[1]}
 iam:
   withOIDC: true
-  
+addons: # the usual suspects - accept defaults, formalize existence (see Console : Cluster -> Configuration -> Add-ons)
+  - name: coredns
+  - name: kube-proxy
+  - name: vpc-cni
+
 managedNodeGroups:
   - name: mng-${EKS_CLUSTER_NAME}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
