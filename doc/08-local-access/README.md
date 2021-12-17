@@ -39,7 +39,7 @@ This will **explicitly** introduce the new administrator to the cluster.
 ```bash
 new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
-  --cluster dev \
+  --cluster ${EKS_CLUSTER_NAME} \
   --group system:masters \
   --arn ${new_admin_arn} \
   --username $((rev | cut -d/ -f1 | rev) <<< ${new_admin_arn})
@@ -56,9 +56,9 @@ Only the cluster creator is initially authorized to interact with the cluster.
 Appropriate entries in the `aws-auth` configmap are required before the cluster will acknowledge any others.
 You can view the configmap from any authorized client device using the following.
 ```bash
-kubectl -n kube-system get configmap aws-auth -o yaml
+kubectl -n kube-system describe configmap aws-auth
 ```
 
-You may, of course, add entries to the `aws-auth` configmap manually but `eksctl create iamidentitymapping` is the safer option.
+You may, of course, edit the `aws-auth` configmap manually but `eksctl create iamidentitymapping` is the safer option.
 
 [Return To Main Menu](/README.md)
