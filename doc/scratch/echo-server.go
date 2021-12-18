@@ -28,7 +28,7 @@ func getResponse() string {
     instanceId := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/instance-id")
     ec2Ip := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/local-ipv4")
     localHostIp := strings.TrimSuffix(shellExec("hostname", "-i"), "\n")
-    res := fmt.Sprintf(`{ "time": "%s", "version": "%s", "ec2Instance": "%s", "ec2IP": "%s", "localhostIP": "%s", "backend": "n/a" }`, time, version, instanceId, ec2Ip, localHostIp)
+    res := fmt.Sprintf(`{ "1_time": "%s", "2_version": "%s", "ec2Instance": "%s", "ec2IP": "%s", "localhostIP": "%s", "backend": "n/a" }`, time, version, instanceId, ec2Ip, localHostIp)
     return res
 }
 

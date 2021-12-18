@@ -9,22 +9,11 @@ export AWS_ACCOUNT_ID=$(curl --silent http://169.254.169.254/latest/dynamic/inst
 export AWS_DEFAULT_REGION=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 export AWS_PAGER=                                                           # intentionally blank
 
-export EKS_GITHUB_PUBLIC_REPO=https://github.com/amcginlay/eks-demos.git    # if you fork this repo, change this!
+export EKS_GITHUB_USER=amcginlay                                            # if you fork this repo, change this!
 export EKS_CLUSTER_NAME=dev
 export EKS_K8S_VERSION=1.20
 
 export EKS_ECR_REGISTRY=\${AWS_ACCOUNT_ID}.dkr.ecr.\${AWS_DEFAULT_REGION}.amazonaws.com
-export EKS_APP_NS=apps
-
-export EKS_APP_FE=echo-frontend
-export EKS_APP_FE_VERSION=1.0.42
-export EKS_APP_FE_VERSION_NEXT=1.0.43
-export EKS_APP_FE_ECR_REPO=\${EKS_ECR_REGISTRY}/\${EKS_APP_FE}
-
-export EKS_APP_BE=echo-backend
-export EKS_APP_BE_VERSION=1.0.142
-export EKS_APP_BE_VERSION_NEXT=1.0.143
-export EKS_APP_BE_ECR_REPO=\${EKS_ECR_REGISTRY}/\${EKS_APP_BE}
 EOF
 ```
 

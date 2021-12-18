@@ -7,28 +7,23 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [03. Create Cloud9 (EC2) Environment](doc/03-cloud9/README.md)
 * [04. Set Variables](doc/04-set-variables/README.md)
 * [05. Configure Client Tools](doc/05-client-tools/README.md)
-* [06. Clone This Repo](doc/06-clone-repo/README.md)
-* [07. Build EKS Cluster](doc/07-build-cluster/README.md)
-* [08. Configure Local Machine Access](doc/08-local-access/README.md)
+* [06. Build EKS Cluster](doc/06-build-cluster/README.md)
+* [07. Configure Local Machine Access](doc/07-local-access/README.md)
 
 ## Workload Deployment
-* [09. Build A Container Image](doc/09-build-container-image/README.md)
-* [10. Push Container Image To ECR](doc/10-push-to-ecr/README.md)
-* [11. Deploy From ECR To Kubernetes](doc/11-deploy-to-k8s/README.md)
+* [08. Build A Container Image](doc/08-build-container-image/README.md)
+* [09. Push Container Image To ECR](doc/09-push-to-ecr/README.md)
+* [10. Deploy From ECR To Kubernetes](doc/10-deploy-to-k8s/README.md)
 
 ## Load Distribution
-* [12. K8s ClusterIP Services](doc/12-clusterip-services/README.md) - because pods need to talk to each other
-* [13. K8s NodePort Services](doc/13-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
-* [14. K8s LoadBalancer Services](doc/14-loadbalancer-services/README.md) - because the world needs to talk to our cluster
-* [15. AWS Load Balancer Controller](doc/15-aws-load-balancer-controller/README.md) - because one load balancer per service is wasteful
+* [11. K8s ClusterIP Services](doc/11-clusterip-services/README.md) - because pods need to talk to each other
+* [12. K8s NodePort Services](doc/12-nodeport-services/README.md) - because workloads outside the cluster need to talk to pods
+* [13. K8s LoadBalancer Services](doc/13-loadbalancer-services/README.md) - because the world needs to talk to our cluster
+* [14. AWS Load Balancer Controller](doc/14-aws-load-balancer-controller/README.md) - because one load balancer per service is wasteful
 
 ## Autoscaling
-* [16. Cluster Autoscaler](doc/16-ca/README.md) - because no one likes a pending pod
-* [17. Horizonal Pod Autoscaler](doc/17-hpa/README.md) - because demand for pods can grow
+* [15. Cluster Autoscaler](doc/15-ca/README.md) - because no one likes a pending pod
+* [16. Horizonal Pod Autoscaler](doc/16-hpa/README.md) - because demand for pods can grow
 
 ## Release Management
-* [18. Helm](doc/18-helm/README.md) - because packages need managing
-
-## Extensions
-* [Orchestration](doc/orchestration/README.md) - balancing desired against actual
-
+* [17. Helm](doc/17-helm/README.md) - because packages need managing
