@@ -1,9 +1,24 @@
 # Helm - because packages need managing
 
-If you have completed the earlier section on **LoadBalancer services** then you will already have a load balancer (CLB) in front of your `echo-frontend` app.
-If you do not have this, execute the following (2-3 mins).
+If you have not completed the earlier section on Services (Load Distribution) then you may not have a service manifest or corresponding service object in place.
+If so, resolve this by executing the following.
+A ClusterIP service will suffice.
 ```bash
-kubectl -n demos expose deployment echo-frontend --port=80 --type=LoadBalancer
+cat << EOF | tee ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-frontend
+  namespace: demos
+  labels:
+    app: echo-frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: echo-frontend
+EOF
 ```
 
 Linux has [yum and apt](https://www.baeldung.com/linux/yum-and-apt).
@@ -73,16 +88,16 @@ cp ~/environment/echo-frontend-1.0/manifests/demos-namespace.yaml \
    ~/environment/helm-charts/echo-frontend/templates/
 ```
 
-Helm offers a dry run option which allows us to "kick the tyres" and look for any potential errors.
+Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
 helm upgrade -i --dry-run echo-frontend ~/environment/helm-charts/echo-frontend/
 ```
 
-This dry run **fails** because we would be asking Helm to deploy over the top of an existing deployment which is not under its control.
+This dry run **fails** because we would be asking Helm to deploy over the top of an existing deployment which it does not currently own.
 Throwing caution to the wind, just delete the `echo-frontend` namespace which will obliterates your entire application.
 We can then try the dry run again.
 ```bash
-kubectl delete namespace demos # this command will take few moments as it needs to dispose of the CLB
+kubectl delete namespace demos # this command may take few moments
 helm upgrade -i --dry-run echo-frontend ~/environment/helm-charts/echo-frontend/
 ```
 
@@ -91,12 +106,10 @@ This time the dry run will produce no errors and we can just go for it.
 helm upgrade -i echo-frontend ~/environment/helm-charts/echo-frontend/
 ```
 
-Remember our application incorporates a CLB.
-In a **dedicated** terminal window, grab the CLB DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
-Leave this looped request running and we will return to view it again later.
+In a **dedicated** terminal window, remote into nginx and begin sending requests to the service.
 ```bash
-clb_dnsname=$(kubectl -n demos get service echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-while true; do curl http://${clb_dnsname}; sleep 0.25; done
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl echo-frontend.demos.svc.cluster.local:80; sleep 0.25; done"
+# ctrl+c to quit loop
 ```
 
 We have seen how Helm can help us deploy in a repeatable way but we also stated that it was configurable.

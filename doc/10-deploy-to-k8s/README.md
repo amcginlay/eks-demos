@@ -30,7 +30,7 @@ metadata:
 EOF
 ```
 
-Create a deployment for version 1 of your app.
+Create a deployment for version 1.0 of your app.
 ```bash
 cat << EOF | tee ~/environment/echo-frontend-1.0/manifests/echo-frontend-deployment.yaml | kubectl apply -f -
 apiVersion: apps/v1

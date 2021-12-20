@@ -10,16 +10,21 @@ aws ecr create-repository \
   --output text
 ```
 
-Push the Docker images to the ECR repository.
+Tag your image in preparation for uploading to ECR, reviewing the contents of the local Docker image cache before and after.
 ```bash
-aws ecr get-login-password | docker login --username AWS --password-stdin ${EKS_ECR_REGISTRY}
+docker images
 docker tag echo-frontend:1.0 ${EKS_ECR_REGISTRY}/echo-frontend:1.0
-docker tag echo-frontend:2.0 ${EKS_ECR_REGISTRY}/echo-frontend:2.0
-docker push ${EKS_ECR_REGISTRY}/echo-frontend:1.0
-docker push ${EKS_ECR_REGISTRY}/echo-frontend:2.0
+docker images
 ```
 
-The EKS cluster can now locate these images by their version tags.
+Authenticate the Docker CLI with ECR and push the image to the ECR repository.
+```bash
+aws ecr get-login-password | docker login --username AWS --password-stdin ${EKS_ECR_REGISTRY}
+docker push ${EKS_ECR_REGISTRY}/echo-frontend:1.0
+```
+
+The EKS cluster will now be able locate this image in ECR by its version tag.
+Review the ECR repository for your app.
 ```bash
 aws ecr list-images --repository-name echo-frontend
 ```
