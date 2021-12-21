@@ -41,7 +41,7 @@ The CA will take **about 2 minutes** to complete the node scaling operation and 
 Once all the pods are successfully in a Running state and have IP addresses assigned the demo is complete.
 Revert the replicaset to its previous size.
 ```bash
-kubectl -n ${EKS_APP_NS} scale deployment ${EKS_APP_FE} --replicas 3
+kubectl -n demos scale deployment echo-frontend --replicas 3
 ```
 
 If nodes are in Ready state and have spare capacity, new pods can be created in a matter of seconds.
