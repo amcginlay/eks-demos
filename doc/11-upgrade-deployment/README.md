@@ -95,10 +95,10 @@ docker stop ${container_id}
 
 Observe the new `backend` attribute ("n/a" by default) and the value for the `version` attribute which is set to 2.0.
 
-Push the Docker image to the ECR repository.
+Tag and push the Docker image to the ECR repository.
 ```bash
-aws ecr get-login-password | docker login --username AWS --password-stdin ${EKS_ECR_REGISTRY}
 docker tag echo-frontend:2.0 ${EKS_ECR_REGISTRY}/echo-frontend:2.0
+aws ecr get-login-password | docker login --username AWS --password-stdin ${EKS_ECR_REGISTRY}
 docker push ${EKS_ECR_REGISTRY}/echo-frontend:2.0
 ```
 
@@ -116,18 +116,19 @@ cp ~/environment/echo-frontend-1.0/manifests/demos-namespace.yaml \
 sed -i "s/echo-frontend:1.0/echo-frontend:2.0/g" ~/environment/echo-frontend-2.0/manifests/echo-frontend-deployment.yaml
 ```
 
-Apply the collection of 2.0 manifests to update the app.
+Apply the collection of 2.0 manifests to update the app in-place.
 ```bash
 kubectl apply -f ~/environment/echo-frontend-2.0/manifests/
 ```
 
 Inspect your updated deployment.
-Observe the version change under the "IMAGES" heading.
+Observe the version change from 1.0 to 2.0 under the "IMAGES" heading.
 ```bash
 sleep 10 && kubectl -n demos get deployments,pods -o wide
 ```
 
 Exec into the first pod to perform curl test.
+Satisfy yourself that your app has been upgraded.
 ```bash
 first_pod=$(kubectl -n demos get pods -l app=echo-frontend -o name | head -1)
 kubectl -n demos exec -it ${first_pod} -- curl localhost:80
