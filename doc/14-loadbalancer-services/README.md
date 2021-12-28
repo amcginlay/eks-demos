@@ -22,8 +22,10 @@ In EKS, services of type LoadBalancer are supported by this type of custom contr
 Upgrade the NodePort service to a LoadBalancer service, then check the running services.
 ```bash
 kubectl -n demos get services # inspect services before upgrade
-sed -i "s/NodePort/LoadBalancer/g" ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml
-kubectl apply -f ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml
+cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.serviceType }}/NodePort/g" | \
+    kubectl apply -f -
 sleep 5 && kubectl -n demos get services # inspect services after upgrade
 ```
 
@@ -32,7 +34,7 @@ Port 80 requests arriving at this endpooint are now evenly distributed across al
 Grab the CLB DNS name and put the following `curl` command in a loop as the AWS resource will not be immediately resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
-clb_dnsname=$(kubectl -n demos get service echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+clb_dnsname=$(kubectl -n demos get service echo-frontend-blue -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${clb_dnsname}; sleep 0.25; done
 # ctrl+c to quit loop
 ```

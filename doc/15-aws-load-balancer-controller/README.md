@@ -41,10 +41,24 @@ Verify that the AWS Load Balancer Controller is installed.
 kubectl -n kube-system get deployment aws-load-balancer-controller
 ```
 
-Start by re-implementing what we had in the previous section - a single load balancer forwarding all traffic to one deployment via its service.
-This time we will be creating an Application Load Balancer (ALB).
+You are now about to configure the ALB to support multiple front ends simulataneously.
+To support this you will now create a separate deployment and service.
+You will use version **2.0** of your app, packaged into a deployment suffixed with the color **green** alongside an associated service of type **LoadBalancer**.
+Recall that services of type **LoadBalancer** are derived from the **NodePort** service type, which is a minimum requirement for ALB routing rules.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend-1.0/manifests/echo-frontend-ingress.yaml | kubectl apply -f -
+cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
+    <(echo ---) \
+    ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
+    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .Values.color }}/green/g" | \
+    sed "s/{{ .Values.version }}/2.0/g" | \
+    sed "s/{{ .Values.serviceType }}/LoadBalancer/g" | \
+    kubectl apply -f -
+```
+
+Now we can deploy an ALB configured to route traffic to both deployments, version 1.0 via the **/blue** route and version 2.0 via the **green** route.
+```bash
+cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -53,18 +67,25 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/group.name: shared
-    alb.ingress.kubernetes.io/group.order: "200"
 spec:
   rules:
   - http:
       paths:
       - backend:
           service:
-            name: echo-frontend
+            name: echo-frontend-blue
             port:
               number: 80
-        path: /
+        path: /blue/
+        pathType: Prefix
+  - http:
+      paths:
+      - backend:
+          service:
+            name: echo-frontend-green
+            port:
+              number: 80
+        path: /green/
         pathType: Prefix
 EOF
 ```
@@ -73,134 +94,21 @@ Grab the DNS name for your ALB and put the following `curl` command in a loop un
 If you receive any errors, just wait a little longer.
 ```bash
 sleep 20 && alb_dnsname=$(kubectl -n demos get ingress echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-while true; do curl http://${alb_dnsname}; sleep 0.25; done
+while true; do curl http://${alb_dnsname}/blue/; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-The AWS Load Balancer Controller depends upon NodePort services for its routing rules.
-We currently have one compatible service but if we're going to test multiple routes through the ALB we will need an alternate deployment and service.
-This deployment will have an accompanying NodePort service which will become a new target for the ALB.
-
-Create a directory in which to store your manifests for your alternative app.
+Once you get a response, try sending separate requests to observe how a single ALB can forward traffic to multiple services/deployments.
 ```bash
-mkdir -p ~/environment/echo-alt/manifests/
+curl http://${alb_dnsname}/blue  # version 1.0
+curl http://${alb_dnsname}/green # version 2.0
 ```
 
-Create a namespace named `demos-alt` which will host our objects.
+In a production environment we would likely favour ALBs over CLBs but for demo purposes the CLBs will suffice so we recommend that you unwind the ALB resources as follows.
 ```bash
-cat << EOF | tee ~/environment/echo-alt/manifests/demos-alt-namespace.yaml | kubectl apply -f -
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: demos-alt
-EOF
-```
-
-Create a deployment and NodePort service for your alternative app.
-```bash
-cat << EOF | tee ~/environment/echo-alt/manifests/echo-alt-deployment.yaml | kubectl apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: echo-alt
-  namespace: demos-alt
-  labels:
-    app: echo-alt
-spec:
-  replicas: 1
-  revisionHistoryLimit: 0
-  selector:
-    matchLabels:
-      app: echo-alt
-  template:
-    metadata:
-      labels:
-        app: echo-alt
-    spec:
-      containers:
-      - name: echo-alt
-        image: gcr.io/google_containers/echoserver:1.10
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: 200Mi
-            cpu: 200m
-EOF
-```
-
-```bash
-cat << EOF | tee ~/environment/echo-alt/manifests/echo-alt-service.yaml | kubectl apply -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: echo-alt
-  namespace: demos-alt
-  labels:
-    app: echo-alt
-spec:
-  type: NodePort
-  ports:
-  - port: 80
-    targetPort: 8080
-  selector:
-    app: echo-alt
-EOF
-```
-
-Take a look at what was produced
-```bash
-kubectl -n demos-alt get deployments,pods,services -o wide
-```
-
-Test this new service for internal reachability.
-The output is notably different to our previously deployed application.
-```bash
-worker_nodes=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
-node_port=$(kubectl -n demos-alt get service -l app=echo-alt -o jsonpath='{.items[0].spec.ports[0].nodePort}')
-kubectl exec -it jumpbox -- curl ${worker_nodes[0]}:${node_port}
-```
-
-Now extend the ALB definition by creating a second ingress resource alongside your new deployment.
-The `group-name` matches our first ingress, so it will be associated with the same ALB as before, but the `group-order` is lower so this path will be evaluated for a pattern match first.
-```bash
-cat << EOF | tee ~/environment/echo-alt/manifests/echo-alt-ingress.yaml | kubectl apply -f -
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: echo-alt
-  namespace: demos-alt
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/group.name: shared
-    alb.ingress.kubernetes.io/group.order: "100"
-spec:
-  rules:
-  - http:
-      paths:
-      - backend:
-          service:
-            name: echo-alt
-            port:
-              number: 80
-        path: /echo-alt/
-        pathType: Prefix
-EOF
-```
-
-Send separate curl requests to observe how a single ALB can forward traffic to multiple deployments in different namespaces.
-```bash
-curl http://${alb_dnsname}          # our original app
-curl http://${alb_dnsname}/echo-alt # our alternative app
-```
-
-We only require one load balancer but we currently have two.
-In a production environment we would likely favour the ALB over the CLB but for demo purposes the CLB will suffice so we recommend that you unwind all the resources generated in this demo as follows.
-```bash
-kubectl -n demos-alt delete ingress echo-alt
+rm ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 kubectl -n demos delete ingress echo-frontend # this discards the ALB so be patient here
 helm -n kube-system uninstall aws-load-balancer-controller
-kubectl delete namespace demos-alt
 ```
 
 [Return To Main Menu](/README.md)

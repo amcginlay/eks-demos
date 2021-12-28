@@ -5,11 +5,13 @@ They negotiate access to the underlying service functionality via an auto-assign
 
 We need to upgrade our ClusterIP service to a NodePort service.
 There are a couple of ways we could achieve this, including the [kubectl patch](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command.
-However, in the interests of maintaining focus on manifests, just make a text adjustment to the YAML file and apply the new configuration as follows.
+However, in the interests of maintaining focus on manifests, re-apply the service manifest adjusting for the new service type as follows.
 ```bash
 kubectl -n demos get services # inspect services before upgrade
-sed -i "s/ClusterIP/NodePort/g" ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml
-kubectl apply -f ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml
+cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.serviceType }}/NodePort/g" | \
+    kubectl apply -f -
 kubectl -n demos get services # inspect services after upgrade
 ```
 

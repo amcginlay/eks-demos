@@ -7,8 +7,8 @@ Version 2.0 of your app provides support for the use of a **backend** app.
 
 Run the following snippet in the terminal to create the new source code for your app.
 ```bash
-mkdir -p ~/environment/echo-frontend-2.0/
-cat > ~/environment/echo-frontend-2.0/main.go << EOF
+mkdir -p ~/environment/echo-frontend/2.0/
+cat > ~/environment/echo-frontend/2.0/main.go << EOF
 package main
 
 import (
@@ -74,16 +74,16 @@ func main() {
 EOF
 ```
 
-Open `~/environment/echo-frontend-1.0/main.go` in Cloud9 IDE to review the updated code.
+Open `~/environment/echo-frontend/2.0/main.go` in Cloud9 IDE to review the updated code.
 
 Copy and re-use the version 1.0 Dockerfile.
 ```bash
-cp ~/environment/echo-frontend-1.0/Dockerfile ~/environment/echo-frontend-2.0/
+cp ~/environment/echo-frontend/1.0/Dockerfile ~/environment/echo-frontend/2.0/
 ```
 
 Use Docker to build and run your new container image.
 ```bash
-docker build -t echo-frontend:2.0 ~/environment/echo-frontend-2.0/
+docker build -t echo-frontend:2.0 ~/environment/echo-frontend/2.0/
 container_id=$(docker run --detach --rm -p 8082:80 echo-frontend:2.0)
 ```
 
@@ -107,18 +107,13 @@ Review the version 1.0 and version 2.0 images, now side by side in ECR.
 aws ecr list-images --repository-name echo-frontend
 ```
 
-Create a directory in which to store your 2.0 manifests, grab copies of the current 1.0 manifests and update the image version
+Re-apply the deployment manifest, adjusting only for the new version, to update your app **in-place**.
 ```bash
-mkdir -p ~/environment/echo-frontend-2.0/manifests/
-cp ~/environment/echo-frontend-1.0/manifests/demos-namespace.yaml \
-   ~/environment/echo-frontend-1.0/manifests/echo-frontend-deployment.yaml \
-   ~/environment/echo-frontend-2.0/manifests/
-sed -i "s/echo-frontend:1.0/echo-frontend:2.0/g" ~/environment/echo-frontend-2.0/manifests/echo-frontend-deployment.yaml
-```
-
-Apply the collection of 2.0 manifests to update the app in-place.
-```bash
-kubectl apply -f ~/environment/echo-frontend-2.0/manifests/
+cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
+    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.version }}/2.0/g" | \
+    kubectl apply -f -
 ```
 
 Inspect your updated deployment.
@@ -130,13 +125,17 @@ sleep 10 && kubectl -n demos get deployments,pods -o wide
 Exec into the first pod to perform curl test.
 Satisfy yourself that your app has been upgraded.
 ```bash
-first_pod=$(kubectl -n demos get pods -l app=echo-frontend -o name | head -1)
+first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -1)
 kubectl -n demos exec -it ${first_pod} -- curl localhost:80
 ```
 
 For now, roll back your deployment to version 1.0.
 ```bash
-kubectl apply -f ~/environment/echo-frontend-1.0/manifests/
+cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
+    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.version }}/1.0/g" | \
+    kubectl apply -f -
 ```
 
 The version 2.0 image remains in ECR for later use.

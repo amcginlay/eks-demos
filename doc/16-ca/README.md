@@ -31,7 +31,7 @@ sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 
 
 In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
 ```bash
-kubectl -n demos scale deployment echo-frontend --replicas 30
+kubectl -n demos scale deployment echo-frontend-blue --replicas 30
 ```
 
 Note how some pods start without an IP addresses because they're stuck in the Pending state and cannot be scheduled.
@@ -41,7 +41,7 @@ The CA will take **about 2 minutes** to complete the node scaling operation and 
 Once all the pods are successfully in a Running state and have IP addresses assigned the demo is complete.
 Revert the replicaset to its previous size.
 ```bash
-kubectl -n demos scale deployment echo-frontend --replicas 3
+kubectl -n demos scale deployment echo-frontend-blue --replicas 3
 ```
 
 If nodes are in Ready state and have spare capacity, new pods can be created in a matter of seconds.

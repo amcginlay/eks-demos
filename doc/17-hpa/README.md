@@ -1,10 +1,7 @@
 # Horizontal Pod Autoscaler - because demand for pods can grow
 
-If you have completed the earlier section on **LoadBalancer services** then you will already have a load balancer (CLB) in front of your `echo-frontend` app.
-If you do not have this, execute the following (2-3 mins).
-```bash
-kubectl -n demos expose deployment echo-frontend --port=80 --type=LoadBalancer
-```
+If you have **not** completed the earlier section on Services (Load Distribution) then you may not have an appropriate service manifest and corresponding service object in place.
+If so, please return and complete the sections named **"K8s ClusterIP Services"** and **"K8s LoadBalancer Services"**.
 
 When your workloads come under pressure their CPU consumption will rise.
 Cloud native best practices suggest that the response to this situation is to increase the number of app replicas which spreads the load.
@@ -40,10 +37,28 @@ watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
 # ctrl+c to quit watch command
 ```
 
-The command to activate an HPA for an existing deployment is `autoscale`.
-Activate the HPA for our running deployment.
+One could generate an HPA using [kubectl autoscale](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command however, in the interests of maintaining focus on manifests, you will build one by hand.
 ```bash
-kubectl -n demos autoscale deployment echo-frontend --cpu-percent=50 --min=3 --max=25
+cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml | \
+             sed "s/{{ .Values.color }}/blue/g" | \
+             sed "s/{{ .Values.minReplicas }}/3/g" | \
+             sed "s/{{ .Values.maxReplicas }}/25/g" | \
+             sed "s/{{ .Values.targetCPUUtilizationPercentage }}/50/g" | \
+             kubectl apply -f -
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: echo-frontend-{{ .Values.color }}
+  namespace: demos
+spec:
+  minReplicas: {{ .Values.minReplicas }}
+  maxReplicas: {{ .Values.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.targetCPUUtilizationPercentage }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: echo-frontend-{{ .Values.color }}
+EOF
 ```
 
 Keep watching the k8s objects in a **dedicated** terminal window.
@@ -53,11 +68,11 @@ watch "kubectl get nodes; echo; kubectl -n demos get deployments,hpa,pods -o wid
 
 In another **dedicated** terminal window, use siege to put the app under heavy load.
 ```bash
-clb_dnsname=$(kubectl -n demos get service -l app=echo-frontend -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
+clb_dnsname=$(kubectl -n demos get service -l app=echo-frontend-blue -o jsonpath='{.items[0].status.loadBalancer.ingress[0].hostname}')
 siege -c 5 ${clb_dnsname} # simulate 5 concurrent users
 ```
 
-This will cause the HPA to autoscale the pods upwards towards its max setting.
+This will cause the HPA to autoscale the pods upwards towards its `maxReplicas` setting.
 Switch back to the terminal window displaying the `watch` results, paying attention to the HPA values shown under TARGETS and REPLICAS.
 Also, observe the list of pods as it grows.
 Under heavy load the TARGETS ratio will be high and the number of replicas will increase rapidly until the resources in the nodes are exhausted.

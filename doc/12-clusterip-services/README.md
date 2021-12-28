@@ -9,32 +9,35 @@ kubectl run jumpbox --image=nginx                         # in default namespace
 sleep 10 && kubectl exec -it jumpbox -- curl localhost:80 # <---- test the NGINX welcome page
 ```
 
-Note that, in the absence of an associated deployment object, your jumpbox will not be automatically replaced in the event of a failure.
+Note that, in the absence of an associated deployment object, your single jumpbox pod will not be automatically replaced in the event of a failure.
 
 Remote into nginx and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
 ```bash
-kubectl exec -it jumpbox -- curl echo-frontend.demos.svc.cluster.local:80 # <---- FAILURE!
+kubectl exec -it jumpbox -- curl echo-frontend-blue.demos.svc.cluster.local:80 # <---- FAILURE!
 ```
 
-Upon creation, each service is allocated a long-term **internal** IP address which is scoped to the cluster and auto-registered within namespace-scoped DNS servers.
+Upon creation, each service is allocated a long-term **internal** IP address which is scoped to the cluster and auto-registered within private [CoreDNS](https://coredns.io/) servers.
 No service means no IP address and, hence, no DNS entry.
 
-Now we can introduce our basic ClusterIP service and test again.
+Now, using the same templating mechanism employed for the deployment, we can introduce our basic ClusterIP service and test again.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend-1.0/manifests/echo-frontend-service.yaml | kubectl apply -f -
+cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
+             sed "s/{{ .Values.color }}/blue/g" | \
+             sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
+             kubectl apply -f -
 apiVersion: v1
 kind: Service
 metadata:
-  name: echo-frontend
+  name: echo-frontend-{{ .Values.color }}
   namespace: demos
   labels:
-    app: echo-frontend
+    app: echo-frontend-{{ .Values.color }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.serviceType }}
   ports:
   - port: 80
   selector:
-    app: echo-frontend
+    app: echo-frontend-{{ .Values.color }}
 EOF
 ```
 
@@ -46,7 +49,7 @@ kubectl -n demos get services
 A private mapping from the DNS name of your service to its corresponding ClusterIP address is now in place so pods can now reach each other via DNS names.
 Put the previous curl request in a loop.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl echo-frontend.demos.svc.cluster.local:80; done"
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 # ctrl+c to quit loop
 ```
 
