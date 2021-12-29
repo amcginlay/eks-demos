@@ -78,8 +78,6 @@ spec:
               number: 80
         path: /blue/
         pathType: Prefix
-  - http:
-      paths:
       - backend:
           service:
             name: echo-frontend-green
