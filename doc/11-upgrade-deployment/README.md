@@ -44,7 +44,7 @@ Review the version 1.0 and version 2.0 images, now side by side in ECR.
 aws ecr list-images --repository-name echo-frontend
 ```
 
-You may also like to visit `https://us-west-2.console.aws.amazon.com/ecr/repositories`, open up the `echo-frontend` repository and inspect your images via the console.
+You may also like to visit [https://us-west-2.console.aws.amazon.com/ecr/repositories](https://us-west-2.console.aws.amazon.com/ecr/repositories), open up the `echo-frontend` repository and inspect your images via the console.
 
 Re-apply the deployment manifest, adjusting only for the new version, to update your app **in-place**.
 ```bash
