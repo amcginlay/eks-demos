@@ -37,7 +37,7 @@ for i in $(docker ps -q); do docker kill $i; done
 docker system prune --all --force
 ```
 
-Run the following snippet in the terminal to create the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
+Run the following snippet in the terminal to pull down the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
 wget --quiet https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
      --output-document ~/environment/echo-frontend/src/1.0/Dockerfile
