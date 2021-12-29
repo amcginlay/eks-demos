@@ -28,7 +28,7 @@ All inbound requests sent to any worker node at `node_ip:node_port` will now be 
 To demo the successful deployment of your NodePort service, `curl` from inside the jumpbox pod.
 This access method conveniently avoids having to navigate any security restrictions such as security groups.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl ${node_ips[0]}:${node_port}; sleep 0.25; done"
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://${node_ips[0]}:${node_port}; sleep 0.25; done"
 # ctrl+c to quit loop
 ```
 

@@ -102,7 +102,7 @@ helm upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
 In a **dedicated** terminal window, remote into nginx and begin sending requests to the service.
 Leave this running for now.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 # ctrl+c to quit loop
 ```
 

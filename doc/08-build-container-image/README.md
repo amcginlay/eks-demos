@@ -121,12 +121,12 @@ docker ps                                                              # ... now
 
 Invoke the webserver from inside the container.
 ```bash
-docker exec -it ${container_id} curl localhost:80
+docker exec -it ${container_id} curl http://localhost:80
 ```
 
 Invoke the webserver from outside the container.
 ```bash
-curl localhost:8081
+curl http://localhost:8081
 ```
 
 The response for the two previous `curl` requests are identical because it is the same operation, only the perspective is different.

@@ -89,7 +89,7 @@ container_id=$(docker run --detach --rm -p 8082:80 echo-frontend:2.0)
 
 Give it a quick test then stop the running container.
 ```bash
-curl localhost:8082
+curl http://localhost:8082
 docker stop ${container_id}
 ```
 
@@ -126,7 +126,7 @@ Exec into the first pod to perform curl test.
 Satisfy yourself that your app has been upgraded.
 ```bash
 first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -1)
-kubectl -n demos exec -it ${first_pod} -- curl localhost:80
+kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
 ```
 
 For now, roll back your deployment to version 1.0.

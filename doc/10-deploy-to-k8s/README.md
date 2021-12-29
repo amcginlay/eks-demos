@@ -78,7 +78,7 @@ sleep 10 && kubectl -n demos get deployments,pods -o wide
 Exec into the first pod to perform curl test.
 ```bash
 first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -1)
-kubectl -n demos exec -it ${first_pod} -- curl localhost:80
+kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
 ```
 
 Do not delete this deployment. We will need it later.
