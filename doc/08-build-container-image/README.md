@@ -3,69 +3,11 @@
 The target for our first image is a simple web app written in [Go](https://go.dev/).
 Go compiles to standalone binaries which are well suited to producing smaller container images.
 
-Run the following snippet in the terminal to create the source code for your app.
+Run the following snippet in the terminal to pull down the source code for your app.
 ```bash
 mkdir -p ~/environment/echo-frontend/src/1.0/
-cat > ~/environment/echo-frontend/src/1.0/main.go << EOF
-package main
-
-import (
-    "encoding/json"
-    "fmt"
-    "log"
-    "math"
-    "net/http"
-    "os"
-    "os/exec"
-    "strings"
-    "time"
-)
-
-const version = "1.0"
-
-var x = 0.0
-func doWork() {
-    x = 0.0001
-    for i := 0; i <= 1000000; i++ {
-        x += math.Sqrt(x)
-    }
-}
-
-func getEnv(key string, fallback string) string {
-    if value, ok := os.LookupEnv(key); ok {
-        return value
-    }
-    return fallback
-}
-
-func shellExec(prg string, args ...string) string {
-    cmd := exec.Command(prg, args...)
-    stdout, _ := cmd.Output()
-    return string(stdout)
-}
-
-func getResponse() string {
-    doWork()
-    ec2Ip := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/local-ipv4")
-    hostname := strings.TrimSuffix(shellExec("hostname"), "\n")
-    time := time.Now().Format("15:04:05")
-    resMap := map[string]string{"ec2IP": ec2Ip, "hostname": hostname, "time": time, "version": version}
-    resJson, _ := json.Marshal(resMap)
-    return string(resJson)
-}
-
-func main() {
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        resp := getResponse()
-        log.Printf("%s", resp)
-        fmt.Fprintf(w, "%s\n", resp)
-    })
-    port := getEnv("PORT", "8080")
-    log.Printf("Server listening on port %s", port)
-    log.Fatal(http.ListenAndServe(":"+port, mux))
-}
-EOF
+wget --quiet https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/main.go \
+     --output-document ~/environment/echo-frontend/src/1.0/main.go
 ```
 
 Open `~/environment/echo-frontend/src/1.0/main.go` in Cloud9 IDE to review the code.
@@ -97,15 +39,8 @@ docker system prune --all --force
 
 Run the following snippet in the terminal to create the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
-cat > ~/environment/echo-frontend/src/1.0/Dockerfile << EOF
-FROM golang:1.12.0-alpine3.9
-ENV PORT=80
-WORKDIR /app/
-COPY main.go .
-RUN go build -o main && \\
-    apk add curl bind-tools
-ENTRYPOINT [ "./main" ]
-EOF
+wget --quiet https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
+     --output-document ~/environment/echo-frontend/src/1.0/Dockerfile
 ```
 
 Open `~/environment/echo-frontend/src/1.0/Dockerfile` in Cloud9 IDE to review the code.
