@@ -13,6 +13,7 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
      --directory-prefix ~/environment/echo-frontend/src/2.0/
 ```
 
+The target files will be in `~/environment/echo-frontend/src/2.0/`.
 Open these files in Cloud9 IDE to review the updated code.
 Observe that the Dockerfile is now using a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/).
 This will help keep the container image size down to a minimum.
