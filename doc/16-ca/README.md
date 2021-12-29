@@ -31,7 +31,7 @@ sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 
 
 In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
 ```bash
-kubectl -n demos scale deployment echo-frontend-blue --replicas 30
+kubectl -n demos scale deployment echo-frontend-blue --replicas 25
 ```
 
 Note how some pods start without an IP addresses because they're stuck in the Pending state and cannot be scheduled.
