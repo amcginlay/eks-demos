@@ -1,4 +1,4 @@
-# Helm - because packages need Helm
+# Helm - because packages need managing
 
 If you have **not** completed the earlier section on Services (Load Distribution) then you may not have an appropriate service manifest and corresponding service object in place.
 If so, please return and complete the section named **"K8s ClusterIP Services"**.
@@ -65,13 +65,13 @@ With the `Chart.yaml` file in place it now should be clear that our intention wa
 
 Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
-helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
+helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
 ```
 
 This dry run **fails** as the `{{ .Values }}` directives inside our manifests are not being translated as they were previously via `sed`.
 The simplest way to assist `helm` in resolving these placeholders is to pass in the required values on the command line as follows.
 ```bash
-helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
+helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
@@ -79,11 +79,10 @@ helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
 ```
 
 The dry run **fails** again, this time because we would be asking Helm to deploy over the top of an existing deployment which it does not currently own.
-Throwing caution to the wind, just delete the `echo-frontend` namespace which will obliterate your existing deployments and services.
-We can then try the dry run again.
+Throwing caution to the wind, just delete everything from the `demos` namespace then try the dry run again.
 ```bash
-kubectl delete namespace demos # be patient, this command may take few moments
-helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
+kubectl -n demos delete all --all # be patient, this command may take few moments
+helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
@@ -93,7 +92,7 @@ helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
 This time the dry run will produce no errors and output the translated manifests.
 Take a moment to observe the output before **removing** the `--dry-run` switch and re-installing the app.
 ```bash
-helm upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
@@ -109,7 +108,7 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-fronte
 
 `helm` now makes it easy now to upgrade the app, as follows.
 ```bash
-helm upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=2.0 \
@@ -118,20 +117,20 @@ helm upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
 
 Hop over to the **dedicated** terminal window you left running and watch as the `curl` responses reveal the old pod replicas being rapidly superceded with new ones (check the `version` property).
 This should only take few seconds and reveals something extremely valuable about running cloud native workloads on container orchestration platforms like Kubernetes.
-Application updates can be applied in-place, quickly and with **zero downtime**.
+Application updates can be applied in-place, quickly and usually with **zero downtime**.
 
 Now imagine that you do not like the result of your rollout, Helm has your back.
 One simple command can roll back any deployment that fails to meet your expectations.
 Keep an eye on the looped `curl` request as the following command is executed.
 ```bash
-helm rollback echo-frontend-blue
+helm -n demos rollback echo-frontend-blue
 ```
 
 If, at any point, we want Helm to reveal the path we took to get where we are, here are a few more commands to look at.
 ```bash
 helm list --all-namespaces      # Helm operations are namespaced by default
-helm status echo-frontend-blue
-helm history echo-frontend-blue
+helm -n demos status echo-frontend-blue
+helm -n demos history echo-frontend-blue
 ```
 
 Finally, if you want to publish your own repo, take a look at [this](https://medium.com/containerum/how-to-make-and-share-your-own-helm-package-50ae40f6c221) or [this](https://github.com/komljen/helm-charts) for more information on how to do so.

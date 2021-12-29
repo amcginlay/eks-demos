@@ -49,7 +49,6 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: echo-frontend-{{ .Values.color }}
-  namespace: demos
 spec:
   minReplicas: {{ .Values.minReplicas }}
   maxReplicas: {{ .Values.maxReplicas }}

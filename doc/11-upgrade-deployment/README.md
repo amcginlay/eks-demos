@@ -52,7 +52,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.version }}/2.0/g" | \
-    kubectl apply -f -
+    kubectl -n demos apply -f -
 ```
 
 Inspect your updated deployment.
@@ -74,7 +74,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.version }}/1.0/g" | \
-    kubectl apply -f -
+    kubectl -n demos apply -f -
 ```
 
 The version 2.0 image remains in ECR for later use.

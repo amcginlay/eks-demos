@@ -44,7 +44,7 @@ kubectl -n kube-system get deployment aws-load-balancer-controller
 You are now about to configure the ALB to support multiple front ends simulataneously.
 To support this you will now create a separate deployment and service.
 You will use version **2.0** of your app, packaged into a deployment suffixed with the color **green** alongside an associated service of type **LoadBalancer**.
-Recall that services of type **LoadBalancer** are derived from the **NodePort** service type, which is a minimum requirement for ALB routing rules.
+Recall that services of type **LoadBalancer** are derived from the **NodePort** service type, which is a minimum requirement for targets in ALB routing rules.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
     <(echo ---) \
@@ -53,17 +53,16 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
     sed "s/{{ .Values.color }}/green/g" | \
     sed "s/{{ .Values.version }}/2.0/g" | \
     sed "s/{{ .Values.serviceType }}/LoadBalancer/g" | \
-    kubectl apply -f -
+    kubectl -n demos apply -f -
 ```
 
 Now we can deploy an ALB configured to route traffic to both deployments, version 1.0 via the **/blue** route and version 2.0 via the **green** route.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | kubectl apply -f -
+cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | kubectl  -n demos apply -f -
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: echo-frontend
-  namespace: demos
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing

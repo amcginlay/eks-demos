@@ -24,12 +24,11 @@ Now, using the same templating mechanism employed for the deployment, we can int
 cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
              sed "s/{{ .Values.color }}/blue/g" | \
              sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
-             kubectl apply -f -
+             kubectl -n demos apply -f -
 apiVersion: v1
 kind: Service
 metadata:
   name: echo-frontend-{{ .Values.color }}
-  namespace: demos
   labels:
     app: echo-frontend-{{ .Values.color }}
 spec:
