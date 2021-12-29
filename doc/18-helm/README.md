@@ -1,4 +1,4 @@
-# Helm - because packages need managing
+# Helm - because packages need Helm
 
 If you have **not** completed the earlier section on Services (Load Distribution) then you may not have an appropriate service manifest and corresponding service object in place.
 If so, please return and complete the section named **"K8s ClusterIP Services"**.
@@ -34,22 +34,23 @@ It could include `configmaps`, `serviceaccounts` or manifests for any other Kube
 But we are more interested in packaging our own applications so uninstall Apache and unwind what we have done.
 ```bash
 helm -n apache uninstall apache
-kubectl delete namespace apache
+kubectl delete namespace apache # be patient, this command may take few moments
 ```
 
 Helm tempts us to get us started with the `helm create` command which builds the skeleton of a new chart.
 Whilst it is undeniably useful to observe the structure it builds it is a little more comprehensive than we need right now.
 Instead, we are going to build only the files we need and we will do that by hand.
-So have a quick peek at `helm create` then discard its results.
+So have a quick peek at what `helm create` produces then discard its results.
+Observe the presence of a `Chart.yaml` file and a `templates` directory as these represent the basic requirements of a Helm chart.
 ```bash
 helm create dummy-app
 tree -a dummy-app
 rm -rf ./dummy-app
 ```
 
-The package/release you want Helm to capture is the `echo-frontend` app you have already deployed.
-If you can achieve this, then your friends and customers can deploy your software on their own clusters in the exact manner you intended.
-You do this by creating a chart for your deployment.
+The package/release you want to build is the `echo-frontend` app you have already deployed.
+By achieving this, your friends and customers can deploy your software on their own clusters in the exact manner you intended.
+You do this by creating a Helm chart from the manifests which comprise your app.
 The `Chart.yaml` file is mandatory for each Chart and acts like a header sheet for our package/release.
 ```bash
 cat > ~/environment/echo-frontend/Chart.yaml << EOF
@@ -60,17 +61,17 @@ EOF
 ```
 
 Throughout the previous sections, whilst deploying your app, you have been carefully preserving its manifests in a directory named `templates`.
-With the `echo-frontend/Chart.yaml` file in place it now should be clear that our intention was always to deploy apps using `helm`.
+With the `Chart.yaml` file in place it now should be clear that our intention was always to deploy apps using Helm.
 
 Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
-helm upgrade -i --dry-run echo-frontend ~/environment/echo-frontend/
+helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
 ```
 
 This dry run **fails** as the `{{ .Values }}` directives inside our manifests are not being translated as they were previously via `sed`.
 The simplest way to assist `helm` in resolving these placeholders is to pass in the required values on the command line as follows.
 ```bash
-helm upgrade -i --dry-run echo-frontend ~/environment/echo-frontend/ \
+helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
@@ -90,7 +91,7 @@ helm upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
 ```
 
 This time the dry run will produce no errors and output the translated manifests.
-Take a moment to observe the output before removing the dry run setting and re-installing the app.
+Take a moment to observe the output before **removing** the `--dry-run` switch and re-installing the app.
 ```bash
 helm upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
@@ -128,7 +129,7 @@ helm rollback echo-frontend-blue
 
 If, at any point, we want Helm to reveal the path we took to get where we are, here are a few more commands to look at.
 ```bash
-helm list --all-namespaces # Helm operations are namespaced by default
+helm list --all-namespaces      # Helm operations are namespaced by default
 helm status echo-frontend-blue
 helm history echo-frontend-blue
 ```
