@@ -21,6 +21,7 @@ mkdir -p ~/environment/echo-frontend/templates/
 ```
 
 Create a namespace named `demos` which will host our objects.
+Observe the use of [`tee`](https://en.wikipedia.org/wiki/Tee_(command)) to ensure a copy of your manifest is preserved as it is applied.
 ```bash
 cat << EOF | tee ~/environment/echo-frontend/templates/demos-namespace.yaml | \
              kubectl apply -f -
@@ -32,9 +33,10 @@ EOF
 ```
 
 Create a manifest and deployment for the first incarantion of your app.
-Version **1.0** of your app is packaged into a deployment suffixed with the color **blue**.
-Observe how your manifest employs a `{{ .Values }}` templating syntax for these settings which `sed` resolves immediately prior to passing to `kubectl apply`.
-The reason behind this choice of syntax will become evident as we progress through the demos.
+`version` **1.0** of your app is packaged into a deployment suffixed with the `color` **blue**.
+Observe how your manifest employs a `{{ .Values }}` templating syntax for these settings.
+`tee` preserves the templated version whilst [`sed`](https://en.wikipedia.org/wiki/Sed) takes care of resolving the `{{ .Values }}` settings prior to passing to `kubectl apply`.
+The reason behind this approach and choice of syntax will become evident as we progress through the demos.
 ```bash
 cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
              sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
