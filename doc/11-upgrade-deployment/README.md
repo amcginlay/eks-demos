@@ -5,81 +5,15 @@ You will now make a small change to your code and redeploy your app using `kubec
 
 Version 2.0 of your app provides support for the use of a **backend** app which will be introduced in a later chapter.
 
-Run the following snippet in the terminal to create the new source code for your app.
+Run the following snippet in the terminal to pull down the new source code and Dockerfile for your app.
 ```bash
 mkdir -p ~/environment/echo-frontend/src/2.0/
-cat > ~/environment/echo-frontend/src/2.0/main.go << EOF
-package main
-
-import (
-    "encoding/json"
-    "fmt"
-    "log"
-    "math"
-    "net/http"
-    "os"
-    "os/exec"
-    "strings"
-    "time"
-)
-
-const version = "2.0"
-
-var x = 0.0
-func doWork() {
-    x = 0.0001
-    for i := 0; i <= 1000000; i++ {
-        x += math.Sqrt(x)
-    }
-}
-
-func getEnv(key string, fallback string) string {
-    if value, ok := os.LookupEnv(key); ok {
-        return value
-    }
-    return fallback
-}
-
-func shellExec(prg string, args ...string) string {
-    cmd := exec.Command(prg, args...)
-    stdout, _ := cmd.Output()
-    return string(stdout)
-}
-
-func getResponse() string {
-    doWork()
-    backend := getEnv("BACKEND", "n/a")
-    if backend != "n/a" {
-        backend = shellExec("curl", "--silent", backend)
-    }
-    ec2Ip := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/local-ipv4")
-    hostname := strings.TrimSuffix(shellExec("hostname"), "\n")
-    time := time.Now().Format("15:04:05")
-    resMap := map[string]string{"backend": backend, "ec2IP": ec2Ip, "hostname": hostname, "time": time, "version": version}
-    resJson, _ := json.Marshal(resMap)
-    return string(resJson)
-}
-
-func main() {
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        resp := getResponse()
-        log.Printf("%s", resp)
-        fmt.Fprintf(w, "%s\n", resp)
-    })
-    port := getEnv("PORT", "8080")
-    log.Printf("Server listening on port %s", port)
-    log.Fatal(http.ListenAndServe(":"+port, mux))
-}
-EOF
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/main.go \
+     https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/Dockerfile \
+     --directory-prefix ~/environment/echo-frontend/src/2.0/
 ```
 
 Open `~/environment/echo-frontend/src/2.0/main.go` in Cloud9 IDE to review the updated code.
-
-Copy and re-use the version 1.0 Dockerfile.
-```bash
-cp ~/environment/echo-frontend/src/1.0/Dockerfile ~/environment/echo-frontend/src/2.0/
-```
 
 Use Docker to build and run your new container image.
 ```bash

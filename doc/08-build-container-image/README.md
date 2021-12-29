@@ -6,8 +6,8 @@ Go compiles to standalone binaries which are well suited to producing smaller co
 Run the following snippet in the terminal to pull down the source code for your app.
 ```bash
 mkdir -p ~/environment/echo-frontend/src/1.0/
-wget --quiet https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/main.go \
-     --output-document ~/environment/echo-frontend/src/1.0/main.go
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/main.go \
+     --directory-prefix ~/environment/echo-frontend/src/1.0/
 ```
 
 Open `~/environment/echo-frontend/src/1.0/main.go` in Cloud9 IDE to review the code.
@@ -39,8 +39,8 @@ docker system prune --all --force
 
 Run the following snippet in the terminal to pull down the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
-wget --quiet https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
-     --output-document ~/environment/echo-frontend/src/1.0/Dockerfile
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
+     --directory-prefix ~/environment/echo-frontend/src/1.0/
 ```
 
 Open `~/environment/echo-frontend/src/1.0/Dockerfile` in Cloud9 IDE to review the code.
