@@ -13,7 +13,9 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
      --directory-prefix ~/environment/echo-frontend/src/2.0/
 ```
 
-Open `~/environment/echo-frontend/src/2.0/main.go` in Cloud9 IDE to review the updated code.
+Open these files in Cloud9 IDE to review the updated code.
+Observe that the Dockerfile is now using a [multi-stage build](https://docs.docker.com/develop/develop-images/multistage-build/).
+This will help keep the container image size down to a minimum.
 
 Use Docker to build and run your new container image.
 ```bash
@@ -41,6 +43,8 @@ Review the version 1.0 and version 2.0 images, now side by side in ECR.
 aws ecr list-images --repository-name echo-frontend
 ```
 
+You may also like to visit `https://us-west-2.console.aws.amazon.com/ecr/repositories`, open up the `echo-frontend` repository and inspect your images via the console.
+
 Re-apply the deployment manifest, adjusting only for the new version, to update your app **in-place**.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
@@ -56,7 +60,7 @@ Observe the version change from 1.0 to 2.0 under the "IMAGES" heading.
 sleep 10 && kubectl -n demos get deployments,pods -o wide
 ```
 
-Exec into the first pod to perform curl test.
+Exec into the first pod to perform a curl test.
 Satisfy yourself that your app has been upgraded.
 ```bash
 first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -1)
