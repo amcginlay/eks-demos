@@ -3,12 +3,12 @@
 Rapid, iterative code changes are commonplace in cloud native software deployments and Kubernetes copes well with these demands.
 You will now make a small change to your code and redeploy your app using `kubectl`.
 
-Version 2.0 of your app provides support for the use of a **backend** app.
+Version 2.0 of your app provides support for the use of a **backend** app which will be introduced in a later chapter.
 
 Run the following snippet in the terminal to create the new source code for your app.
 ```bash
-mkdir -p ~/environment/echo-frontend/2.0/
-cat > ~/environment/echo-frontend/2.0/main.go << EOF
+mkdir -p ~/environment/echo-frontend/src/2.0/
+cat > ~/environment/echo-frontend/src/2.0/main.go << EOF
 package main
 
 import (
@@ -74,16 +74,16 @@ func main() {
 EOF
 ```
 
-Open `~/environment/echo-frontend/2.0/main.go` in Cloud9 IDE to review the updated code.
+Open `~/environment/echo-frontend/src/2.0/main.go` in Cloud9 IDE to review the updated code.
 
 Copy and re-use the version 1.0 Dockerfile.
 ```bash
-cp ~/environment/echo-frontend/1.0/Dockerfile ~/environment/echo-frontend/2.0/
+cp ~/environment/echo-frontend/src/1.0/Dockerfile ~/environment/echo-frontend/src/2.0/
 ```
 
 Use Docker to build and run your new container image.
 ```bash
-docker build -t echo-frontend:2.0 ~/environment/echo-frontend/2.0/
+docker build -t echo-frontend:2.0 ~/environment/echo-frontend/src/2.0/
 container_id=$(docker run --detach --rm -p 8082:80 echo-frontend:2.0)
 ```
 

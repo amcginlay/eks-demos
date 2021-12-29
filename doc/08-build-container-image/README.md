@@ -5,8 +5,8 @@ Go compiles to standalone binaries which are well suited to producing smaller co
 
 Run the following snippet in the terminal to create the source code for your app.
 ```bash
-mkdir -p ~/environment/echo-frontend/1.0/
-cat > ~/environment/echo-frontend/1.0/main.go << EOF
+mkdir -p ~/environment/echo-frontend/src/1.0/
+cat > ~/environment/echo-frontend/src/1.0/main.go << EOF
 package main
 
 import (
@@ -68,11 +68,11 @@ func main() {
 EOF
 ```
 
-Open `~/environment/echo-frontend/1.0/main.go` in Cloud9 IDE to review the code.
+Open `~/environment/echo-frontend/src/1.0/main.go` in Cloud9 IDE to review the code.
 
 You can launch your app from the terminal session using the following.
 ```bash
-go run ~/environment/echo-frontend/1.0/main.go
+go run ~/environment/echo-frontend/src/1.0/main.go
 ```
 
 Your webserver app will tie up this first Cloud9 terminal session until its process is stopped.
@@ -97,7 +97,7 @@ docker system prune --all --force
 
 Run the following snippet in the terminal to create the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
-cat > ~/environment/echo-frontend/1.0/Dockerfile << EOF
+cat > ~/environment/echo-frontend/src/1.0/Dockerfile << EOF
 FROM golang:1.12.0-alpine3.9
 ENV PORT=80
 WORKDIR /app/
@@ -108,15 +108,15 @@ ENTRYPOINT [ "./main" ]
 EOF
 ```
 
-Open `~/environment/echo-frontend/1.0/Dockerfile` in Cloud9 IDE to review the code.
+Open `~/environment/echo-frontend/src/1.0/Dockerfile` in Cloud9 IDE to review the code.
 
 Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the newly containerized app.
 ```bash
-docker build -t echo-frontend:1.0 ~/environment/echo-frontend/1.0/    # build the container image
-docker images                                                         # see what you produced
-docker ps                                                             # nothing running ...
-container_id=$(docker run --detach --rm -p 8081:80 echo-frontend:1.0) # ask docker to instantiate a single container as a background process
-docker ps                                                             # ... now one container running
+docker build -t echo-frontend:1.0 ~/environment/echo-frontend/src/1.0/ # build the container image
+docker images                                                          # see what you produced
+docker ps                                                              # nothing running ...
+container_id=$(docker run --detach --rm -p 8081:80 echo-frontend:1.0)  # ask docker to instantiate a single container as a background process
+docker ps                                                              # ... now one container running
 ```
 
 Invoke the webserver from inside the container.
