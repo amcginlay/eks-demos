@@ -71,20 +71,20 @@ spec:
   rules:
   - http:
       paths:
-      - backend:
+      - path: /blue/
+        pathType: Prefix
+        backend:
           service:
             name: echo-frontend-blue
             port:
               number: 80
-        path: /blue/
+      - path: /green/
         pathType: Prefix
-      - backend:
+        backend:
           service:
             name: echo-frontend-green
             port:
               number: 80
-        path: /green/
-        pathType: Prefix
 EOF
 ```
 
