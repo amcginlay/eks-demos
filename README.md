@@ -28,3 +28,6 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 
 ## Release Management
 * [18. Helm](doc/18-helm/README.md) - because packages need managing
+
+## Service Mesh
+* (WIP) [19. AWS App Mesh](doc/19-appmesh/README.md) - because managing microservices at scale is hard
