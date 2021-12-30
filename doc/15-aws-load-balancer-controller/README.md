@@ -21,8 +21,8 @@ aws iam create-policy \
   file://<(curl --silent iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.3.1/docs/install/iam_policy.json)
 
 eksctl create iamserviceaccount \
-  --namespace kube-system \
   --cluster=${EKS_CLUSTER_NAME} \
+  --namespace kube-system \
   --name=aws-load-balancer-controller \
   --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
   --override-existing-serviceaccounts \
