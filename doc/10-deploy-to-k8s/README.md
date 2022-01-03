@@ -35,7 +35,7 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
 Open `~/environment/echo-frontend/templates/echo-frontend-deployment.yaml` in Cloud9 IDE to review the code.
 Observe that this is a templated version of your manifest which employs a `{{ .Values }}` templating syntax.
 
-You will preserve this baseline version on disk, using [`sed`](https://en.wikipedia.org/wiki/Sed) to resolve the `{{ .Values }}` settings prior to passing to `kubectl apply`.
+You will preserve this baseline version on disk and use [`sed`](https://en.wikipedia.org/wiki/Sed) to dynamically resolve the `{{ .Values }}` settings prior to passing to `kubectl apply`.
 The reason behind this approach and choice of syntax will become evident as we progress through the demos.
 Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
 ```bash
