@@ -25,43 +25,25 @@ Create a namespace named `demos` which will host our objects.
 kubectl create namespace demos
 ```
 
-Create a manifest and deployment for the first incarnation of your app.
-`version` **1.0** of your app is packaged into a deployment suffixed with the `color` **blue**.
-Observe how your manifest employs a `{{ .Values }}` templating syntax for these settings.
-[`tee`](https://en.wikipedia.org/wiki/Tee_(command)) preserves the templated version whilst [`sed`](https://en.wikipedia.org/wiki/Sed) takes care of resolving the `{{ .Values }}` settings prior to passing to `kubectl apply`.
-The reason behind this approach and choice of syntax will become evident as we progress through the demos.
+Before you ask your cluster to deploy the first incarnation of your deployment object, download its manifest to your Cloud9 environment.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-             sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
-             sed "s/{{ .Values.color }}/blue/g" | \
-             sed "s/{{ .Values.version }}/1.0/g" | \
-             kubectl -n demos apply -f -
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: echo-frontend-{{ .Values.color }}
-  labels:
-    app: echo-frontend-{{ .Values.color }}
-spec:
-  replicas: 3
-  revisionHistoryLimit: 0
-  selector:
-    matchLabels:
-      app: echo-frontend-{{ .Values.color }}
-  template:
-    metadata:
-      labels:
-        app: echo-frontend-{{ .Values.color }}
-    spec:
-      containers:
-      - name: echo-frontend
-        image: {{ .Values.registry }}/echo-frontend:{{ .Values.version }}
-        imagePullPolicy: Always
-        resources:
-          requests:
-            memory: 200Mi
-            cpu: 200m
-EOF
+mkdir -p ~/environment/echo-frontend/templates/
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
+     --directory-prefix ~/environment/echo-frontend/templates/
+```
+
+Open `~/environment/echo-frontend/templates/echo-frontend-deployment.yaml` in Cloud9 IDE to review the code.
+Observe that this is a templated version of your manifest which employs a `{{ .Values }}` templating syntax.
+
+You will preserve this baseline version on disk, using [`sed`](https://en.wikipedia.org/wiki/Sed) to resolve the `{{ .Values }}` settings prior to passing to `kubectl apply`.
+The reason behind this approach and choice of syntax will become evident as we progress through the demos.
+Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
+```bash
+cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
+    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.version }}/1.0/g" | \
+    kubectl -n demos apply -f -
 ```
 
 Inspect your first deployment.

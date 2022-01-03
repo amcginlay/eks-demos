@@ -5,7 +5,7 @@ You will now make a small change to your code and redeploy your app using `kubec
 
 Version 2.0 of your app provides support for the use of a **backend** app which will be introduced in a later chapter.
 
-Run the following snippet in the terminal to pull down the new source code and Dockerfile for your app.
+Run the following snippet in the terminal to download the new source code and Dockerfile for your app.
 ```bash
 mkdir -p ~/environment/echo-frontend/src/2.0/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/main.go \

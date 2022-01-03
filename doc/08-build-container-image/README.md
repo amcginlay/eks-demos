@@ -3,7 +3,7 @@
 The target for our first image is a simple web app written in [Go](https://go.dev/).
 Go compiles to standalone binaries which are well suited to producing smaller container images.
 
-Run the following snippet in the terminal to pull down the source code for your app.
+Run the following snippet in the terminal to download the source code for your app which is contained in a single file.
 ```bash
 mkdir -p ~/environment/echo-frontend/src/1.0/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/main.go \
@@ -37,7 +37,7 @@ for i in $(docker ps -q); do docker kill $i; done
 docker system prune --all --force
 ```
 
-Run the following snippet in the terminal to pull down the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
+Run the following snippet in the terminal to download the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
      --directory-prefix ~/environment/echo-frontend/src/1.0/

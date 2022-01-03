@@ -56,35 +56,15 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
     kubectl -n demos apply -f -
 ```
 
-Now we can deploy an ALB configured to route traffic to both deployments, version 1.0 via the **/blue** route and version 2.0 via the **green** route.
+Now we can download the manifest and deploy an ALB.
+Be sure to open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
+You will observe that it is configured to route traffic to both deployments; version 1.0 via the **/blue** route and version 2.0 via the **green** route.
+You will also note that it contains zero `{{ .Values }}` settings so there are no `sed` replacements required this time. 
 ```bash
-cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | kubectl  -n demos apply -f -
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: echo-frontend
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /blue/
-        pathType: Prefix
-        backend:
-          service:
-            name: echo-frontend-blue
-            port:
-              number: 80
-      - path: /green/
-        pathType: Prefix
-        backend:
-          service:
-            name: echo-frontend-green
-            port:
-              number: 80
-EOF
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-ingress.yaml \
+     --directory-prefix ~/environment/echo-frontend/templates/
+cat ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | \
+    kubectl -n demos apply -f -
 ```
 
 Grab the DNS name for your ALB and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).

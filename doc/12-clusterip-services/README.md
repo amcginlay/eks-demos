@@ -19,25 +19,21 @@ kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.loc
 Upon creation, each service is allocated a long-term **internal** IP address which is scoped to the cluster and auto-registered within private [CoreDNS](https://coredns.io/) servers.
 No service means no IP address and, hence, no DNS entry.
 
-Now, using the same templating mechanism employed for the deployment, we can introduce our basic ClusterIP service and test again.
+Before you ask your cluster to deploy the first incarnation of your service object, download its manifest to your Cloud9 environment.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
-             sed "s/{{ .Values.color }}/blue/g" | \
-             sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
-             kubectl -n demos apply -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: echo-frontend-{{ .Values.color }}
-  labels:
-    app: echo-frontend-{{ .Values.color }}
-spec:
-  type: {{ .Values.serviceType }}
-  ports:
-  - port: 80
-  selector:
-    app: echo-frontend-{{ .Values.color }}
-EOF
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
+     --directory-prefix ~/environment/echo-frontend/templates/
+```
+
+Open `~/environment/echo-frontend/templates/echo-frontend-service.yaml` in Cloud9 IDE to review the code.
+Observe that this is using the same templating mechanism employed for the deployment
+
+Now, we can introduce our basic ClusterIP service.
+```bash
+cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
+    kubectl -n demos apply -f -
 ```
 
 Inspect your first service.
@@ -46,7 +42,7 @@ kubectl -n demos get services
 ```
 
 A private mapping from the DNS name of your service to its corresponding ClusterIP address is now in place so pods can now reach each other via DNS names.
-Put the previous curl request in a loop.
+Take the previous curl request which failed and place it in a loop.
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 # ctrl+c to quit loop
