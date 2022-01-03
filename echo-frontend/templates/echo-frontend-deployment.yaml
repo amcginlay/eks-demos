@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-frontend-{{ .Values.color }}
+  labels:
+    app: echo-frontend-{{ .Values.color }}
+spec:
+  replicas: 3
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: echo-frontend-{{ .Values.color }}
+  template:
+    metadata:
+      labels:
+        app: echo-frontend-{{ .Values.color }}
+    spec:
+      containers:
+      - name: echo-frontend
+        image: {{ .Values.registry }}/echo-frontend:{{ .Values.version }}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 200Mi
+            cpu: 200m
