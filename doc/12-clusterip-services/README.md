@@ -2,16 +2,20 @@
 
 This section assumes that your `echo-frontend` app is deployed and scaled to 3 instances.
 
+### Using `nginx` as a "jumpbox"
+
 ClusterIP services are intended to establish dynamic communication channels between individual pods inside your cluster so, to see this in action, you first need to gain peer-level access to your workloads, just as you might do with a regular jumpbox (or bastion host) in the EC2 world.
-With the `kubectl run` command we can conveniently deploy [nginx](https://www.nginx.com) as a standalone pod which can serve as a jumpbox.
+With the `kubectl run` command we can conveniently deploy [nginx](https://www.nginx.com) as a standalone pod which will serve as your "jumpbox".
 ```bash
 kubectl run jumpbox --image=nginx                                # in default namespace
 sleep 10 && kubectl exec -it jumpbox -- curl http://localhost:80 # <---- test the NGINX welcome page
 ```
 
-Note that, in the absence of an associated deployment object, your single jumpbox pod will not be automatically replaced in the event of a failure.
+Note that, in the absence of an associated deployment object, your single "jumpbox" pod will not be automatically replaced in the event of a failure.
 
-Remote into nginx and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
+### Creating a basic service object
+
+Remote into your "jumpbox" and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
 ```bash
 kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80 # <---- FAILURE!
 ```

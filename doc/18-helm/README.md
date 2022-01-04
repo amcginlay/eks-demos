@@ -1,6 +1,7 @@
 # Helm - because packages need managing
 
 If you have **not** completed the earlier section on Services (Load Distribution) then you may not have an appropriate service manifest and corresponding service object in place.
+Your nginx "jumpbox" may also be missing.
 If so, please return and complete the section named **"K8s ClusterIP Services"**.
 
 Linux has [yum and apt](https://www.baeldung.com/linux/yum-and-apt).
@@ -99,12 +100,13 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set serviceType=LoadBalancer
 ```
 
-In a **dedicated** terminal window, remote into nginx and begin sending requests to the service.
-Leave this running for now.
+In a **dedicated** terminal window, remote into your "jumpbox" and begin sending requests to the service.
 ```bash
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 # ctrl+c to quit loop
 ```
+
+Leave this running for now.
 
 `helm` now makes it easy now to upgrade the app, as follows.
 ```bash
