@@ -56,6 +56,12 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
     kubectl -n demos apply -f -
 ```
 
+Check that both `blue` and `green` services exist and are of a compatible TYPE (either **LoadBalancer** or **NodePort**).
+If necessary, revisit the appropriate sections to create/upgrade any services before moving on.
+```
+kubectl -n demos get services
+```
+
 Now we can download the manifest and deploy an ALB.
 Be sure to open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
 You will observe that it is configured to route traffic to both deployments; version 1.0 via the **/blue** route and version 2.0 via the **green** route.
@@ -67,10 +73,15 @@ cat ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | \
     kubectl -n demos apply -f -
 ```
 
+Inspect your first ingress object and confirm that an ADDRESS (i.e. DNS name) is displayed.
+```bash
+sleep 20 && kubectl -n demos get ingress
+```
+
 Grab the DNS name for your ALB and put the following `curl` command in a loop until the AWS resource is resolved (2-3 mins).
 If you receive any errors, just wait a little longer.
 ```bash
-sleep 20 && alb_dnsname=$(kubectl -n demos get ingress echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+alb_dnsname=$(kubectl -n demos get ingress echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${alb_dnsname}/blue/; sleep 0.25; done
 # ctrl+c to quit loop
 ```

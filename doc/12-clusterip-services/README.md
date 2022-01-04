@@ -41,7 +41,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     kubectl -n demos apply -f -
 ```
 
-Inspect your first service.
+Inspect your first service object.
 ```bash
 kubectl -n demos get services
 ```

@@ -7,12 +7,12 @@ We need to upgrade our ClusterIP service to a NodePort service.
 There are a couple of ways we could achieve this, including the [kubectl patch](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command.
 However, in the interests of maintaining focus on manifests, re-apply the service manifest adjusting for the new service type as follows.
 ```bash
-kubectl -n demos get services # inspect services before upgrade
+kubectl -n demos get services # inspect service objects before upgrade
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.serviceType }}/NodePort/g" | \
     kubectl -n demos apply -f -
-kubectl -n demos get services # inspect services after upgrade
+kubectl -n demos get services # inspect service objects after upgrade
 ```
 
 The type of your service has now been upgraded to NodePort.

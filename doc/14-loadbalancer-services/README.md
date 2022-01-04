@@ -21,12 +21,12 @@ In EKS, services of type LoadBalancer are supported by this type of custom contr
 
 Upgrade the NodePort service to a LoadBalancer service, then check the running services.
 ```bash
-kubectl -n demos get services # inspect services before upgrade
+kubectl -n demos get services # inspect service objects before upgrade
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.serviceType }}/LoadBalancer/g" | \
     kubectl -n demos apply -f -
-sleep 5 && kubectl -n demos get services # inspect services after upgrade
+sleep 5 && kubectl -n demos get services # inspect service objects after upgrade
 ```
 
 The `EXTERNAL-IP`, which was previously set as `<none>`, now contains the publicly addressible DNS name for an AWS Classic Load Balancer (CLB).
