@@ -9,7 +9,7 @@ To see this in action and troubleshoot problems it often helps to gain peer-leve
 With the `kubectl run` command we can conveniently deploy [nginx](https://www.nginx.com) as a standalone pod which will serve as your "jumpbox".
 ```bash
 kubectl run jumpbox --image=nginx                                # in default namespace
-sleep 10 && kubectl exec -it jumpbox -- curl http://localhost:80 # <---- test the NGINX welcome page
+sleep 10 && kubectl exec -it jumpbox -- curl http://localhost:80 # test the NGINX welcome page
 ```
 
 Note that, in the absence of an associated deployment object, your single "jumpbox" pod will not be automatically replaced in the event of a failure.
@@ -18,7 +18,7 @@ Note that, in the absence of an associated deployment object, your single "jumpb
 
 Remote into your "jumpbox" and attempt to demonstrate pod-to-pod communication via a service ... **which will fail** because no such service exists yet.
 ```bash
-kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80 # <---- FAILURE!
+kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80 # FAILURE EXPECTED!
 ```
 
 Upon creation, each service is allocated a long-term **internal** IP address which is scoped to the cluster and auto-registered within private [CoreDNS](https://coredns.io/) servers.
