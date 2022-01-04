@@ -86,7 +86,7 @@ while true; do curl http://${alb_dnsname}/blue/; sleep 0.25; done
 # ctrl+c to quit loop
 ```
 
-Once you get a response, try sending separate requests to observe how a single ALB can forward traffic to multiple services/deployments.
+Once you get a response, try sending requests on your **blue/green** paths to observe how a single ALB can simultaneously support traffic routed to multiple services/deployments.
 ```bash
 curl http://${alb_dnsname}/blue  # version 1.0
 curl http://${alb_dnsname}/green # version 2.0
@@ -96,7 +96,8 @@ In a production environment we would likely favour ALBs over CLBs but for demo p
 ```bash
 rm ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 kubectl -n demos delete ingress echo-frontend                       # this discards the ALB so be patient here
-kubectl -n demos delete deployment echo-frontend-green              # this discards the green deployment which is not required for now
+kubectl -n demos delete service echo-frontend-green                 # this discards the green service which is no longer required ...
+kubectl -n demos delete deployment echo-frontend-green              # ... the green deployment is also not required
 helm -n kube-system uninstall aws-load-balancer-controller
 ```
 
