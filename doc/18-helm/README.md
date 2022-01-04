@@ -76,6 +76,7 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
+  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
@@ -87,6 +88,7 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
+  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
@@ -97,6 +99,7 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
+  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
@@ -114,6 +117,7 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=2.0 \
+  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
