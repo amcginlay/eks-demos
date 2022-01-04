@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-backend-{{ .Values.color }}
+  labels:
+    app: echo-backend-{{ .Values.color }}
+spec:
+  replicas: 3
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: echo-backend-{{ .Values.color }}
+  template:
+    metadata:
+      labels:
+        app: echo-backend-{{ .Values.color }}
+    spec:
+      containers:
+      - name: echo-backend
+        image: {{ .Values.registry }}/echo-backend:{{ .Values.version }}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
