@@ -9,8 +9,9 @@ Run the following snippet in the terminal to download the new source code and Do
 ```bash
 mkdir -p ~/environment/echo-frontend/src/2.0/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/main.go \
-     https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/Dockerfile \
-     --directory-prefix ~/environment/echo-frontend/src/2.0/
+  -O ~/environment/echo-frontend/src/2.0/main.go
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/2.0/Dockerfile \
+  -O ~/environment/echo-frontend/src/2.0/Dockerfile
 ```
 
 The target files will be in `~/environment/echo-frontend/src/2.0/`.

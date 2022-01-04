@@ -27,7 +27,7 @@ No service means no IP address and, hence, no DNS entry.
 Before you ask your cluster to deploy the first incarnation of your service object, download its manifest to your Cloud9 environment.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
-     --directory-prefix ~/environment/echo-frontend/templates/
+  -O ~/environment/echo-frontend/templates/echo-frontend-service.yaml
 ```
 
 Open `~/environment/echo-frontend/templates/echo-frontend-service.yaml` in Cloud9 IDE to review the code.

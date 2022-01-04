@@ -7,7 +7,7 @@ Run the following snippet in the terminal to download the source code for your a
 ```bash
 mkdir -p ~/environment/echo-frontend/src/1.0/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/main.go \
-     --directory-prefix ~/environment/echo-frontend/src/1.0/
+  -O ~/environment/echo-frontend/src/1.0/main.go
 ```
 
 Open `~/environment/echo-frontend/src/1.0/main.go` in Cloud9 IDE to review the code.
@@ -40,7 +40,7 @@ docker system prune --all --force
 Run the following snippet in the terminal to download the [`Dockerfile`](https://docs.docker.com/engine/reference/builder/) for your app.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/src/1.0/Dockerfile \
-     --directory-prefix ~/environment/echo-frontend/src/1.0/
+  -O ~/environment/echo-frontend/src/1.0/Dockerfile
 ```
 
 Open `~/environment/echo-frontend/src/1.0/Dockerfile` in Cloud9 IDE to review the code.
