@@ -65,7 +65,7 @@ kubectl -n demos get services
 Now we can download the manifest for an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) object and use it to deploy your ALB.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-ingress.yaml \
-     --directory-prefix ~/environment/echo-frontend/templates/
+  -O ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 kubectl -n demos apply -f ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 ```
 
