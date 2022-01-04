@@ -66,8 +66,7 @@ Now we can download the manifest for an [ingress](https://kubernetes.io/docs/con
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-ingress.yaml \
      --directory-prefix ~/environment/echo-frontend/templates/
-cat ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml | \
-    kubectl -n demos apply -f -
+kubectl -n demos apply -f ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 ```
 
 Be sure to open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
