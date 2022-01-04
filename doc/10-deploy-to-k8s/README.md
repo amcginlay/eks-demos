@@ -27,7 +27,6 @@ kubectl create namespace demos
 
 Before you ask your cluster to deploy the first incarnation of your deployment object, download its manifest to your Cloud9 environment.
 ```bash
-mkdir -p ~/environment/echo-frontend/templates/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
      --directory-prefix ~/environment/echo-frontend/templates/
 ```
