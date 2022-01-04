@@ -37,8 +37,8 @@ func shellExec(prg string, args ...string) string {
 
 func getResponse() string {
     doWork()
-    backend := getEnv("BACKEND", "n/a")
-    if backend != "n/a" {
+    backend := getEnv("BACKEND", "none")
+    if backend != "none" {
         backend = shellExec("curl", "--silent", backend)
     }
     ec2Ip := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/local-ipv4")

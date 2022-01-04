@@ -42,6 +42,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.version }}/1.0/g" | \
+    sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 

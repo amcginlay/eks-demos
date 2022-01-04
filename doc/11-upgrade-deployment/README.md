@@ -31,7 +31,7 @@ curl http://localhost:8082
 docker stop ${container_id}
 ```
 
-Observe the new `backend` attribute ("n/a" by default) and the value for the `version` attribute which is set to 2.0.
+Observe the new `backend` attribute ("none" by default) and the value for the `version` attribute which is set to 2.0.
 
 Tag and push the Docker image to the ECR repository.
 ```bash
@@ -53,6 +53,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.version }}/2.0/g" | \
+    sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 
@@ -75,6 +76,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
     sed "s/{{ .Values.version }}/1.0/g" | \
+    sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 

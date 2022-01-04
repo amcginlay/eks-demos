@@ -19,6 +19,9 @@ spec:
       - name: echo-frontend
         image: {{ .Values.registry }}/echo-frontend:{{ .Values.version }}
         imagePullPolicy: Always
+        env:
+        - name: BACKEND
+          value: {{ .Values.backend }}
         resources:
           requests:
             memory: 200Mi
