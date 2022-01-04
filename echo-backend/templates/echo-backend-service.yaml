@@ -5,7 +5,7 @@ metadata:
   labels:
     app: echo-backend-{{ .Values.color }}
 spec:
-  type: {{ .Values.serviceType }}
+  type: ClusterIP
   ports:
   - port: 80
   selector:

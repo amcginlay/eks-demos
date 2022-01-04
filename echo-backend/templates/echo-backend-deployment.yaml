@@ -5,7 +5,7 @@ metadata:
   labels:
     app: echo-backend-{{ .Values.color }}
 spec:
-  replicas: 3
+  replicas: 2
   revisionHistoryLimit: 0
   selector:
     matchLabels:
