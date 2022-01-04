@@ -70,7 +70,7 @@ kubectl -n demos apply -f ~/environment/echo-frontend/templates/echo-frontend-in
 ```
 
 Be sure to open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
-You will observe that your ALB is configured to route traffic to both services; version 1.0 via the **/blue** route and version 2.0 via the **/green** route.
+You will observe that your ALB is configured to route traffic to both services; version 1.0 via the **/blue/** path and version 2.0 via the **/green/** path.
 You will also note that it contains no `{{ .Values }}` settings, therefore, no `sed` replacements were required this time. 
 
 Inspect your first ingress object and confirm that an ADDRESS (i.e. DNS name) is displayed.
