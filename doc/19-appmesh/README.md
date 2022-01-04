@@ -67,7 +67,6 @@ for color in blue green; do
       sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
       sed "s/{{ .Values.color }}/${color}/g" | \
       sed "s/{{ .Values.version }}/${version}/g" | \
-      sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
       kubectl -n demos apply -f -
 done
 ```
