@@ -14,7 +14,7 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [08. Build A Container Image](doc/08-build-container-image/README.md)
 * [09. Push Container Image To ECR](doc/09-push-to-ecr/README.md)
 * [10. Deploy From ECR To Kubernetes](doc/10-deploy-to-k8s/README.md)
-* [11. Upgrade A Deployment](doc/11-upgrade-deployment/README.md)
+* [11. Prepare Upgraded Image](doc/11-prepare-upgraded-image/README.md)
 
 ## Load Distribution
 * [12. K8s ClusterIP Services](doc/12-clusterip-services/README.md) - because pods need to talk to each other

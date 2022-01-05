@@ -1,4 +1,4 @@
-# Upgrade your deployment
+# Prepare Upgraded Image
 
 Rapid, iterative code changes are commonplace in cloud native software deployments and Kubernetes copes well with these demands.
 You will now make a small change to your code and redeploy your app using `kubectl`.
@@ -46,41 +46,6 @@ aws ecr list-images --repository-name echo-frontend
 ```
 
 You may also like to visit [https://us-west-2.console.aws.amazon.com/ecr/repositories](https://us-west-2.console.aws.amazon.com/ecr/repositories), open up the `echo-frontend` repository and inspect your images via the console.
-
-Re-apply the deployment manifest, adjusting only for the new version, to update your app **in-place**.
-```bash
-cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-    sed "s/{{ .*.registry }}/${EKS_ECR_REGISTRY}/g" | \
-    sed "s/{{ .*.color }}/blue/g" | \
-    sed "s/{{ .*.replicas }}/3/g" | \
-    sed "s/{{ .*.version }}/2.0/g" | \
-    sed "s/{{ .*.backend }}/none/g" | \
-    kubectl -n demos apply -f -
-```
-
-Inspect your updated deployment.
-Observe the version change from 1.0 to 2.0 under the "IMAGES" heading.
-```bash
-sleep 10 && kubectl -n demos get deployments,pods -o wide
-```
-
-Exec into the first pod to perform a curl test.
-Satisfy yourself that your app has been upgraded.
-```bash
-first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -1)
-kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
-```
-
-For now, roll back your deployment to version 1.0.
-```bash
-cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-    sed "s/{{ .*.registry }}/${EKS_ECR_REGISTRY}/g" | \
-    sed "s/{{ .*.color }}/blue/g" | \
-    sed "s/{{ .*.replicas }}/3/g" | \
-    sed "s/{{ .*.version }}/1.0/g" | \
-    sed "s/{{ .*.backend }}/none/g" | \
-    kubectl -n demos apply -f -
-```
 
 The version 2.0 image remains in ECR for later use.
 
