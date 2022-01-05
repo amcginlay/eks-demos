@@ -54,12 +54,12 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-fronte
 ```
 
 Observe the ec2IP and hostname changing with each of the invocations.
-These requests were sent to the jumpbox pod which, as a singleton, exists on just one of the worker nodes.
+These requests were sent to your "jumpbox" which, as a singleton, exists on just one of the worker nodes.
 However the 3 **echo-frontend** replicas, which are spread across all the worker nodes, were each involved in servicing the requests.
 That's [netfilter/iptables](https://netfilter.org/) at work.
 When pods belonging to services are started/stopped, the **node-proxy** components on the worker nodes all simultaneously modify their routes, creating a consistent kernel-level load balancer per service.
 As a result, it doesn't matter which worker node receives the request, the routing behaviour is consistently well distributed.
 
-We will use the jumpbox pod again so leave it in place for now.
+We will use the "jumpbox" again so leave it in place for now.
 
 [Return To Main Menu](/README.md)
