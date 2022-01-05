@@ -1,7 +1,7 @@
 # Prepare Upgraded Image
 
 Rapid, iterative code changes are commonplace in cloud native software deployments and Kubernetes copes well with these demands.
-You will now make a small change to your code, build a new container and push this image to ECR.
+You will now make a small change to your code, build a new container image and push this to ECR.
 
 Version 2.0 of your app provides support for the use of a **backend** app which will be introduced in a later chapter.
 
