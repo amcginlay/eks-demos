@@ -94,13 +94,12 @@ curl http://${alb_dnsname}/blue  # version 1.0
 curl http://${alb_dnsname}/green # version 2.0
 ```
 
-In a production environment we would likely favour ALBs over CLBs but for demo purposes the CLBs will suffice so we recommend that you unwind the ALB resources as follows.
+In a production environment we would likely favour ALBs over CLBs but, for now, CLBs will suffice so we recommend that you unwind the ALB and **green** resources as follows.
 ```bash
 rm ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 kubectl -n demos delete ingress echo-frontend                       # this discards the ALB so be patient here
-kubectl -n demos delete service echo-frontend-green                 # this discards the green service which is no longer required ...
-kubectl -n demos delete deployment echo-frontend-green              # ... the green deployment is also not required
-helm -n kube-system uninstall aws-load-balancer-controller
+kubectl -n demos delete service echo-frontend-green
+kubectl -n demos delete deployment echo-frontend-green
 ```
 
 [Return To Main Menu](/README.md)
