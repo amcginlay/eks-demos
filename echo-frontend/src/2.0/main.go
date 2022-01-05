@@ -39,7 +39,10 @@ func getResponse() string {
     doWork()
     backend := getEnv("BACKEND", "none")
     if backend != "none" {
-        backend = shellExec("curl", "--silent", backend)
+        backendJson := shellExec("curl", "--silent", backend)
+        var backendMap map[string]interface{}
+        json.Unmarshal([]byte(backendJson), &backendMap)
+        backend = fmt.Sprint(backendMap["version"])
     }
     ec2Ip := shellExec("curl", "--silent", "http://169.254.169.254/latest/meta-data/local-ipv4")
     hostname := strings.TrimSuffix(shellExec("hostname"), "\n")
