@@ -21,7 +21,7 @@ This helps to minimize the risk of duplicate port usage.
 Capture the private IP addresses of all the worker nodes and the high-order port for use in a moment.
 ```bash
 node_ips=($(kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'))
-node_port=$(kubectl -n demos get service -l app=echo-frontend -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+node_port=$(kubectl -n demos get service -l app=echo-frontend-blue -o jsonpath='{.items[0].spec.ports[0].nodePort}')
 ```
 
 All inbound requests sent to any worker node at `node_ip:node_port` will now be forwarded to the underlying ClusterIP service.
