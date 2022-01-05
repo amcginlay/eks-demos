@@ -37,27 +37,20 @@ watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
 # ctrl+c to quit watch command
 ```
 
-One could generate an HPA using [kubectl autoscale](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command however, in the interests of maintaining focus on manifests, you will build one by hand.
+Now we can download the manifest for the HPA object.
 ```bash
-cat << EOF | tee ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml | \
-             sed "s/{{ .Values.color }}/blue/g" | \
-             sed "s/{{ .Values.minReplicas }}/3/g" | \
-             sed "s/{{ .Values.maxReplicas }}/25/g" | \
-             sed "s/{{ .Values.targetCPUUtilizationPercentage }}/50/g" | \
-             kubectl apply -f -
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: echo-frontend-{{ .Values.color }}
-spec:
-  minReplicas: {{ .Values.minReplicas }}
-  maxReplicas: {{ .Values.maxReplicas }}
-  targetCPUUtilizationPercentage: {{ .Values.targetCPUUtilizationPercentage }}
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: echo-frontend-{{ .Values.color }}
-EOF
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-hpa.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml
+```
+
+Open `~/environment/echo-frontend/templates/echo-frontend-hpa.yaml` in Cloud9 IDE to review the code, then deploy the HPA.
+```bash
+cat ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml | \
+    sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.minReplicas }}/3/g" | \
+    sed "s/{{ .Values.maxReplicas }}/25/g" | \
+    sed "s/{{ .Values.targetCPUUtilizationPercentage }}/50/g" | \
+    kubectl -n demos apply -f -
 ```
 
 Keep watching the k8s objects in a **dedicated** terminal window.
