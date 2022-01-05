@@ -23,8 +23,8 @@ Upgrade the NodePort service to a LoadBalancer service, then check the running s
 ```bash
 kubectl -n demos get services # inspect service objects before upgrade
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.serviceType }}/LoadBalancer/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.serviceType }}/LoadBalancer/g" | \
     kubectl -n demos apply -f -
 sleep 5 && kubectl -n demos get services # inspect service objects after upgrade
 ```

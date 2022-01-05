@@ -9,8 +9,8 @@ However, in the interests of maintaining focus on manifests, re-apply the servic
 ```bash
 kubectl -n demos get services # inspect service objects before upgrade
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.serviceType }}/NodePort/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.serviceType }}/NodePort/g" | \
     kubectl -n demos apply -f -
 kubectl -n demos get services # inspect service objects after upgrade
 ```

@@ -36,8 +36,8 @@ Observe that this is using the same templating mechanism employed for the deploy
 Now, we can introduce our basic ClusterIP service.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.serviceType }}/ClusterIP/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.serviceType }}/ClusterIP/g" | \
     kubectl -n demos apply -f -
 ```
 

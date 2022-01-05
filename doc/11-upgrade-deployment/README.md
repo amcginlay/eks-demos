@@ -50,11 +50,11 @@ You may also like to visit [https://us-west-2.console.aws.amazon.com/ecr/reposit
 Re-apply the deployment manifest, adjusting only for the new version, to update your app **in-place**.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.replicas }}/3/g" | \
-    sed "s/{{ .Values.version }}/2.0/g" | \
-    sed "s/{{ .Values.backend }}/none/g" | \
+    sed "s/{{ .*.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.replicas }}/3/g" | \
+    sed "s/{{ .*.version }}/2.0/g" | \
+    sed "s/{{ .*.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 
@@ -74,11 +74,11 @@ kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
 For now, roll back your deployment to version 1.0.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.replicas }}/3/g" | \
-    sed "s/{{ .Values.version }}/1.0/g" | \
-    sed "s/{{ .Values.backend }}/none/g" | \
+    sed "s/{{ .*.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.replicas }}/3/g" | \
+    sed "s/{{ .*.version }}/1.0/g" | \
+    sed "s/{{ .*.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 

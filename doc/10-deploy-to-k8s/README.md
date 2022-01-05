@@ -39,11 +39,11 @@ The reason behind this approach and choice of syntax will become evident as we p
 Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
-    sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.replicas }}/3/g" | \
-    sed "s/{{ .Values.version }}/1.0/g" | \
-    sed "s/{{ .Values.backend }}/none/g" | \
+    sed "s/{{ .*.registry }}/${EKS_ECR_REGISTRY}/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.replicas }}/3/g" | \
+    sed "s/{{ .*.version }}/1.0/g" | \
+    sed "s/{{ .*.backend }}/none/g" | \
     kubectl -n demos apply -f -
 ```
 

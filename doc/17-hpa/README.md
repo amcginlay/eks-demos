@@ -46,10 +46,10 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
 Open `~/environment/echo-frontend/templates/echo-frontend-hpa.yaml` in Cloud9 IDE to review the code, then deploy the HPA.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml | \
-    sed "s/{{ .Values.color }}/blue/g" | \
-    sed "s/{{ .Values.minReplicas }}/3/g" | \
-    sed "s/{{ .Values.maxReplicas }}/25/g" | \
-    sed "s/{{ .Values.targetCPUUtilizationPercentage }}/50/g" | \
+    sed "s/{{ .*.color }}/blue/g" | \
+    sed "s/{{ .*.minReplicas }}/3/g" | \
+    sed "s/{{ .*.maxReplicas }}/25/g" | \
+    sed "s/{{ .*.targetCPUUtilizationPercentage }}/50/g" | \
     kubectl -n demos apply -f -
 ```
 
