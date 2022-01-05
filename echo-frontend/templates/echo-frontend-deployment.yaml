@@ -5,7 +5,7 @@ metadata:
   labels:
     app: echo-frontend-{{ .Values.color }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ default 3 .Values.replicas }}
   revisionHistoryLimit: 0
   selector:
     matchLabels:
@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: BACKEND
-          value: {{ .Values.backend }}
+          value: {{ default none .Values.backend }}
         resources:
           requests:
             memory: 200Mi
