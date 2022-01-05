@@ -69,28 +69,26 @@ Helm provides a dry run option which allows us to "kick the tyres" and look for 
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
 ```
 
-This dry run **fails** as the `{{ .Values }}` directives inside our manifests are not being translated as they were previously via `sed`.
+This dry run **fails** as the `{{ .Values }}` directives inside our manifests, specifically those without default settings, are not being translated as they were previously via `sed`.
 The simplest way to assist `helm` in resolving these placeholders is to pass in the required values on the command line as follows.
 ```bash
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
-  --set replicas=3 \
   --set version=1.0 \
-  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
-The dry run **fails** again, this time because we would be asking Helm to deploy over the top of an existing deployment which it does not currently own.
-Throwing caution to the wind, just delete everything from the `demos` namespace then try the dry run again.
+The dry run **fails** again, this time because `echo-frontend-blue` already exists.
+Helm refuses to deploy over the top of an existing deployment which it does not currently own.
+Throwing caution to the wind, just empty the `demos` namespace then try the dry run again.
 ```bash
-kubectl -n demos delete all --all # be patient, this command may take few moments
+kubectl delete namespace demos # be patient, this command may take few moments
+kubectl create namespace demos
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
-  --set replicas=3 \
   --set version=1.0 \
-  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
@@ -100,9 +98,7 @@ Take a moment to observe the output before **removing** the `--dry-run` switch a
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
-  --set replicas=3 \
   --set version=1.0 \
-  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
@@ -114,14 +110,12 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-fronte
 
 Leave this running for now.
 
-`helm` now makes it easy now to upgrade the app, as follows.
+`helm` now makes it easy now to upgrade the app to the version 2.0 image we created as follows.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
-  --set replicas=3 \
   --set version=2.0 \
-  --set backend=none \
   --set serviceType=LoadBalancer
 ```
 
