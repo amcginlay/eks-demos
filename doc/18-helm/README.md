@@ -75,6 +75,7 @@ The simplest way to assist `helm` in resolving these placeholders is to pass in 
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
+  --set replicas=3 \
   --set version=1.0 \
   --set backend=none \
   --set serviceType=LoadBalancer
@@ -87,6 +88,7 @@ kubectl -n demos delete all --all # be patient, this command may take few moment
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
+  --set replicas=3 \
   --set version=1.0 \
   --set backend=none \
   --set serviceType=LoadBalancer
@@ -98,6 +100,7 @@ Take a moment to observe the output before **removing** the `--dry-run` switch a
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
+  --set replicas=3 \
   --set version=1.0 \
   --set backend=none \
   --set serviceType=LoadBalancer
@@ -116,6 +119,7 @@ Leave this running for now.
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
+  --set replicas=3 \
   --set version=2.0 \
   --set backend=none \
   --set serviceType=LoadBalancer

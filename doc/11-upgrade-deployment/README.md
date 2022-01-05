@@ -52,6 +52,7 @@ Re-apply the deployment manifest, adjusting only for the new version, to update 
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.replicas }}/3/g" | \
     sed "s/{{ .Values.version }}/2.0/g" | \
     sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -
@@ -75,6 +76,7 @@ For now, roll back your deployment to version 1.0.
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.replicas }}/3/g" | \
     sed "s/{{ .Values.version }}/1.0/g" | \
     sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -

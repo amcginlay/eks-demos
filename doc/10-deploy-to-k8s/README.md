@@ -41,6 +41,7 @@ Initially, you want `version` **1.0** of your app to be packaged into a deployme
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .Values.registry }}/${EKS_ECR_REGISTRY}/g" | \
     sed "s/{{ .Values.color }}/blue/g" | \
+    sed "s/{{ .Values.replicas }}/3/g" | \
     sed "s/{{ .Values.version }}/1.0/g" | \
     sed "s/{{ .Values.backend }}/none/g" | \
     kubectl -n demos apply -f -
