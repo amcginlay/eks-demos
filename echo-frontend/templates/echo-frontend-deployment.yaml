@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: BACKEND
-          value: {{ default none .Values.backend }}
+          value: {{ default "none" .Values.backend }}
         resources:
           requests:
             memory: 200Mi
