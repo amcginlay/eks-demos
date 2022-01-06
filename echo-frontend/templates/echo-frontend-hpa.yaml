@@ -3,8 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: echo-frontend-{{ .Values.color }}
 spec:
-  minReplicas: 30
-  maxReplicas: 3
+  minReplicas: 3
+  maxReplicas: 30
   targetCPUUtilizationPercentage: 50
   scaleTargetRef:
     apiVersion: apps/v1
