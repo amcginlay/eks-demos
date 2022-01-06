@@ -38,6 +38,7 @@ Now, we can introduce our basic ClusterIP service.
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     sed "s/{{ .*.color }}/blue/g" | \
     sed "s/{{ .*.serviceType }}/ClusterIP/g" | \
+    tee /dev/tty | \
     kubectl -n demos apply -f -
 ```
 

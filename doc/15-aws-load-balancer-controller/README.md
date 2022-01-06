@@ -55,6 +55,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml \
     sed "s/{{ .*.version }}/2.0/g" | \
     sed "s/{{ .*.backend }}/none/g" | \
     sed "s/{{ .*.serviceType }}/NodePort/g" | \
+    tee /dev/tty | \
     kubectl -n demos apply -f -
 ```
 
@@ -64,16 +65,20 @@ If necessary, revisit the appropriate sections to create/upgrade any services be
 kubectl -n demos get services
 ```
 
-Now we can download the manifest for an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) object and use it to deploy your ALB.
+Now we can download the manifest for an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) object.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-ingress.yaml \
   -O ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
-kubectl -n demos apply -f ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 ```
 
-Be sure to open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
+Open `~/environment/echo-frontend/templates/echo-frontend-ingress.yaml` in Cloud9 IDE to review the code.
 You will observe that your ALB is configured to route traffic to both services; version 1.0 via the **/blue/** path and version 2.0 via the **/green/** path.
-You will also note that it contains no `{{ .Values }}` settings, therefore, no `sed` replacements were required this time. 
+You will also note that it contains no templated settings, therefore, no `sed` replacements are required this time. 
+
+Deploy your ingress object to deploy and configure an ALB.
+```bash
+kubectl -n demos apply -f ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
+```
 
 Inspect your first ingress object and confirm that an ADDRESS (i.e. DNS name) is displayed.
 ```bash

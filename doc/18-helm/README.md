@@ -81,7 +81,7 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
 
 The dry run **fails** again, this time because `echo-frontend-blue` already exists.
 Helm refuses to deploy over the top of an existing deployment which it does not currently own.
-Throwing caution to the wind, just empty the `demos` namespace then try the dry run again.
+Empty the `demos` namespace then try the dry run again.
 ```bash
 kubectl delete namespace demos # be patient, this command may take few moments
 kubectl create namespace demos
@@ -92,7 +92,7 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
   --set serviceType=LoadBalancer
 ```
 
-This time the dry run will produce no errors and output the translated manifests.
+This time the dry run will produce no errors and output the translated manifests, just as the `tee` command did for you previously.
 Take a moment to observe the output before **removing** the `--dry-run` switch and re-installing the app.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
@@ -108,7 +108,7 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-fronte
 # ctrl+c to quit loop
 ```
 
-Leave this running for now.
+Leave the looped command running for now.
 
 `helm` now makes it easy now to upgrade the app to the version 2.0 image we created as follows.
 ```bash

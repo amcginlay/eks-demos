@@ -25,6 +25,7 @@ kubectl -n demos get services # inspect service objects before upgrade
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     sed "s/{{ .*.color }}/blue/g" | \
     sed "s/{{ .*.serviceType }}/LoadBalancer/g" | \
+    tee /dev/tty | \
     kubectl -n demos apply -f -
 sleep 5 && kubectl -n demos get services # inspect service objects after upgrade
 ```

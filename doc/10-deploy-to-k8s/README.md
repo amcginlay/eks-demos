@@ -34,7 +34,8 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
 Open `~/environment/echo-frontend/templates/echo-frontend-deployment.yaml` in Cloud9 IDE to review the code.
 Observe that this is a templated version of your manifest which employs a `{{ .Values }}` templating syntax.
 
-You will preserve this baseline version on disk and use [`sed`](https://en.wikipedia.org/wiki/Sed) to dynamically resolve the `{{ .Values }}` settings prior to passing to `kubectl apply`.
+You will preserve this baseline version on disk and, for now, use [`sed`](https://en.wikipedia.org/wiki/Sed) to dynamically resolve the `{{ .Values }}` settings.
+[tee](https://en.wikipedia.org/wiki/Tee_(command)) dumps this to the terminal so you get a chance to observe the result which get forwarded to `kubectl apply`.
 The reason behind this approach and choice of syntax will become evident as we progress through the demos.
 Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
 ```bash
@@ -44,6 +45,7 @@ cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
     sed "s/{{ .*.replicas }}/3/g" | \
     sed "s/{{ .*.version }}/1.0/g" | \
     sed "s/{{ .*.backend }}/none/g" | \
+    tee /dev/tty | \
     kubectl -n demos apply -f -
 ```
 
