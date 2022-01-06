@@ -47,9 +47,7 @@ Open `~/environment/echo-frontend/templates/echo-frontend-hpa.yaml` in Cloud9 ID
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml | \
     sed "s/{{ .*.color }}/blue/g" | \
-    sed "s/{{ .*.minReplicas }}/3/g" | \
-    sed "s/{{ .*.maxReplicas }}/25/g" | \
-    sed "s/{{ .*.targetCPUUtilizationPercentage }}/50/g" | \
+    tee /dev/tty | \
     kubectl -n demos apply -f -
 ```
 
