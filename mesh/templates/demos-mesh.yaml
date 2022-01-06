@@ -1,0 +1,10 @@
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: Mesh
+metadata:
+  name: demos
+spec:
+  egressFilter:
+    type: ALLOW_ALL  # permit pods inside the mesh to communicate externally
+  namespaceSelector:
+    matchLabels:
+      mesh: demos    # associate this mesh with appropriately labeled namespaces
