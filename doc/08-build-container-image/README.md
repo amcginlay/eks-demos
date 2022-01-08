@@ -45,7 +45,7 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
 
 Open `~/environment/echo-frontend/src/1.0/Dockerfile` in Cloud9 IDE to review the code.
 
-Each Cloud9 instance has the Docker daemon installed. Build the Docker image from the Cloud9 terminal then run the newly containerized app.
+Build the Docker image from the Cloud9 terminal then run the newly containerized app.
 ```bash
 docker build -t echo-frontend:1.0 ~/environment/echo-frontend/src/1.0/ # build the container image
 docker images                                                          # see what you produced
