@@ -1,6 +1,6 @@
 # Build A Container Image
 
-The target for our first image is a simple web app written in [Go](https://go.dev/).
+The target for your first image is a simple web app written in [Go](https://go.dev/).
 Go compiles to standalone binaries which are well suited to producing smaller container images.
 
 Run the following snippet in the terminal to download the source code for your app which is contained in a single file.
@@ -68,7 +68,7 @@ The response for the two previous `curl` requests are identical because it is th
 Observe that the recorded values of **hostname** and **ec2IP** have now diverged.
 This is because your app is now containerized and running inside its own namespace.
 
-We are done with running images in Docker for now so stop the container (which will be terminated because we ran it with the `--rm` flag).
+We are done with running images in Docker for now so stop the container (which will be terminated because you ran it with the `--rm` flag).
 ```bash
 docker stop ${container_id}
 ```

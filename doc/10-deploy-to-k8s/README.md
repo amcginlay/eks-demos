@@ -13,14 +13,14 @@ NOTE the command also makes use of the `neat` plug-in for `kubectl` (installed v
 kubectl create deployment dummy-deployment --image dummy --dry-run=client -o yaml | kubectl neat
 ```
 
-### Deploy our application at scale
+### Deploy your application at scale
 
 Create a directory in which to store your Kubernetes manifests.
 ```bash
 mkdir -p ~/environment/echo-frontend/templates/
 ```
 
-Create a namespace named `demos` which will host our objects.
+Create a namespace named `demos` which will host your objects.
 ```bash
 kubectl create namespace demos
 ```
@@ -36,7 +36,7 @@ Observe that this is a templated version of your manifest which employs a `{{ .V
 
 You will preserve this baseline version on disk and, for now, use [`sed`](https://en.wikipedia.org/wiki/Sed) to dynamically resolve the `{{ .Values }}` settings.
 [tee](https://en.wikipedia.org/wiki/Tee_(command)) dumps this to the terminal so you get a chance to observe the result which get forwarded to `kubectl apply`.
-The reason behind this approach and choice of syntax will become evident as we progress through the demos.
+The reason behind this approach and choice of syntax will become evident as you progress through the demos.
 Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml | \
@@ -60,6 +60,6 @@ first_pod=$(kubectl -n demos get pods -l app=echo-frontend-blue -o name | head -
 kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
 ```
 
-Do not delete this deployment. We will need it later.
+Do not delete this deployment. You will need it later.
 
 [Return To Main Menu](/README.md)

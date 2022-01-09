@@ -4,11 +4,11 @@ The previous section introduced the Kubernetes LoadBalancer service.
 The EKS implementation of this creates one AWS Classic Load Balancer (CLB) per service.
 Whilst this provides a working solution it is not best suited for modern deployments built upon VPC infrastructure and is not as configurable as you may expect.
 It would be preferable to support multiple deployments from a single load balancer but this is a requirement which the CLB cannot satisfy.
-For this reason we recommend using the [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
+For this reason it is recommended to use the [AWS Load Balancer Controller](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html).
 This controller supports the use of [AWS Application Load Balancers (ALB)](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/) and [Network Load Balancers (NLB)](https://aws.amazon.com/elasticloadbalancing/network-load-balancer/) which are the preferred modern solutions.
 
-The AWS Load Balancer Controller does not come installed as standard on EKS clusters so we need to follow the documented installation instructions which are presented in short form below.
-These instructions install the deployment using `helm` - a package manager for Kubernetes that we will cover in a later section.
+The AWS Load Balancer Controller does not come installed as standard on EKS clusters so you need to follow the documented installation instructions which are presented in short form below.
+These instructions install the deployment using `helm` - a package manager for Kubernetes that will be covered in a later section.
 This section assumes that the OIDC provider of your cluster has been registered for use with IAM.
 This is the case as you previously set `withOIDC: true` in the cluster config YAML file, but check out [this link](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html) if you need help re-applying the setting.
 
@@ -65,7 +65,7 @@ If necessary, revisit the appropriate sections to create/upgrade any services be
 kubectl -n demos get services
 ```
 
-Now we can download the manifest for an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) object.
+Now you can download the manifest for an [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) object.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-ingress.yaml \
   -O ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
@@ -99,7 +99,7 @@ curl http://${alb_dnsname}/blue  # version 1.0
 curl http://${alb_dnsname}/green # version 2.0
 ```
 
-In a production environment we would likely favour ALBs over CLBs but, for now, CLBs will suffice so we recommend that you unwind the ALB and **green** resources as follows.
+In a production environment you would likely favour ALBs over CLBs but, for now, CLBs will suffice so it is recommended that you unwind the ALB and **green** resources as follows.
 ```bash
 rm ~/environment/echo-frontend/templates/echo-frontend-ingress.yaml
 kubectl -n demos delete ingress echo-frontend                       # this discards the ALB so be patient here

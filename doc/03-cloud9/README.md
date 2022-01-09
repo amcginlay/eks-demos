@@ -1,6 +1,6 @@
 # Create Cloud9 (EC2) Environment
 
-As we create our Cloud9 environment we also disable the "AWS managed temporary credentials" feature.
+As you create your Cloud9 environment, disable the "AWS managed temporary credentials" feature.
 Doing so enables the underlying EC2 instance to correctly acknowledge its assigned IAM Role, in this case `Role-EC2-EKSClusterAdmin`.
 ```bash
 cluster_name=dev
@@ -24,7 +24,7 @@ aws sts get-caller-identity
 ```
 
 The standard Cloud9 environment has a small (10gb) root volume.
-To ensure we don't exhaust this storage extend the root volume to 30gb.
+To ensure you don't exhaust this storage extend the root volume to 30gb.
 ```bash
 region=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 instance_id=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)

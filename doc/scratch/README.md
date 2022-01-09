@@ -6,7 +6,7 @@ If you do not have this, execute the following (2-3 mins).
 kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_FE} --port=80 --type=LoadBalancer
 ```
 
-# if we don't create the service account via eksctl it will not activate IRSA (note the policy attachment)
+# createing the service account via eksctl ensure that IRSA is correctly configured (note the policy attachment)
 eksctl create iamserviceaccount \
   --cluster ${EKS_CLUSTER_NAME} \
   --namespace kube-system \
@@ -26,9 +26,9 @@ helm upgrade -i appmesh-controller eks/appmesh-controller \
 
 kubectl -n kube-system get deployment appmesh-controller
 
-# we aim to use App Mesh to demonstrate a Blue Green deployment model within which traffic can be dynamically shifted between two different versions of fully-scaled backends
+# the aim is to use App Mesh to demonstrate a Blue Green deployment model within which traffic can be dynamically shifted between two different versions of fully-scaled backends
 # create these backend images using tools you are already familiar with
-# NOTE the generated repo name will match our exported variable named `EKS_APP_BE_ECR_REPO`.
+# NOTE the generated repo name will match your exported variable named `EKS_APP_BE_ECR_REPO`.
 envsubst < ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile.template > ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
 docker build -t ${EKS_APP_BE}:${EKS_APP_BE_VERSION} ~/environment/eks-demos/src/${EKS_APP_BE}/
 sed -i "s/ENV VERSION=${EKS_APP_BE_VERSION}/ENV VERSION=${EKS_APP_BE_VERSION_NEXT}/g" ~/environment/eks-demos/src/${EKS_APP_BE}/Dockerfile
@@ -121,7 +121,7 @@ aws appmesh list-virtual-nodes --mesh-name ${EKS_APP_NS} # check from the AWS as
 # confirm that the backend pods currently have one container each (READY 1/1)
 kubectl -n ${EKS_APP_NS} get pods
 
-# with the backend virtual nodes in place we can now deploy a virtual router which will distribute backend requests (BLUE and GREEN) using weighted routes
+# with the backend virtual nodes in place you can now deploy a virtual router which will distribute backend requests (BLUE and GREEN) using weighted routes
 # create a single virtualrouter which, for now, sends 100% of requests to BLUE
 # NOTE a virtual router, which sits in front of a set of routes to virtual nodes, is only required when traffic shifting is desired.
 cat > ~/environment/eks-demos/src/mesh-apps/vr-${EKS_APP_BE}.yaml << EOF
@@ -155,11 +155,11 @@ kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS
 kubectl -n ${EKS_APP_NS} get virtualrouters                                                                                # check from the k8s aspect
 aws appmesh describe-route --mesh-name ${EKS_APP_NS} --virtual-router-name vr-${EKS_APP_BE} --route-name vrr-${EKS_APP_BE} # check from the AWS aspect
 
-# with the virtual router in place we can now deploy a virtual service and the matching underlying ClusterIP service which it will provide a version independent target for backend traffic.
+# with the virtual router in place you can now deploy a virtual service and the matching underlying ClusterIP service which it will provide a version independent target for backend traffic.
 # the ClusterIP service should never resolve to any pods in the traditional sense, it just surfaces a DNS name and IP address which the mesh can reference internally to anchor its redirections.
 # in the same way that k8s pods send requests to other pods via k8s services, virtualnodes send requests to other virtualnodes via virtualservices
-# we already have a virtualrouter, which knows how to locate the blue and green backend virtualnodes
-# now we create a single virtualservice that forwards all its traffic to the virtualrouter
+# you already have a virtualrouter, which knows how to locate the blue and green backend virtualnodes
+# now you can create a single virtualservice that forwards all its traffic to the virtualrouter
 cat > ~/environment/eks-demos/src/mesh-apps/vs-${EKS_APP_BE}.yaml << EOF
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualService
@@ -181,7 +181,7 @@ kubectl -n ${EKS_APP_NS} get virtualservices                                    
 aws appmesh describe-virtual-service --mesh-name ${EKS_APP_NS} --virtual-service-name ${EKS_APP_BE} # check from the AWS aspect
 
 # the final piece is the virtual node component which represents the frontend deployment.
-# we could have applied this manifest before now, but since it's dependencies were not yet available
+# you could have applied this manifest before now, but since it's dependencies were not yet available
 # it would be held in a partially-complete state without the means to produce a corresponding AWS resource
 
 cat > ~/environment/eks-demos/src/mesh-apps/vn-${EKS_APP_FE}.yaml << EOF
@@ -206,7 +206,7 @@ kubectl -n ${EKS_APP_NS} get virtualnodes                # check from the k8s as
 aws appmesh list-virtual-nodes --mesh-name ${EKS_APP_NS} # check from the AWS aspect
 
 # upon restart, each backend pod will be injected with two additional containers (sidecars)
-# one is envoy, the other is the x-ray daemon which we enabled when we installed the App Mesh controller
+# one is envoy, the other is the x-ray daemon which you enabled when you installed the App Mesh controller
 for color in blue green; do
   kubectl -n ${EKS_APP_NS} rollout restart deployment ${EKS_APP_BE}-${color}
 done
@@ -225,7 +225,7 @@ while true; do curl http://${clb_dnsname}; sleep 0.25; done
 # apply an updated manifest for the virtual router in which the weights are flipped to route 0% of traffic to the BLUE backend and 100% to green
 # observe in the **dedicated** terminal window as the backend traffic is switched from BLUE to GREEN (~5-10 secs)
 # this was achieved by reconfiguring the App Mesh configuration, which re-publishes that configuration down to all the appropriate envoy proxies, dynamically re-routing the requests flowing out through those containers
-# our application remains completely unaware that any of this reconfiguration is taking place
+# your application remains completely unaware that any of this reconfiguration is taking place
 sed -i -e "s/weight: 100/weight: -1/g" -e "s/weight: 0/weight: 100/g" -e "s/weight: -1/weight: 0/g" ~/environment/eks-demos/src/mesh-apps/vr-${EKS_APP_BE}.yaml
 kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS_APP_BE}.yaml
 
@@ -234,7 +234,7 @@ kubectl -n ${EKS_APP_NS} apply -f ~/environment/eks-demos/src/mesh-apps/vr-${EKS
 # when you installed the App Mesh controller you essentially made a commitment to configure your service mesh through the exclusive use of k8s manifests (think, Infrastructure as Code) so you must resist the temptation to make stateful modifications via other tools (e.g. AWS Console/CLI).
 # this approach will protect you against configuration drift and make your deployments portable between EKS clusters.
 
-# you may recall we enabled x-ray when we installed the App Mesh controller so our application will also now be emiting trace diagnostics to the X-Ray service.
+# you may recall you enabled x-ray when you installed the App Mesh controller so your application will also now be emiting trace diagnostics to the X-Ray service.
 # head over to the x-ray service map at https://us-west-2.console.aws.amazon.com/xray/home to observe as the traffic begins to shift from BLUE to GREEN
 # the default service map window is 5 minutes but you can reduce this to 1 minute.
 # as you refresh the service map you will observe the volume of recorded traffic drop from BLUE until the service icon disappears altogether

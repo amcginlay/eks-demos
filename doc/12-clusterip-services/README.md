@@ -6,7 +6,7 @@ This section assumes that your `echo-frontend` app is deployed and scaled to 3 i
 
 ClusterIP services are intended to establish dynamic communication channels between individual pods inside your cluster.
 To see this in action and troubleshoot problems it often helps to gain peer-level access to your workloads, just as you might do with a regular [jumpbox](https://en.wikipedia.org/wiki/Jump_server) (or bastion host) in the EC2 world.
-With the `kubectl run` command we can conveniently deploy [nginx](https://www.nginx.com) as a standalone pod which will serve as your "jumpbox".
+With the `kubectl run` command you can conveniently deploy [nginx](https://www.nginx.com) as a standalone pod which will serve as your "jumpbox".
 ```bash
 kubectl run jumpbox --image=nginx                                # in default namespace
 sleep 10 && kubectl exec -it jumpbox -- curl http://localhost:80 # test the NGINX welcome page
@@ -33,7 +33,8 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-fr
 Open `~/environment/echo-frontend/templates/echo-frontend-service.yaml` in Cloud9 IDE to review the code.
 Observe that this is using the same templating mechanism employed for the deployment
 
-Now, we can introduce our basic ClusterIP service.
+Now, you can introduce you first service.
+The simplest form of service is the [ClusterIP](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) service.
 ```bash
 cat ~/environment/echo-frontend/templates/echo-frontend-service.yaml | \
     sed "s/{{ .*.color }}/blue/g" | \

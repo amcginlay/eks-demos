@@ -1,11 +1,11 @@
-# K8s LoadBalancer Services - because the world needs to talk to our cluster
+# K8s LoadBalancer Services - because the world needs to talk to your cluster
 
 The NodePort service solved one problem but exposed another.
-If our worker nodes (i.e. EC2 instances) belong to an auto-scaling group then some questions remain:
+If your worker nodes (i.e. EC2 instances) belong to an auto-scaling group then some questions remain:
 
-- How many nodes are active at any given moment and how do we track their IP addresses?
+- How many nodes are active at any given moment and how do you track their IP addresses?
 - Are these nodes reachable by your clients?
-- What if the node we were targeting a moment ago has now been terminated?
+- What if the node you were targeting a moment ago has now been terminated?
 
 In general, load balancers are designed to negate these questions by providing a single point of access which guards us from the underlying complexity and volatility.
 Kubernetes services of type LoadBalancer incorporate and extend the functionailty of NodePort services.

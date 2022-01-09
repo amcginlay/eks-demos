@@ -37,7 +37,7 @@ watch "kubectl top nodes; echo; kubectl top pods --all-namespaces"
 # ctrl+c to quit watch command
 ```
 
-Now we can download the manifest for the HPA object.
+Now you can download the manifest for the HPA object.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-hpa.yaml \
   -O ~/environment/echo-frontend/templates/echo-frontend-hpa.yaml
@@ -70,7 +70,7 @@ At this point you will observe that new pod IP addresses are unable to be alloca
 As seen in an earlier section, the CA will step in to add new nodes and within a couple of minutes all the required pods will be Running as expected.
 
 Switch back to the terminal window displaying the `siege` results.
-Instead of stopping the load entirely, which is a little unnatural, we are just going to dial it back from high to low.
+Instead of stopping the load entirely, which is a little unnatural, you will just dial it back from high to low.
 ```bash
 # ctrl+c to quit the running heavy-load siege command
 siege -c 1 ${clb_dnsname} # simulate 1 concurrent users

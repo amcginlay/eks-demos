@@ -3,8 +3,8 @@
 NodePort services incorporate and extend the functionailty of the ClusterIP service.
 They negotiate access to the underlying service functionality via an auto-assigned high-order port which every worker node agrees upon, hence the name.
 
-We need to upgrade our ClusterIP service to a NodePort service.
-There are a couple of ways we could achieve this, including the [kubectl patch](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command.
+You need to upgrade your ClusterIP service to a NodePort service.
+There are a couple of ways you could achieve this, including the [kubectl patch](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/) command.
 However, in the interests of maintaining focus on manifests, re-apply the service manifest adjusting for the new service type as follows.
 ```bash
 kubectl -n demos get services # inspect service objects before upgrade

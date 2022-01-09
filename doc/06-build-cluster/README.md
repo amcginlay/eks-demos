@@ -76,7 +76,7 @@ Check the Cloud9 environment can connect to the k8s cluster and display the TWO 
 kubectl get nodes -o wide
 ```
 
-We can further validate our permissions by observing the pods initally deployed in the kube-system namespace.
+You can further validate your permissions by observing the pods initally deployed in the kube-system namespace.
 ```bash
 kubectl -n kube-system get pods -o wide
 ```

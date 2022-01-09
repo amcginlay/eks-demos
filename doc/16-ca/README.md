@@ -3,7 +3,7 @@
 This section assumes that the `echo-frontend` app is deployed and scaled to 3 instances.
 
 Our two-node cluster cannot run an infinite number of pods.
-If we scale our deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
+If you scale your deployment beyond the capacity of the current nodes then any pods which cannot be scheduled will be set to a Pending state until circumstances change.
 The [Cluster Autoscaler (CA)](https://docs.aws.amazon.com/eks/latest/userguide/cluster-autoscaler.html) monitors for Pending pods that failed to run due to insufficient resources and attempts to resolve the situation by scaling-up the number of available nodes and scaling them back when the pressure recedes.
 
 Install the CA following documented best practices for EKS.
@@ -15,8 +15,8 @@ kubectl apply -f <( \
 )
 ```
 
-In a moment we're going to request to increase the number of pods in our existing deployment.
-Before we do so, get ready to monitor what is happening inside our cluster.
+In a moment you will submit a request to increase the number of pods in your existing deployment.
+Before you do so, get ready to monitor what is happening inside your cluster.
 
 In a **dedicated** terminal window prepare to observe the nodes and pods as their status changes.
 ```bash
@@ -29,13 +29,13 @@ Scaling related events will be highlighted in red.
 sleep 20 && kubectl logs deployment/cluster-autoscaler -n kube-system -f | grep 'scale-up\|scaleup\|scale up\|$' --color
 ```
 
-In your original terminal window, re-scale our deployment to intentionally exceed the capacity of the nodes.
+In your original terminal window, re-scale your deployment to intentionally exceed the capacity of the nodes.
 ```bash
 kubectl -n demos scale deployment echo-frontend-blue --replicas 25
 ```
 
 Note how some pods start without an IP addresses because they're stuck in the Pending state and cannot be scheduled.
-Once additional nodes get introduced (up to our current maximum of 6) the Pending pods will move to a Running state and an IP address will be allocated.
+Once additional nodes get introduced (up to the current maximum of 6) the Pending pods will move to a Running state and an IP address will be allocated.
 The CA will take **about 2 minutes** to complete the node scaling operation and thereby allow all the pods to start.
 
 Once all the pods are successfully in a Running state and have IP addresses assigned the demo is complete.

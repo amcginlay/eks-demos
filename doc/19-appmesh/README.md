@@ -92,12 +92,12 @@ while true; do curl http://${clb_dnsname}; sleep 0.25; done
 
 Leave the **dedicated** terminal window in this state and return to your original terminal window.
 
-In the earlier section titled **Prepare Upgraded Image** we introduced version 2.0 of `echo-frontend` which supports the use of backend apps.
+In the earlier section titled **Prepare Upgraded Image** you created version 2.0 of `echo-frontend` which supports the use of backend apps.
 Now is the time to deploy that version using an [in-place](https://docs.aws.amazon.com/whitepapers/latest/overview-deployment-options/in-place-deployments.html) strategy.
 The driver for reusing the **blue** environment is simply to limit the volume of pods created.
 
 Whilst you deploy version 2.0 of your `echo-frontend` app you will also provide it with the URL for a compatible instance of `echo-backend` as follows.
-Observe that the URL is for the `blue` backend which is acceptable for testing connectivity but creates a tightly coupled relationship between our services.
+Observe that the URL is for the `blue` backend which is acceptable for testing connectivity but creates a tightly coupled relationship between your services.
 We instead want out services to be loosely coupled and resolving that issue is the crux of this exercise.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
@@ -110,12 +110,12 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
 
 Return to your **dedicated** terminal window to observe the 2.0 `echo-frontend` successfully retrieving `"backend":"1.0"` from the `blue` backend environment.
 
-The next step is to start rollimg out the [AWS App Mesh components](https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html#app_mesh_components).
+The next step is to start rolling out the [AWS App Mesh components](https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html#app_mesh_components).
 Go the the [App Mesh console](https://us-west-2.console.aws.amazon.com/appmesh/meshes) page.
-There is likely to be no Meshes shown here.
-Each `Mesh` component encapsulate a logical collection of interconnected service mesh resources.
+There is likely to be no Meshes currently shown here.
+Each `Mesh` resource encapsulates a logical collection of other interconnected service mesh resources.
 
-Download the manifest for your `Mesh` to your Cloud9 environment.
+Download the manifest for your `Mesh` component to your Cloud9 environment.
 ```bash
 mkdir -p ~/environment/mesh/templates/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/demos-mesh.yaml \

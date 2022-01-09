@@ -15,14 +15,14 @@ We can use Helm to both consume and publish software in a simple, repeatable and
 
 We start by showing how to consume popular open-source software published to a Helm repo.
 A Helm repo consists of a collection of packages/releases which can be readily deployed to Kubernetes.
-Add (i.e. import) a popular repo which provides us a menu of packages/releases from which we can choose.
+Add (i.e. import) a popular repo which provides us a menu of packages/releases from which you can choose.
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm search repo
 ```
 
 The source for these packages/releases are known as charts and these particular ones can be inspected at [https://github.com/bitnami/charts/tree/master/bitnami](https://github.com/bitnami/charts/tree/master/bitnami).
-The `bitnami/apache` release is present in this list so we can install it into its own namespace as follows.
+The `bitnami/apache` release is present in this list so you can install it into its own namespace as follows.
 ```bash
 kubectl create namespace apache
 helm -n apache upgrade -i apache bitnami/apache # "upgrade -i" is interpreted as install or upgrade, as necessary
@@ -32,15 +32,15 @@ kubectl -n apache get all                       # view the objects created
 The `bitnami/apache` release is a simple package/release comprising a `deployment` with an associated `service` of type LoadBalancer but it could be much larger.
 It could include `configmaps`, `serviceaccounts` or manifests for any other Kubernetes object your cluster is capable of consuming.
 
-But we are more interested in packaging our own applications so uninstall Apache and unwind what we have done.
+In this demo, you are more interested in packaging your own applications so uninstall Apache and unwind what you have done.
 ```bash
 helm -n apache uninstall apache
 kubectl delete namespace apache # be patient, this command may take few moments
 ```
 
 Helm tempts us to get us started with the `helm create` command which builds the skeleton of a new chart.
-Whilst it is undeniably useful to observe the structure it builds it is a little more comprehensive than we need right now.
-Instead, we are going to build only the files we need and we will do that by hand.
+Whilst it is undeniably useful to observe the structure it builds it is a little more comprehensive than you need right now.
+Instead, you are going to build only the files you need and this will be done by hand.
 So have a quick peek at what `helm create` produces then discard its results.
 Observe the presence of a `Chart.yaml` file and a `templates` directory as these represent the basic requirements of a Helm chart.
 ```bash
@@ -52,7 +52,7 @@ rm -rf ./dummy-app
 The package/release you want to build is the `echo-frontend` app you have already deployed.
 By achieving this, your friends and customers can deploy your software on their own clusters in the exact manner you intended.
 You do this by creating a Helm chart from the manifests which comprise your app.
-The `Chart.yaml` file is mandatory for each Chart and acts like a header sheet for our package/release.
+The `Chart.yaml` file is mandatory for each Chart and acts like a header sheet for your package/release.
 ```bash
 cat > ~/environment/echo-frontend/Chart.yaml << EOF
 apiVersion: v2
@@ -62,14 +62,14 @@ EOF
 ```
 
 Throughout the previous sections, whilst deploying your app, you have been carefully preserving its manifests in a directory named `templates`.
-With the `Chart.yaml` file in place it now should be clear that our intention was always to deploy apps using Helm.
+With the `Chart.yaml` file in place it now should be clear that the intention in these demos was always to deploy apps using Helm.
 
 Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
 ```
 
-This dry run **fails** as the `{{ .Values }}` directives inside our manifests, specifically those without default settings, are not being translated as they were previously via `sed`.
+This dry run **fails** as the `{{ .Values }}` directives inside your manifests, specifically those without default settings, are not being translated as they were previously via `sed`.
 The simplest way to assist `helm` in resolving these placeholders is to pass in the required values on the command line as follows.
 ```bash
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
@@ -110,7 +110,7 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-fronte
 
 Leave the looped command running for now.
 
-`helm` now makes it easy now to upgrade the app to the version 2.0 image we created as follows.
+`helm` now makes it easy now to upgrade the app to the version 2.0 image you created as follows.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
@@ -131,7 +131,7 @@ Keep an eye on the looped `curl` request as the following command is executed.
 helm -n demos rollback echo-frontend-blue
 ```
 
-If, at any point, we want Helm to reveal the path we took to get where we are, here are a few more commands to look at.
+If, at any point, you want Helm to reveal the path taken to get to where you are, here are a few more commands to look at.
 ```bash
 helm list --all-namespaces      # Helm operations are namespaced by default
 helm -n demos status echo-frontend-blue
