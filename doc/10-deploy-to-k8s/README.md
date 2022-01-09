@@ -35,7 +35,7 @@ Open `~/environment/echo-frontend/templates/echo-frontend-deployment.yaml` in Cl
 Observe that this is a templated version of your manifest which employs a `{{ .Values }}` templating syntax.
 
 You will preserve this baseline version on disk and, for now, use [`sed`](https://en.wikipedia.org/wiki/Sed) to dynamically resolve the `{{ .Values }}` settings.
-[tee](https://en.wikipedia.org/wiki/Tee_(command)) dumps this to the terminal so you get a chance to observe the result which get forwarded to `kubectl apply`.
+The [tee](https://en.wikipedia.org/wiki/Tee_(command)) command dumps this to the terminal so you get a chance to observe the result which get forwarded to `kubectl apply`.
 The reason behind this approach and choice of syntax will become evident as you progress through the demos.
 Initially, you want `version` **1.0** of your app to be packaged into a deployment suffixed with the `color` **blue**.
 ```bash
