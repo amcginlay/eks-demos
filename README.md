@@ -25,9 +25,10 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 ## Autoscaling
 * [16. Cluster Autoscaler](doc/16-ca/README.md) - because no one likes a pending pod
 * [17. Horizonal Pod Autoscaler](doc/17-hpa/README.md) - because demand for pods can grow
+* (WIP) [18. Karpenter](doc/18-karpenter/README.md) - because CA is not perfect
 
 ## Release Management
-* [18. Helm](doc/18-helm/README.md) - because packages need managing
+* [19. Helm](doc/19-helm/README.md) - because packages need managing
 
 ## Service Mesh
-* (WIP) [19. AWS App Mesh](doc/19-appmesh/README.md) - because managing microservices at scale is hard
+* (WIP) [20. AWS App Mesh](doc/20-appmesh/README.md) - because managing microservices at scale is hard

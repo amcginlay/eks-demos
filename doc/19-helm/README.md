@@ -82,10 +82,11 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
 The dry run **fails** again, this time because `echo-frontend-blue` already exists.
 Helm refuses to deploy over the top of an existing deployment which it does not currently own.
 Empty the `demos` namespace then try the dry run again.
+This time, note that we ask helm to re-create the namespace for us.
 ```bash
 kubectl delete namespace demos # be patient, this command may take few moments
-kubectl create namespace demos
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
