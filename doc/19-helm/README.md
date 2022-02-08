@@ -66,17 +66,19 @@ With the `Chart.yaml` file in place it now should be clear that the intention in
 
 Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
-helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/
+helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace
 ```
 
 This dry run **fails** as the `{{ .Values }}` directives inside your manifests, specifically those without default settings, are not being translated as they were previously via `sed`.
 The simplest way to assist `helm` in resolving these placeholders is to pass in the required values on the command line as follows.
 ```bash
 helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
-  --set serviceType=LoadBalancer
+  --set serviceType=ClusterIP
 ```
 
 The dry run **fails** again, this time because `echo-frontend-blue` already exists.
@@ -90,17 +92,18 @@ helm -n demos upgrade -i --dry-run echo-frontend-blue ~/environment/echo-fronten
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
-  --set serviceType=LoadBalancer
+  --set serviceType=ClusterIP
 ```
 
 This time the dry run will produce no errors and output the translated manifests, just as the `tee` command did for you previously.
 Take a moment to observe the output before **removing** the `--dry-run` switch and re-installing the app.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=1.0 \
-  --set serviceType=LoadBalancer
+  --set serviceType=ClusterIP
 ```
 
 In a **dedicated** terminal window, remote into your "jumpbox" and begin sending requests to the service.
@@ -114,13 +117,14 @@ Leave the looped command running for now.
 `helm` now makes it easy now to upgrade the app to the version 2.0 image you created as follows.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=2.0 \
-  --set serviceType=LoadBalancer
+  --set serviceType=ClusterIP
 ```
 
-Hop over to the **dedicated** terminal window you left running and watch as the `curl` responses reveal the old pod replicas being rapidly superceded with new ones (check the `version` property).
+Hop over to the **dedicated** terminal window you left running and watch as the `curl` responses reveal the old pod replicas being rapidly superseded with new ones (check the `version` property).
 This should only take few seconds and reveals something extremely valuable about running cloud native workloads on container orchestration platforms like Kubernetes.
 Application updates can be applied in-place, quickly and usually with **zero downtime**.
 
