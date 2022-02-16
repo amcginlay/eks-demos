@@ -3,7 +3,7 @@
 If you have **not** completed the earlier section on Services (Load Distribution) then you may not have an appropriate service manifest and corresponding service object in place.
 Your nginx "**jumpbox**" may also be missing.
 If so, please return and complete the section named **"K8s ClusterIP Services"**.
-Also make sure that v2.0 of your app is ready.
+Additionally, you must also have complete the section named **"Prepare Upgraded Image"**
 
 Linux has [yum and apt](https://www.baeldung.com/linux/yum-and-apt).
 Mac has [Homebrew](https://brew.sh/).
