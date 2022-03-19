@@ -33,7 +33,7 @@ rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm dive.rpm
 )
 echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
-kubectl krew install neat
+kubectl krew install neat get-all
 ```
 
 Verify the installs worked.
