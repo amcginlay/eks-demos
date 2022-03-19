@@ -41,7 +41,7 @@ Verify the installs worked.
 which aws eksctl kubectl session-manager-plugin dive jq tree helm siege gradle kubectl-neat
 ```
 
-Configure kubectl autocomplete.
+Configure [kubectl autocomplete](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/).
 ```bash
 cat > ~/.kubectl-ac << EOF
 source <(kubectl completion bash)
