@@ -3,8 +3,7 @@
 This section assumes the following:
 - you have completed the earlier section on **Helm**
 - the current `echo-frontend` deployment is under control of Helm.
-- additionally its deployment version is **v1.0** and its service is of type **LoadBalancer**
-- You have deployed an "nginx jumpbox", as described in the chapter **"K8s ClusterIP Services"**.
+- additionally the `echo-frontend` deployment version is **v1.0** and its service is of type **LoadBalancer**
 
 Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-for-k8s/) as follows, ignoring any warnings.
 ```bash
