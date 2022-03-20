@@ -8,5 +8,3 @@ spec:
   ports:
   - name: http
     port: 80
-  selector:
-    app: vs-echo-backend
