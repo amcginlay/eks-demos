@@ -1,22 +1,22 @@
 kind: VirtualRouter
 metadata:
-  name: vr-backend
+  name: vr-echo-backend
 spec:
-  awsName: vr-backend
+  awsName: vr-echo-backend
   listeners:
     - portMapping:
         port: 80
         protocol: http
   routes:
-    - name: vrr-backend
+    - name: vrr-echo-backend
       httpRoute:
         match:
           prefix: /
         action:
           weightedTargets:
           - virtualNodeRef:
-              name: vn-backend-blue
+              name: vn-echo-backend-blue
             weight: 100
           - virtualNodeRef:
-              name: vn-backend-green
+              name: vn-echo-backend-green
             weight: 0
