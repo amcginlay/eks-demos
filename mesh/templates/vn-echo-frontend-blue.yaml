@@ -1,20 +1,20 @@
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualNode
 metadata:
-  name: vn-echo-frontend
+  name: vn-echo-frontend-blue
 spec:
-  awsName: vn-echo-frontend
+  awsName: vn-echo-frontendblue
   podSelector:
     matchLabels:
-      app: echo-frontend
+      app: echo-frontend-blue
   listeners:
     - portMapping:
         port: 80
         protocol: http
   serviceDiscovery:
     dns:
-      hostname: echo-frontend
+      hostname: echo-frontend-blue
   backends:
     - virtualService:
         virtualServiceRef:
-          name: vs-echo-backend
+          name: vs-echo-backend-blue
