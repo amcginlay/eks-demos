@@ -17,4 +17,4 @@ spec:
   backends:
     - virtualService:
         virtualServiceRef:
-          name: vs-echo-backend-blue
+          name: vs-echo-backend
