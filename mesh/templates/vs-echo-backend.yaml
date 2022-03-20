@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vs-echo-backend
+  name: vs-echo-backend
+spec:
+  ports:
+  - name: http
+    port: 80
+  selector:
+    app: vs-echo-backend
