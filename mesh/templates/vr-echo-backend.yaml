@@ -1,0 +1,23 @@
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualRouter
+metadata:
+  name: vr-echo-backend
+spec:
+  awsName: vr-echo-backend
+  listeners:
+    - portMapping:
+        port: 80
+        protocol: http
+  routes:
+    - name: vrr-echo-backend
+      httpRoute:
+        match:
+          prefix: /
+        action:
+          weightedTargets:
+          - virtualNodeRef:
+              name: vn-echo-backend-blue
+            weight: 100
+          - virtualNodeRef:
+              name: vn-echo-backend-green
+            weight: 0
