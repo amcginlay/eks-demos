@@ -9,8 +9,8 @@ spec:
       app: echo-backend-blue
   listeners:
     - portMapping:
-      port: 80
-      protocol: http
+        port: 80
+        protocol: http
   serviceDiscovery:
     dns:
       hostname: echo-backend-blue
