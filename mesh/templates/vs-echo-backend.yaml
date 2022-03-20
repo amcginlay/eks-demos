@@ -1,0 +1,10 @@
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualService
+metadata:
+  name: vs-echo-backend
+spec:
+  awsName: vs-echo-backend
+  provider:
+    virtualRouter:
+      virtualRouterRef:
+        name: vr-echo-backend
