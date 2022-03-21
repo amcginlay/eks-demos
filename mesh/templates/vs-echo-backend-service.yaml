@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: vs-echo-backend
 spec:
+# ClusterIP: None # can this be "headless"?
   ports:
   - name: http
     port: 80
