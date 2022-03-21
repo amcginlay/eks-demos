@@ -5,7 +5,7 @@ metadata:
   labels:
     app: echo-backend-{{ .Values.color }}
 spec:
-  type: ClusterIP # can this be "headless"?
+  type: ClusterIP
 # ClusterIP: None # can this be "headless"?
   ports:
   - port: 80
