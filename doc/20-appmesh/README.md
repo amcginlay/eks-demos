@@ -1,4 +1,4 @@
-# (WIP) AWS App Mesh - because managing microservices at scale is hard
+# AWS App Mesh - because managing microservices at scale is hard
 
 This section assumes the following:
 - you have completed the earlier section on **Helm**
