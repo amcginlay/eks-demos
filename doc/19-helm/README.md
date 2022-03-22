@@ -143,6 +143,14 @@ helm -n demos status echo-frontend-blue
 helm -n demos history echo-frontend-blue
 ```
 
+As we move on from this chapter we do, in fact, wish to be running the latest version (v2.0) of the frontend app.
+We can do this by "rolling back the rollback", so once more ...
+```bash
+helm -n demos rollback echo-frontend-blue
+```
+
+... before finally checking that the looped `curl` request is reporing `"version":"2.0"`.
+
 Finally, if you want to publish your own repo, take a look at [this](https://medium.com/containerum/how-to-make-and-share-your-own-helm-package-50ae40f6c221) or [this](https://github.com/komljen/helm-charts) for more information on how to do so.
 
 [Return To Main Menu](/README.md)
