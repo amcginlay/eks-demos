@@ -41,8 +41,9 @@ The injector webhook is also activated with a label.
 
 Use a pair of labels to activate your namespace for use with your mesh by applying a pair of labels as follows.
 ```bash
-kubectl label namespace demos mesh=demos
-kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook=enabled
+kubectl label namespace demos \
+  mesh=demos \
+  appmesh.k8s.aws/sidecarInjectorWebhook=enabled
 ```
 
 ## Prepare Helm
