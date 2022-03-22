@@ -245,7 +245,7 @@ From **another dedicated** terminal window, observe what happens now to the pods
 watch kubectl -n demos get pods
 ```
 
-## Reconfigure and restart your newly meshified deployments
+## Reconfigure, restart and observe
 
 With the Mesh now complete and deployed you can restart all your deployments to get the `envoy` proxy containers injected and configured inside your pods.
 
@@ -255,6 +255,8 @@ kubectl -n demos rollout restart deployment \
   echo-backend-blue \
   echo-backend-green
 ```
+
+Return to your **dedicated** terminal window polling the pods, under the heading of `READY` you should the **backend** pods change from `1/1` to `2/2` meaning that the pods each now host a pair of containers - your workload and its own `envoy` proxy.
 
 Almost there.
 Finally, we need to bounce the **frontend** deployment but, as you do, take this opportunity to **reconfigure** the backend URL to point at our "meshed" service.
@@ -267,11 +269,8 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set serviceType=ClusterIP
 ```
 
-## Observe your watchers
-
-Return to your **dedicated** terminal window polling the pods, under the heading of `READY` you should see them all change from `1/1` to `2/2` meaning that the pods each now host a pair of containers - your workload twinned its own `envoy` proxy.
-
 Return to your **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
+
 Continue to watch what happens here as you move on.
 
 ## Shift traffic
