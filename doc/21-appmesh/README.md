@@ -300,7 +300,7 @@ Now, in Cloud9, click the **Preview** button in the toolbar, followed by **Previ
 If you're curious to see where your weights ended up, click `config_dump` and search for the word "vs-echo-backend".
 
 ## Tidy up
-`VirtualNodes` use their `spec.podSelector.matchLabels` attribute to identify its targets.
+A `VirtualNode` uses its `spec.podSelector.matchLabels` attribute to identify its targets.
 This means `VirtualNodes` bind directly to the pods which renders the original backend services obsolete.
 As you're fully committed to using a service mesh, this provides an opportunity to tidy up your namespace, as follows.
 ```bash
