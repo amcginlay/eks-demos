@@ -31,10 +31,11 @@ name: echo-backend
 version: 1.0.0
 EOF
 
-# BLUE and GREEN backends are built and labeled v11.0 and v12.0 respectively
 declare -A versions=()
 versions[blue]=11.0
 versions[green]=12.0
+
+# BLUE and GREEN backends are built and labeled v11.0 and v12.0 respectively
 for color in blue green; do
   version=${versions[${color}]}
   mkdir -p ~/environment/echo-backend/src/${version}/
