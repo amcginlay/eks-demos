@@ -289,9 +289,10 @@ helm -n demos upgrade -i mesh ~/environment/mesh \
 ## Delving into envoy
 
 Each `envoy` container hosts a webserver on port **9901** which you can query for diagnostics purposes.
-Each Cloud9 instance supports an embedded browser which serve local traffic, provided its on port **8080**.
+Each Cloud9 instance supports an embedded browser which will serve local traffic, provided its on port **8080**.
 Combine this info with the with `kubectl port-forward` command and we can get a convenient window into the inner workings of `envoy`.
 ```bash
+# ctrl+c to quit
 kubectl -n demos port-forward deploy/echo-frontend-blue 8080:9901
 ```
 
@@ -304,7 +305,7 @@ This means `VirtualNodes` bind directly to the pods which renders the original b
 As you're fully committed to using a service mesh, this provides an opportunity to tidy up your namespace, as follows.
 ```bash
 mv ~/environment/echo-backend/templates/echo-backend-service.yaml \
-   ~/environment/echo-backend/templates/echo-backend-service.yaml.retired
+   ~/environment/echo-backend/templates/.echo-backend-service.yaml.retired
 
 declare -A versions=()
 versions[blue]=11.0
