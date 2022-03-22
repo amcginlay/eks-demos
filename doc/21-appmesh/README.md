@@ -3,6 +3,8 @@
 This section assumes that you have completed the previous section named **"Deploy Backend Services"**.
 The assumptions listed in that section also apply here.
 
+## Install the App Mesh Controller
+
 Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-for-k8s/) as follows, ignoring any warnings.
 ```bash
 eksctl create iamserviceaccount \
@@ -25,30 +27,47 @@ Verify that the App Mesh Controller is installed.
 kubectl -n kube-system get deployment appmesh-controller
 ```
 
-**If not already in place**, in a **dedicated** terminal window run a looped command against the **frontend**.
+## Label your namespace
+
+Labels in Kubernetes are much like tags in AWS.
+They can be used to provide (automated) observers the required context to behave as intended.
+For namespaces to support AppMesh they first need to be associated with their `Mesh` object.
+This association is established with a namespace label.
+
+Additionally, resident pods will need to be "proxied" via [envoy](https://www.envoyproxy.io/) for use with your service mesh.
+We could do this by manually adding `envoy` to the `template.spec.containers` section of every deployment manifest.
+Thankfully, the use of the injector webhook, which is installed with the App Mesh Controller, prevents us from needing to do this explicitly.
+The injector webhook is also activated with a label.
+
+Use a pair of labels to activate your namespace for use with your mesh by applying a pair of labels as follows.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+kubectl label namespace demos mesh=demos
+kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook=enabled
 ```
 
-The next step is to start rolling out the [AWS App Mesh components](https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html#app_mesh_components).
+## Prepare Helm
+
+Introduce a `Chart.yaml` file so your mesh is deployable via Helm
+```bash
+mkdir -p ~/environment/mesh/templates/
+cat > ~/environment/mesh/Chart.yaml << EOF
+apiVersion: v2
+name: mesh
+version: 1.0.0
+EOF
+```
+
+## Introduce the Service Mesh
+
+The next step is to start rolling out your [AWS App Mesh components](https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html#app_mesh_components).
 Go the the [App Mesh console](https://us-west-2.console.aws.amazon.com/appmesh/meshes) page.
 There is likely to be no Meshes currently shown here.
 Each `Mesh` resource encapsulates a logical collection of other interconnected service mesh resources, as revealed shortly.
 
 Download the manifest for your `Mesh` resource to your Cloud9 environment.
 ```bash
-mkdir -p ~/environment/mesh/templates/
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/demos-mesh.yaml \
   -O ~/environment/mesh/templates/demos-mesh.yaml
-```
-
-Introduce a `Chart.yaml` file so your mesh is deployable via Helm
-```bash
-cat > ~/environment/mesh/Chart.yaml << EOF
-apiVersion: v2
-name: mesh
-version: 1.0.0
-EOF
 ```
 
 Use the Helm CLI to deploy your service mesh in its embryonic state.
@@ -69,29 +88,14 @@ aws appmesh list-meshes
 aws appmesh describe-mesh --mesh-name demos
 ```
 
+## Treat the console as read-only
+
 Return to the App Mesh console to observe your nascent "Mesh" resource named `demos` which you can click through to see its (empty) configuration.
 You must **resist** any temptation to create or modify meshes via the console.
 That's the implicit agreement you make whenever you use Kubernetes manifests/controllers to "manage" external resources in this way.
 Obviously it's convenient to **view** your configuration via the console, but when using the App Mesh Controller you must respect this arrangement and treat the console as if it were **read-only**.
 
-<!-- The console reveals that your mesh encompasses, among other things, `Virtual nodes` of which there are currently none. -->
-
-Labels in Kubernetes are much like tags in AWS.
-They can be used to provide (automated) observers the required context to behave as intended.
-For namespaces to support AppMesh they first need to be associated with their `Mesh` object.
-This association is activated with a namespace label.
-
-Additionally, resident pods will need to be "proxied" for use with your service mesh.
-We could do this by manually adding the [envoy](https://www.envoyproxy.io/) service proxy container to every deployment manifest.
-Thankfully, the use of the injector webhook, which is installed with the App Mesh Controller, prevents us from needing to do this explicitly.
-The injector webhook is also activated with a label.
-
-Use a pair of labels to activate your namespace for use with your mesh by applying a pair of labels as follows.
-```bash
-kubectl label namespace demos \
-  mesh=demos \
-  appmesh.k8s.aws/sidecarInjectorWebhook=enabled
-```
+## The VirtualNodes (backend)
 
 Each Kubernetes service which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
 Your **backend** `VirtualNodes` are the simplest to implement since they are not dependent on any other `Virtual` objects inside the mesh itself.
@@ -124,6 +128,8 @@ aws appmesh describe-virtual-node --mesh-name demos \
   --virtual-node-name vn-echo-backend-green
 ```
 
+## The VirtualRouter
+
 Your primary aim is to dynamically orchestrate the distribution of traffic from the frontend to both your **blue** and **green** backends.
 In this case, App Mesh requires a `VirtualRouter` resource to sit just in front of your backend `VirtualNodes` and maintain the desired traffic split ratios.
 
@@ -155,8 +161,10 @@ aws appmesh describe-route --mesh-name demos \
   --route-name vrr-echo-backend
 ```
 
- That final step is where you can observe the weights.
- Return to the App Mesh console and see if you can locate the weights there.
+That final step is where you can observe the weights.
+Return to the App Mesh console and see if you can locate the weights there.
+
+## The VirtualService
 
 Your next step is to introduce a `VirtualService` object which depends upon the `VirtualRouter` object you just created as well as an underlying Kubernetes `Service` object.
 The `Service` you twin with your `VirtualService` intentionally missing a `spec:selector:` section which means it can never target any traditional pod endpoints which is intentional.
@@ -193,6 +201,8 @@ aws appmesh describe-route --mesh-name demos \
   --route-name vrr-echo-backend
 ```
 
+## The VirtualNodes (frontend)
+
 The `VirtualNode` **frontend** resource was deferred until now since it has a dependency on your `VirtualService` resource.
 Now that dependency is in place we can now complete the Mesh
 
@@ -221,14 +231,24 @@ aws appmesh describe-virtual-node --mesh-name demos \
   --virtual-node-name vn-echo-frontend-blue
 ```
 
-With the Mesh now complete and deployed you can restart all your backend deployments to get the envoy proxies injected and configured
-Observe this happening, from **another dedicated** terminal window, as follows.
+## Prepare your watchers
+
+**If not already in place**, in a **dedicated** terminal window run a looped command against the **frontend**.
+```bash
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+```
+
+From **another dedicated** terminal window, observe what happens now to the pods.
 ```bash
 # ctrl+c to quit
 watch kubectl -n demos get pods
 ```
 
-Now bounce the **backend** deployments and watch them return with one new container per pod.
+## Reconfigure and restart your newly meshified deployments
+
+With the Mesh now complete and deployed you can restart all your deployments to get the `envoy` proxy containers injected and configured inside your pods.
+
+Bounce the **backend** deployments and watch them return with one additional container per pod.
 ```bash
 kubectl -n demos rollout restart deployment \
   echo-backend-blue \
@@ -236,7 +256,7 @@ kubectl -n demos rollout restart deployment \
 ```
 
 Almost there.
-Finally, we need to bounce the **frontend** deployment but, as you do, take this opportunity to reconfigure the backend URL to point at our "meshed" service.
+Finally, we need to bounce the **frontend** deployment but, as you do, take this opportunity to **reconfigure** the backend URL to point at our "meshed" service.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
@@ -246,13 +266,23 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set serviceType=ClusterIP
 ```
 
-You should still have open a **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
-Let's reconfigure the `VirtualRouter` to split the traffic 50/50 and observe what happens after ~10 seconds have elapsed.
+## Observe your watchers
+
+Return to your **dedicated** terminal window polling the pods, under the heading of `READY` you should see them all change from `1/1` to `2/2` meaning that the pods each now host a pair of containers - your workload twinned its own `envoy` proxy.
+
+Return to your **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
+Continue to watch what happens here as you move on.
+
+## Shift traffic
+
+Let's reconfigure the `VirtualRouter` to split the traffic 50/50 and, after a few seconds, observe what happens.
 ```bash
 helm -n demos upgrade -i mesh ~/environment/mesh \
   --set weightBlue=50 \
   --set weightGreen=50
 ```
+
+## Summary
 
 This is a textbook-style blue/green configuration with zero impact on upstream services.
 But we've only scratched the surface of what's possible.
