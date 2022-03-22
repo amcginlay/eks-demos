@@ -2,8 +2,7 @@
 
 This section assumes the following:
 - you have completed the earlier section on **Helm**
-- the current `echo-frontend` deployment is under control of Helm.
-- additionally the `echo-frontend` deployment version is **v2.0**
+- the current `echo-frontend` deployment is version **v2.0** and is deployed under the control of Helm.
 
 Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-for-k8s/) as follows, ignoring any warnings.
 ```bash
