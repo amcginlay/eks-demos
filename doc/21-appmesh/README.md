@@ -98,8 +98,8 @@ Obviously it's convenient to **view** your configuration via the console, but wh
 
 ## The VirtualNodes (backend)
 
-Each Kubernetes service which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
-Your **backend** `VirtualNodes` are the simplest to implement since they are not dependent on any other `Virtual` objects inside the mesh itself.
+Each Kubernetes deployment which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
+Your **backend** `VirtualNodes` are simple to implement since they are not dependent on any other `Virtual` objects inside the mesh itself.
 
 Download the manifests for your `VirtualNode` **backend** resources.
 ```bash
@@ -169,7 +169,7 @@ Return to the App Mesh console and see if you can locate the weights there.
 
 Your next step is to introduce a `VirtualService` object which depends upon the `VirtualRouter` object you just created as well as an underlying Kubernetes `Service` object.
 The `Service` you twin with your `VirtualService` intentionally missing a `spec:selector:` section which means it can never target any traditional pod endpoints which is intentional.
-It just needs to surface an IP address for identity purposes.
+It just needs to surface a ClusterIP address for identity purposes.
 
 Download the manifests for your `VirtualService` resource and its associated `Service` object.
 ```bash
@@ -269,6 +269,10 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set serviceType=ClusterIP
 ```
 
+This reconfiguration will cause all the frontend pods to restart.
+When they restart the `envoy` proxy will hook any requests matching the backend URL and route them as per the rules defined in App Mesh.
+Be aware that `VirtualService` resources **do not** support the fully-qualified naming convention adopted by Kubernetes services (i.e. `<service>.<namespace>.svc.cluster.local`).
+
 Return to your **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
 
 Continue to watch what happens here as you move on.
@@ -282,12 +286,32 @@ helm -n demos upgrade -i mesh ~/environment/mesh \
   --set weightGreen=50
 ```
 
+## Tidy up
+`VirtualNodes` use their `spec.podSelector.matchLabels` attribute to identify its targets.
+This means `VirtualNodes` bind directly to the pods which renders the original backend services obsolete.
+As such this provides an opportunity to tidy up your namespace, as follows.
+```bash
+rm ~/environment/echo-backend/templates/echo-backend-service.yaml
+
+declare -A versions=()
+versions[blue]=11.0
+versions[green]=12.0
+for color in blue green; do
+  version=${versions[${color}]}
+  helm -n demos upgrade -i echo-backend-${color} ~/environment/echo-backend/ \
+    --set registry=${EKS_ECR_REGISTRY} \
+    --set color=${color} \
+    --set version=${version}
+done
+```
+
 ## Summary
 
 This is a textbook-style blue/green configuration with zero impact on upstream services.
 But we've only scratched the surface of what's possible.
 Service meshes are all about externalizing the type of logic that you don't want polluting your codebase.
-Other use cases include.
+
+Other common use cases include.
 - Observability
 - Retry policies
 - TLS termination
@@ -295,6 +319,6 @@ Other use cases include.
 
 You may hear these topics collectively described as **cross-cutting concerns** or **non-functional requirements** - that is to say businesses rarely ask for these features explicitly, but they may question their absence when things go wrong.
 
-Whilst a service mesh may appear overkill in the small problem domain presented here, they become ever more important as your microservices architecture grows.
+Whilst a service mesh may appear overkill in the context of our simple echo service, they become ever more important as your microservices architecture grows.
 
 [Return To Main Menu](/README.md)
