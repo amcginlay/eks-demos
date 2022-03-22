@@ -31,7 +31,7 @@ kubectl -n kube-system get deployment appmesh-controller
 
 Labels in Kubernetes are much like tags in AWS.
 They can be used to provide (automated) observers the required context to behave as intended.
-For namespaces to support AppMesh they first need to be associated with their `Mesh` object.
+For namespaces to support AppMesh they first need to be associated with their (soon to exist) `Mesh` object.
 This association is established with a namespace label.
 
 Additionally, resident pods will need to be "proxied" via [envoy](https://www.envoyproxy.io/) for use with your service mesh.
