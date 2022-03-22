@@ -270,7 +270,7 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
 ```
 
 This reconfiguration will cause all the frontend pods to restart.
-When they restart the `envoy` proxy will hook any requests matching the backend URL and route them as per the rules defined in App Mesh.
+As they do so the `envoy` proxy will hook any requests matching the backend URL and route them as per the rules defined in App Mesh.
 Be aware that `VirtualService` resources **do not** support the fully-qualified naming convention adopted by Kubernetes services (i.e. `<service>.<namespace>.svc.cluster.local`).
 
 Return to your **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
@@ -286,12 +286,25 @@ helm -n demos upgrade -i mesh ~/environment/mesh \
   --set weightGreen=50
 ```
 
+## Delving into envoy
+
+Each `envoy` container hosts a webserver on port **9901** which you can query for diagnostics purposes.
+Each Cloud9 instance supports an embedded browser which serve local traffic, provided its on port **8080**.
+Combine this info with the with `kubectl port-forward` command and we can get a convenient window into the inner workings of `envoy`.
+```bash
+kubectl -n demos port-forward deploy/echo-frontend-blue 8080:9901
+```
+
+Now, in Cloud9, click the **Preview** button in the toolbar, followed by **Preview Running Application**.
+If you're curious to see where your weights ended up, click `config_dump` and search for the word "vs-echo-backend".
+
 ## Tidy up
 `VirtualNodes` use their `spec.podSelector.matchLabels` attribute to identify its targets.
 This means `VirtualNodes` bind directly to the pods which renders the original backend services obsolete.
-As such this provides an opportunity to tidy up your namespace, as follows.
+As you're fully committed to using a service mesh, this provides an opportunity to tidy up your namespace, as follows.
 ```bash
-rm ~/environment/echo-backend/templates/echo-backend-service.yaml
+mv ~/environment/echo-backend/templates/echo-backend-service.yaml \
+   ~/environment/echo-backend/templates/echo-backend-service.yaml.retired
 
 declare -A versions=()
 versions[blue]=11.0
