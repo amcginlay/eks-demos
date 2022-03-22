@@ -31,6 +31,7 @@ name: echo-backend
 version: 1.0.0
 EOF
 
+# next two section require these version mappings
 declare -A versions=()
 versions[blue]=11.0
 versions[green]=12.0
