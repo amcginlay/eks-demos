@@ -31,5 +31,5 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 * [19. Helm](doc/19-helm/README.md) - because packages need managing
 
 ## Service Mesh
-* [20. Deploy Backend Services](doc/19-backend/README.md) - because no one likes a monolith
-* [21. AWS App Mesh](doc/20-appmesh/README.md) - because managing microservices at scale is hard
+* [20. Deploy Backend Services](doc/20-backend/README.md) - because no one likes a monolith
+* [21. AWS App Mesh](doc/21-appmesh/README.md) - because managing microservices at scale is hard
