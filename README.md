@@ -33,4 +33,4 @@ A selection of demos guiding you through the maze of [Elastic Kubernetes Service
 ## Service Mesh
 * [20. Deploy Backend Services](doc/20-backend/README.md) - because no one likes a monolith
 * [21. AWS App Mesh](doc/21-appmesh/README.md) - because managing microservices at scale is hard
-* (WIP) [22. X-Ray](doc/22-x-ray/README.md) - because observability at scale is hard
+* [22. X-Ray](doc/22-x-ray/README.md) - because observability at scale is hard
