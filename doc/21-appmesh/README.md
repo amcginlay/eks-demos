@@ -202,7 +202,7 @@ aws appmesh describe-route --mesh-name demos \
   --route-name vrr-echo-backend
 ```
 
-## The VirtualNodes (frontend)
+## The VirtualNode (frontend)
 
 The `VirtualNode` **frontend** resource was deferred until now since it has a dependency on your `VirtualService` resource.
 Now that dependency is in place we can now complete the Mesh
@@ -308,11 +308,11 @@ Service meshes are all about externalizing the type of logic that you don't want
 Other common use cases include.
 - Observability
 - Retry policies
-- TLS termination
+- SSL/TLS termination
 - Circuit breakers
 
 You may hear these topics collectively described as **cross-cutting concerns** or **non-functional requirements** - that is to say businesses rarely ask for these features explicitly, but they may question their absence when things go wrong.
 
-Whilst a service mesh may appear overkill in the context of our simple echo service, they become ever more important as your microservices architecture grows.
+Whilst a service mesh may appear overkill in the context of your simple echo service, they become ever more important as your microservices architecture grows.
 
 [Return To Main Menu](/README.md)
