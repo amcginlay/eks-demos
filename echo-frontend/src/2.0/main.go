@@ -15,7 +15,6 @@ import (
 const version = "2.0"
 
 var backend = getEnv("BACKEND", "none")
-
 var x = 0.0
 
 func doWork() {
