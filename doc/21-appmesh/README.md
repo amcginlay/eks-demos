@@ -299,26 +299,6 @@ kubectl -n demos port-forward deploy/echo-frontend-blue 8080:9901
 Now, in Cloud9, click the **Preview** button in the toolbar, followed by **Preview Running Application**.
 If you're curious to see where your weights ended up, click `config_dump` and search for the word "vs-echo-backend".
 
-## Tidy up
-A `VirtualNode` uses its `spec.podSelector.matchLabels` attribute to identify its targets.
-This means `VirtualNodes` bind directly to the pods which renders the original backend services obsolete.
-As you're fully committed to using a service mesh, this provides an opportunity to tidy up your namespace, as follows.
-```bash
-mv ~/environment/echo-backend/templates/echo-backend-service.yaml \
-   ~/environment/echo-backend/templates/.echo-backend-service.yaml.retired
-
-declare -A versions=()
-versions[blue]=11.0
-versions[green]=12.0
-for color in blue green; do
-  version=${versions[${color}]}
-  helm -n demos upgrade -i echo-backend-${color} ~/environment/echo-backend/ \
-    --set registry=${EKS_ECR_REGISTRY} \
-    --set color=${color} \
-    --set version=${version}
-done
-```
-
 ## Summary
 
 This is a textbook-style blue/green configuration with zero impact on upstream services.
