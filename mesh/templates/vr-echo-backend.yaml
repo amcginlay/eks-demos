@@ -17,7 +17,7 @@ spec:
           weightedTargets:
           - virtualNodeRef:
               name: vn-echo-backend-blue
-            weight: {{ default 100 .Values.weightBlue }}
+            weight: {{ .Values.blueWeight }}
           - virtualNodeRef:
               name: vn-echo-backend-green
-            weight: {{ default 0 .Values.weightGreen }}
+            weight: {{ .Values.greenWeight }}

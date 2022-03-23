@@ -98,7 +98,7 @@ Obviously it's convenient to **view** your configuration via the console, but wh
 
 ## The VirtualNodes (backend)
 
-Each Kubernetes deployment which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
+Each Kubernetes service which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
 Your **backend** `VirtualNodes` are simple to implement since they are not dependent on any other `Virtual` objects inside the mesh itself.
 
 Download the manifests for your `VirtualNode` **backend** resources.
@@ -145,8 +145,8 @@ Note the use of templated values for the split ratios.
 ```bash
 # adding VirtualRouter - note the percentage blue/green weights
 helm -n demos upgrade -i mesh ~/environment/mesh \
-  --set weightBlue=100 \
-  --set weightGreen=0
+  --set blueWeight=100 \
+  --set greenWeight=0
 ```
 
 View the new objects/resources.
@@ -183,8 +183,8 @@ Use the Helm CLI to redeploy your service mesh with the new `VirtualService` res
 ```bash
 # adding VirtualService
 helm -n demos upgrade -i mesh ~/environment/mesh \
-  --set weightBlue=100 \
-  --set weightGreen=0
+  --set blueWeight=100 \
+  --set greenWeight=0
 ```
 
 View the new resources/objects.
@@ -217,8 +217,8 @@ Use the Helm CLI to redeploy your **completed** service mesh with the new `Virtu
 ```bash
 # adding frontend VirtualNode
 helm -n demos upgrade -i mesh ~/environment/mesh \
-  --set weightBlue=100 \
-  --set weightGreen=0
+  --set blueWeight=100 \
+  --set greenWeight=0
 ```
 
 View the new objects/resources.
@@ -282,8 +282,8 @@ Continue to watch what happens here as you move on.
 Let's reconfigure the `VirtualRouter` to split the traffic 50/50 and, after a few seconds, observe what happens.
 ```bash
 helm -n demos upgrade -i mesh ~/environment/mesh \
-  --set weightBlue=50 \
-  --set weightGreen=50
+  --set blueWeight=50 \
+  --set greenWeight=50
 ```
 
 ## Delving into envoy
