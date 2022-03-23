@@ -4,9 +4,6 @@ metadata:
   name: vn-echo-backend-blue
 spec:
   awsName: vn-echo-backend-blue
-  podSelector:
-    matchLabels:
-      app: echo-backend-blue
   listeners:
     - portMapping:
         port: 80
