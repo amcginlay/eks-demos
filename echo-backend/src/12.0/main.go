@@ -15,10 +15,7 @@ const version = "12.0"
 var failureRate = getEnvInt("FAILURE_RATE", 0)
 
 func getEnvInt(key string, fallback int) int {
-	result, err := strconv.Atoi(getEnv(key, strconv.Itoa(fallback)))
-	if err != nil {
-		panic(err)
-	}
+	result, _ := strconv.Atoi(getEnv(key, strconv.Itoa(fallback)))
 	return result
 }
 
