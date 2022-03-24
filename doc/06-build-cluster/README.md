@@ -53,6 +53,7 @@ managedNodeGroups:
         albIngress: true
         xRay: true
         cloudWatch: true
+        externalDNS: true
 
 # we do not want to concern ourselves with self managed nodes, but here's how eksctl handles them
 # nodeGroups:
