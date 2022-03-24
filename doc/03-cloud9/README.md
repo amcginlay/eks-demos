@@ -1,5 +1,7 @@
 # Create Cloud9 (EC2) Environment
 
+## Step 1: From CloudShell
+
 As you create your Cloud9 environment, disable the "AWS managed temporary credentials" feature.
 Doing so enables the underlying EC2 instance to correctly acknowledge its assigned IAM Role, in this case `Role-EC2-EKSClusterAdmin`.
 ```bash
@@ -31,6 +33,8 @@ Execute the following command then navigate your browser to the URL it displays 
 ```bash
 echo "https://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}"
 ```
+
+## Step 2: From Cloud9
 
 Once inside the Cloud9 environment, open a terminal session and run the following command to confirm the `Role-EC2-EKSClusterAdmin` IAM role has been assumed:
 ```bash
