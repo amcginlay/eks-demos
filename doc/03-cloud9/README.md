@@ -14,7 +14,7 @@ subnet_id=$( \
 )
 env_id=$( \
   aws cloud9 create-environment-ec2 \
-    --name c9-eks-${cluster_name}-$(date +"%Y%m%d%H%M") \
+    --name eks-${cluster_name}-$(date +"%Y%m%d%H%M") \
     --instance-type m5.large \
     --image-id amazonlinux-2-x86_64 \
     --subnet-id ${subnet_id} \
