@@ -31,7 +31,7 @@ aws ec2 associate-iam-instance-profile --instance-id ${instance_id} --iam-instan
 
 Execute the following command then navigate your browser to the URL it displays before exiting your CloudShell session
 ```bash
-echo "https://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}"
+echo -e "\nGo to your new Cloud9 instance at:\nhttps://${AWS_DEFAULT_REGION}.console.aws.amazon.com/cloud9/ide/${env_id}\n"
 ```
 
 ## Step 2: From Cloud9
