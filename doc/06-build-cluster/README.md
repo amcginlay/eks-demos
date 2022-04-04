@@ -56,7 +56,7 @@ managedNodeGroups:
         externalDNS: true
         certManager: true
      attachPolicyARNs:
-       - arn:aws:iam::aws:policy/AWSCertificateManagerPrivateCAFullAccess        
+       - arn:aws:iam::aws:policy/AWSCertificateManagerPrivateCAUser       
 
 # we do not want to concern ourselves with self managed nodes, but here's how eksctl handles them
 # nodeGroups:
