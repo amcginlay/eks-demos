@@ -47,8 +47,10 @@ managedNodeGroups:
     desiredCapacity: 2
     maxSize: 6
     iam:
-      attachPolicyARNs:
-        - arn:aws:iam::aws:policy/AWSCertificateManagerPrivateCAUser       
+      attachPolicyARNs:      
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::aws:policy/AWSCertificateManagerPrivateCAUser
       withAddonPolicies:
         autoScaler: true
         appMesh: true
