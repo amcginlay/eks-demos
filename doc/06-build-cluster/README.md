@@ -8,16 +8,16 @@ aws sts get-caller-identity
 Set up a KMS customer managed key to encrypt secrets, as per: https://aws.amazon.com/blogs/containers/using-eks-encryption-provider-support-for-defense-in-depth/
 ```bash
 key_metadata=($(aws kms create-key --query KeyMetadata.[KeyId,Arn] --output text)) # [0]=KeyId [1]=Arn
-aws kms create-alias --alias-name alias/cmk-eks-${EKS_CLUSTER_NAME}-$(cut -c-8 <<< ${key_metadata[0]}) --target-key-id ${key_metadata[1]}
+aws kms create-alias --alias-name alias/${C9_PROJECT}-$(cut -c-8 <<< ${key_metadata[0]}) --target-key-id ${key_metadata[1]}
 ```
 
 Create a manifest describing the EKS cluster with a managed node group (using spot instances) alongside a fargate profile.
 ```bash
-cat > ~/environment/${EKS_CLUSTER_NAME}-cluster-config.yaml << EOF
+cat > ~/environment/${C9_PROJECT}-cluster-config.yaml << EOF
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: ${EKS_CLUSTER_NAME}
+  name: ${C9_PROJECT}
   region: ${AWS_DEFAULT_REGION}
   version: "${EKS_K8S_VERSION}"
 availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
@@ -39,7 +39,7 @@ cloudWatch: # comment out as necessary
       - "scheduler"
 
 managedNodeGroups:
-  - name: mng-${EKS_CLUSTER_NAME}
+  - name: mng-${C9_PROJECT}
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
     instanceTypes: ["t3.small","t3a.small"]
     privateNetworking: true
@@ -63,7 +63,7 @@ managedNodeGroups:
 
 # we do not want to concern ourselves with self managed nodes, but here's how eksctl handles them
 # nodeGroups:
-#   - name: ng-${EKS_CLUSTER_NAME}
+#   - name: ng-${C9_PROJECT}
 #     availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]
 #     instanceType: "t3.small"
 #     privateNetworking: true
@@ -75,7 +75,7 @@ managedNodeGroups:
 #         effect: NoSchedule
 
 fargateProfiles:
-  - name: fp-${EKS_CLUSTER_NAME}
+  - name: fp-${C9_PROJECT}
     selectors:
       - namespace: serverless
 EOF
@@ -83,7 +83,7 @@ EOF
 
 Build the EKS cluster from the manifest (~20 mins). NOTE this will also update `~/.kube/config`
 ```bash
-eksctl create cluster -f ~/environment/${EKS_CLUSTER_NAME}-cluster-config.yaml 
+eksctl create cluster -f ~/environment/${C9_PROJECT}-cluster-config.yaml 
 ```
 
 Check the Cloud9 environment can connect to the k8s cluster and display the TWO nodes in the managed node group.

@@ -5,7 +5,7 @@
 As you create your Cloud9 environment, disable the "AWS managed temporary credentials" feature.
 Doing so enables the underlying EC2 instance to correctly acknowledge its assigned IAM Role, in this case `Role-EC2-EKSClusterAdmin`.
 ```bash
-cluster_name=dev
+cluster_name=eks-dev-$(date +"%y%m%d")
 subnet_id=$( \
   aws ec2 describe-subnets \
     --filters "Name=availability-zone,Values=${AWS_DEFAULT_REGION}a" "Name=default-for-az,Values=true" \
@@ -14,7 +14,7 @@ subnet_id=$( \
 )
 env_id=$( \
   aws cloud9 create-environment-ec2 \
-    --name eks-${cluster_name}-$(date +"%Y%m%d%H%M") \
+    --name ${cluster_name} \
     --instance-type m5.large \
     --image-id amazonlinux-2-x86_64 \
     --subnet-id ${subnet_id} \

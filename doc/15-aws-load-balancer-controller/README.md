@@ -21,7 +21,7 @@ aws iam create-policy \
   file://<(curl --silent iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.3.1/docs/install/iam_policy.json)
 
 eksctl create iamserviceaccount \
-  --cluster=${EKS_CLUSTER_NAME} \
+  --cluster=${C9_PROJECT} \
   --namespace kube-system \
   --name=aws-load-balancer-controller \
   --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
@@ -31,7 +31,7 @@ eksctl create iamserviceaccount \
 helm repo add eks https://aws.github.io/eks-charts
 
 helm -n kube-system install aws-load-balancer-controller eks/aws-load-balancer-controller \
-  --set clusterName=${EKS_CLUSTER_NAME} \
+  --set clusterName=${C9_PROJECT} \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
 ```

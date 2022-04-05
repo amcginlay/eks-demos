@@ -8,7 +8,7 @@ kubectl -n ${EKS_APP_NS} expose deployment ${EKS_APP_FE} --port=80 --type=LoadBa
 
 # createing the service account via eksctl ensure that IRSA is correctly configured (note the policy attachment)
 eksctl create iamserviceaccount \
-  --cluster ${EKS_CLUSTER_NAME} \
+  --cluster ${C9_PROJECT} \
   --namespace kube-system \
   --name appmesh-controller \
   --attach-policy-arn arn:aws:iam::aws:policy/AWSCloudMapFullAccess,arn:aws:iam::aws:policy/AWSAppMeshFullAccess \

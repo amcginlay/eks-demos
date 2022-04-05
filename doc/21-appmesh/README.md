@@ -8,7 +8,7 @@ The assumptions listed in that section also apply here.
 Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-for-k8s/) as follows, ignoring any warnings.
 ```bash
 eksctl create iamserviceaccount \
-  --cluster ${EKS_CLUSTER_NAME} \
+  --cluster ${C9_PROJECT} \
   --namespace kube-system \
   --name appmesh-controller \
   --attach-policy-arn arn:aws:iam::aws:policy/AWSCloudMapFullAccess,arn:aws:iam::aws:policy/AWSAppMeshFullAccess \

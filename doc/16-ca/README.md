@@ -11,7 +11,7 @@ Install the CA following documented best practices for EKS.
 kubectl apply -f <( \
   curl --silent https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml | \
     sed "s/v1\.[[:digit:]]*\.0/v${EKS_K8S_VERSION}.0/g" | \
-    sed "s/<YOUR CLUSTER NAME>/${EKS_CLUSTER_NAME}\n            - --balance-similar-node-groups\n            - --skip-nodes-with-system-pods=false/g" \
+    sed "s/<YOUR CLUSTER NAME>/${C9_PROJECT}\n            - --balance-similar-node-groups\n            - --skip-nodes-with-system-pods=false/g" \
 )
 ```
 
@@ -49,7 +49,7 @@ In comparison, nodes take significantly longer to stand up so best practice indi
 With the number of pod replicas reduced, the CA will slowly scale-in the number of nodes and would eventually revert to its previous size.
 This operation would take 10+ minutes so, to save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
-eksctl scale nodegroup --cluster ${EKS_CLUSTER_NAME} --name mng-${EKS_CLUSTER_NAME} --nodes 2
+eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng-${C9_PROJECT} --nodes 2
 ```
 
 [Return To Main Menu](/README.md)

@@ -39,7 +39,7 @@ This will **explicitly** introduce the new administrator to the cluster.
 ```bash
 new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
-  --cluster ${EKS_CLUSTER_NAME} \
+  --cluster ${C9_PROJECT} \
   --group system:masters \
   --arn ${new_admin_arn} \
   --username $((rev | cut -d/ -f1 | rev) <<< ${new_admin_arn})
