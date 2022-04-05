@@ -15,8 +15,8 @@ We also assume this local machine is [configured to access the AWS account](http
 As this cluster is unknown to your **local machine** it will need an appropriately configured kubeconfig file installed at `~/.kube/config`.
 This will get your local machine authenticated (but not yet authorized) with the cluster.
 ```bash
-cluster=dev
-aws eks update-kubeconfig --name ${cluster}
+aws eks list-clusters # identify your target cluster
+aws eks update-kubeconfig --name <target-cluster-name>
 ```
 
 The following command will confirm the **unauthorized** status of your **local machine**.
