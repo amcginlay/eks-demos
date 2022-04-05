@@ -39,7 +39,7 @@ cloudWatch: # comment out as necessary
       - "scheduler"
 
 managedNodeGroups:
-  - name: mng-${C9_PROJECT}
+  - name: mng
     availabilityZones: ["${AWS_DEFAULT_REGION}a", "${AWS_DEFAULT_REGION}b", "${AWS_DEFAULT_REGION}c"]
     instanceTypes: ["t3.small","t3a.small"]
     privateNetworking: true
@@ -63,7 +63,7 @@ managedNodeGroups:
 
 # we do not want to concern ourselves with self managed nodes, but here's how eksctl handles them
 # nodeGroups:
-#   - name: ng-${C9_PROJECT}
+#   - name: ng
 #     availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]
 #     instanceType: "t3.small"
 #     privateNetworking: true
@@ -75,7 +75,7 @@ managedNodeGroups:
 #         effect: NoSchedule
 
 fargateProfiles:
-  - name: fp-${C9_PROJECT}
+  - name: fp
     selectors:
       - namespace: serverless
 EOF

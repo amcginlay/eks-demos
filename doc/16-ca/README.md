@@ -49,7 +49,7 @@ In comparison, nodes take significantly longer to stand up so best practice indi
 With the number of pod replicas reduced, the CA will slowly scale-in the number of nodes and would eventually revert to its previous size.
 This operation would take 10+ minutes so, to save time, manually revert the desired number of nodes and continue to monitor this to completion before moving on.
 ```bash
-eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng-${C9_PROJECT} --nodes 2
+eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes 2
 ```
 
 [Return To Main Menu](/README.md)
