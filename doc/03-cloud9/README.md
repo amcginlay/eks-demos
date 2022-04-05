@@ -44,6 +44,8 @@ aws sts get-caller-identity
 The standard Cloud9 environment has a small (10gb) root volume.
 To ensure you don't exhaust this storage extend the root volume to 30gb.
 ```bash
+df -T # check disk use percentage before (typically ~80%) ...
+
 region=$(curl --silent http://169.254.169.254/latest/meta-data/placement/region)
 instance_id=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)
 
@@ -71,6 +73,8 @@ done
 
 sudo growpart /dev/nvme0n1 1
 sudo xfs_growfs -d /
+
+df -T # ... check disk use percentage has been reduced
 ```
 
 [Return To Main Menu](/README.md)
