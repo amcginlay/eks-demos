@@ -265,13 +265,12 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=2.0 \
-  --set backend=http://vs-echo-backend:80 \
+  --set backend=http://vs-echo-backend.demos.svc.cluster.local:80 \
   --set serviceType=ClusterIP
 ```
 
 This reconfiguration will cause all the frontend pods to restart.
 As they do so the `envoy` proxy will hook any requests matching the backend URL and route them as per the rules defined in App Mesh.
-Be aware that `VirtualService` resources **do not** support the fully-qualified naming convention adopted by Kubernetes services (i.e. `<service>.<namespace>.svc.cluster.local`).
 
 Return to your **dedicated** terminal window polling the frontend and, at this point, nothing appears to have changed because we weighted the `VirtualRouter` to send 100% of traffic to the `blue` backend.
 
