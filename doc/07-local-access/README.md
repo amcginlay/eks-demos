@@ -16,14 +16,15 @@ As this cluster is unknown to your **local machine** it will need an appropriate
 This will get your local machine authenticated (but not yet authorized) with the cluster.
 ```bash
 aws eks list-clusters # identify your target cluster
-target_cluster=<target-cluster-name>
-aws eks update-kubeconfig --name ${target_cluster}
+aws eks update-kubeconfig --name <target-cluster-name>
 ```
 
 The following command will confirm the **unauthorized** status of your **local machine**.
 ```bash
 kubectl get nodes
 ```
+
+## From Local Machine (unauthorized)
 
 To address this, first run the following Bash shell commands on your **local machine** to identify the ARN of the currently configured IAM principal.
 ```bash
@@ -35,11 +36,14 @@ fi
 echo ${new_admin_arn}
 ```
 
+## From Cloud9 terminal (authorized)
+
 Then, in the **Cloud9 terminal**, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
 This will **explicitly** introduce the new administrator to the cluster.
 ```bash
+new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
-  --cluster ${target_cluster} \
+  --cluster ${C9_PROJECT} \
   --group system:masters \
   --arn ${new_admin_arn} \
   --username $((rev | cut -d/ -f1 | rev) <<< ${new_admin_arn})
