@@ -16,7 +16,8 @@ As this cluster is unknown to your **local machine** it will need an appropriate
 This will get your local machine authenticated (but not yet authorized) with the cluster.
 ```bash
 aws eks list-clusters # identify your target cluster
-aws eks update-kubeconfig --name <target-cluster-name>
+target_cluster=<target-cluster-name>
+aws eks update-kubeconfig --name ${target_cluster}
 ```
 
 The following command will confirm the **unauthorized** status of your **local machine**.
@@ -39,7 +40,7 @@ This will **explicitly** introduce the new administrator to the cluster.
 ```bash
 new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
-  --cluster ${C9_PROJECT} \
+  --cluster ${target_cluster} \
   --group system:masters \
   --arn ${new_admin_arn} \
   --username $((rev | cut -d/ -f1 | rev) <<< ${new_admin_arn})
