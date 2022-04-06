@@ -38,7 +38,6 @@ echo ${new_admin_arn}
 Then, in the **Cloud9 terminal**, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
 This will **explicitly** introduce the new administrator to the cluster.
 ```bash
-new_admin_arn=<NEW_ADMIN_ARN>
 eksctl create iamidentitymapping \
   --cluster ${target_cluster} \
   --group system:masters \
