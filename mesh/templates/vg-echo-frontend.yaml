@@ -15,6 +15,7 @@ spec:
   listeners:
     - portMapping:
         port: 80
+        protocol: http
 ---
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: GatewayRoute
