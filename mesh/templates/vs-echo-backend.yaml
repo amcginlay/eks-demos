@@ -3,7 +3,7 @@ kind: VirtualService
 metadata:
   name: vs-echo-backend
 spec:
-  awsName: vs-echo-backend.{{ .Release.Namespace }}.svc.cluster.local
+  awsName: vs-echo-backend.{{ .Release.Namespace }}.svc.cluster.local # required for FQDN support
   provider:
     virtualRouter:
       virtualRouterRef:
