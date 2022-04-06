@@ -6,5 +6,5 @@ spec:
   awsName: vs-echo-frontend.{{ .Release.Namespace }}.svc.cluster.local # required for FQDN support
   provider:
     virtualNode:
-        virtualNodeRef:
-            name: vn-echo-frontend
+      virtualNodeRef:
+        name: vn-echo-frontend
