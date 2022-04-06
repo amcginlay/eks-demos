@@ -33,7 +33,8 @@ new_admin_arn=${arn}
 if grep -q assumed-role <<< ${arn}; then
   new_admin_arn=$((sed "s/:sts:/:iam:/g" | sed "s/assumed-//g" | rev | cut -d/ -f2- | rev) <<< ${arn})
 fi
-echo ${new_admin_arn}
+
+echo "The required value for <NEW_ADMIN_ARN> is ${new_admin_arn}"
 ```
 
 ## From Cloud9 terminal (authorized)
