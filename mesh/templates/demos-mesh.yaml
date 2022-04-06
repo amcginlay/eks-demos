@@ -4,7 +4,8 @@ metadata:
   name: demos
 spec:
   egressFilter:
-    type: ALLOW_ALL  # permit pods inside the mesh to communicate externally
+    type: DROP_ALL   # network access ONLY via routes to VirtualService resources defined in this mesh (preferred)
+  # type: ALLOW_ALL  # unrestricted network access (switch on for temporary internet access)
   namespaceSelector:
     matchLabels:
       mesh: demos    # associate this mesh with appropriately labeled namespaces
