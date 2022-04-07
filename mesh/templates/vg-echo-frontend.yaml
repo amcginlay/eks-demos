@@ -52,6 +52,14 @@ spec:
           image: 840364872350.dkr.ecr.us-west-2.amazonaws.com/aws-appmesh-envoy:v1.20.0.1-prod
           ports:
             - containerPort: 80
+          volumeMounts:
+           - mountPath: "/etc/keys"
+             name: pca-secret
+             readOnly: true
+      volumes:
+        - name: pca-secret
+          secret:
+            secretName: pca-secret
 ---
 apiVersion: v1
 kind: Service
