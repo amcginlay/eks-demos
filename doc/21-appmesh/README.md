@@ -3,6 +3,12 @@
 This section assumes that you have completed the previous section named **"Deploy Backend Services"**.
 The assumptions listed in that section also apply here.
 
+## Scale-out the data plane
+
+```bash
+eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes 4
+```
+
 ## Install the App Mesh Controller
 
 Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-for-k8s/) as follows, ignoring any warnings.
@@ -240,7 +246,7 @@ wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/te
   -O ~/environment/mesh/templates/vg-echo-frontend.yaml
 ```
 
-Use the Helm CLI to redeploy your **completed** service mesh with the new `VirtualNode` **frontend** resource now in place.
+Use the Helm CLI to redeploy your **completed** service mesh with the new `VirtualGateway` **frontend** resource now in place.
 ```bash
 # adding frontend VirtualGateway
 helm -n demos upgrade -i mesh ~/environment/mesh \
@@ -262,7 +268,8 @@ Inspect your new objects/resources as usual to confirm their presence.
 
 ## Prepare your watchers
 
-In a **dedicated** terminal window run a looped command against the **frontend** NLB.
+In a **dedicated** terminal window run a looped command against the **frontend** Network Load Balancer (NLB).
+THe new NLB will make a couple of minutes to resolve so be patient.
 ```bash
 nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${nlb_dnsname}; sleep 0.25; done
@@ -284,6 +291,7 @@ Bounce the **backend** deployments and watch them return with one additional con
 kubectl -n demos rollout restart deployment \
   echo-backend-blue \
   echo-backend-green
+  # echo-frontend-blue intentionally omitted, see below ...
 ```
 
 Return to your **dedicated** terminal window polling the pods, under the heading of `READY` you should the **backend** pods change from `1/1` to `2/2` meaning that the pods each now host a pair of containers - your workload and its own `envoy` proxy.
