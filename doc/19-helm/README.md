@@ -49,7 +49,18 @@ tree -a dummy-app
 rm -rf ./dummy-app
 ```
 
-The package/release you want to build is the `echo-frontend` app you have already deployed.
+Throughout the previous sections, whilst deploying your app, you have been carefully preserving its manifests in a directory named `templates`.
+If you need a recap of the manifests which should already be downloaded, see below.
+```bash
+mkdir -p ~/environment/echo-frontend/templates/
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml
+
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-service.yaml
+```
+
+The package/release you want to create is the `echo-frontend` app you have already deployed manually.
 By achieving this, your friends and customers can deploy your software on their own clusters in the exact manner you intended.
 You do this by creating a Helm chart from the manifests which comprise your app.
 The `Chart.yaml` file is mandatory for each Chart and acts like a header sheet for your package/release.
@@ -60,9 +71,6 @@ name: echo-frontend
 version: 1.0.0
 EOF
 ```
-
-Throughout the previous sections, whilst deploying your app, you have been carefully preserving its manifests in a directory named `templates`.
-With the `Chart.yaml` file in place it now should be clear that the intention in these demos was always to deploy apps using Helm.
 
 Helm provides a dry run option which allows us to "kick the tyres" and look for any potential errors.
 ```bash
