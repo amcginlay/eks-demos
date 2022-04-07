@@ -41,9 +41,8 @@ The injector webhook is also activated with a label.
 
 Use a pair of labels to activate your namespace for use with your mesh by applying a pair of labels as follows.
 ```bash
-kubectl label namespace demos \
-  mesh=demos \
-  appmesh.k8s.aws/sidecarInjectorWebhook=enabled
+kubectl label namespace demos mesh=demos
+kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook=enabled
 ```
 
 ## Prepare Helm
@@ -96,7 +95,7 @@ You must **resist** any temptation to create or modify meshes via the console.
 That's the implicit agreement you make whenever you use Kubernetes manifests/controllers to "manage" external resources in this way.
 Obviously it's convenient to **view** your configuration via the console, but when using the App Mesh Controller you must respect this arrangement and treat the console as if it were **read-only**.
 
-## The VirtualNodes (backend)
+## The Backend VirtualNodes
 
 Each Kubernetes service which wants to play a role in your service mesh requires an associated `VirtualNode` resource inside the mesh.
 Your **backend** `VirtualNodes` are simple to implement since they are not dependent on any other `Virtual` objects inside the mesh itself.
@@ -129,7 +128,7 @@ aws appmesh describe-virtual-node --mesh-name demos \
   --virtual-node-name vn-echo-backend-green
 ```
 
-## The VirtualRouter
+## The Backend VirtualRouter
 
 Your primary aim is to dynamically orchestrate the distribution of traffic from the frontend to both your **blue** and **green** backends.
 In this case, App Mesh requires a `VirtualRouter` resource to sit just in front of your backend `VirtualNodes` and maintain the desired traffic split ratios.
@@ -165,10 +164,10 @@ aws appmesh describe-route --mesh-name demos \
 That final step is where you can observe the weights.
 Return to the App Mesh console and see if you can locate the weights there.
 
-## The VirtualService
+## The Backend VirtualService
 
 Your next step is to introduce a `VirtualService` object which depends upon the `VirtualRouter` object you just created as well as an underlying Kubernetes `Service` object.
-The `Service` you twin with your `VirtualService` intentionally missing a `spec:selector:` section which means it can never target any traditional pod endpoints which is intentional.
+The `Service` you twin with your `VirtualService` is intentionally missing a `spec:selector:` section which means it can never target any traditional pod endpoints.
 It just needs to surface a ClusterIP address for identity purposes.
 
 Download the manifests for your `VirtualService` resource and its associated `Service` object.
@@ -202,41 +201,72 @@ aws appmesh describe-route --mesh-name demos \
   --route-name vrr-echo-backend
 ```
 
-## The VirtualNode (frontend)
+## The Frontend VirtualNode and VirtualService
 
-The `VirtualNode` **frontend** resource was deferred until now since it has a dependency on your `VirtualService` resource.
-Now that dependency is in place we can now complete the Mesh
+The `VirtualNode` **frontend** resource was deferred until now since it has a dependency on your backend `VirtualService` resource.
+Now that dependency is in place you can complete the VirtualNodes.
 
-Download the manifest for your `VirtualNode` **frontend** resource.
+As with the backend, you also need a Service (without physical targets) to provide a ClusterIP address for identity purposes.
+
+Download the manifests for your **frontend** resources and their associated `Service` object.
 ```bash
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vn-echo-frontend-blue.yaml \
   -O ~/environment/mesh/templates/vn-echo-frontend-blue.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-frontend.yaml \
+  -O ~/environment/mesh/templates/vs-echo-frontend.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-frontend-service.yaml \
+  -O ~/environment/mesh/templates/vs-echo-frontend-service.yaml
 ```
 
 Use the Helm CLI to redeploy your **completed** service mesh with the new `VirtualNode` **frontend** resource now in place.
 ```bash
-# adding frontend VirtualNode
+# adding frontend VirtualNode and VirtualService
 helm -n demos upgrade -i mesh ~/environment/mesh \
   --set blueWeight=100 \
   --set greenWeight=0
 ```
 
-View the new objects/resources.
+## The Frontend VirtualGateway etc.
+
+The final part is to provide an external facing load balancer (NLB) to the frontend.
+For this purpose we use a service mesh component known as a VirtualGateway.
+The routing for traffic passing through the ingress point is configurable via the service mesh.
+VirtualGateways are a little more complex so there are four related objects/resources in a combined manifest.
+You will have noticed there is currently no **green** frontend so you will observe only one configured route, for **blue**.
+
+Download the **combined** manifest for your VirtualGateway resources/object.
 ```bash
-# K8s
-kubectl -n demos get virtualnodes
-kubectl -n demos describe virtualnode vn-echo-frontend-blue
-# AWS
-aws appmesh list-virtual-nodes --mesh-name demos
-aws appmesh describe-virtual-node --mesh-name demos \
-  --virtual-node-name vn-echo-frontend-blue
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vg-echo-frontend.yaml \
+  -O ~/environment/mesh/templates/vg-echo-frontend.yaml
 ```
+
+Use the Helm CLI to redeploy your **completed** service mesh with the new `VirtualNode` **frontend** resource now in place.
+```bash
+# adding frontend VirtualGateway
+helm -n demos upgrade -i mesh ~/environment/mesh \
+  --set blueWeight=100 \
+  --set greenWeight=0
+```
+
+Due to a problem with [resource ordering in Helm](https://stackoverflow.com/questions/51957676/helm-install-in-certain-order) we need to apply the route subsequently.
+```bash
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vg-echo-frontend-route.yaml \
+  -O ~/environment/mesh/templates/vg-echo-frontend-route.yaml
+
+helm -n demos upgrade -i mesh ~/environment/mesh \
+  --set blueWeight=100 \
+  --set greenWeight=0
+```
+
+Inspect your new objects/resources as usual to confirm their presence.
 
 ## Prepare your watchers
 
-**If not already in place**, in a **dedicated** terminal window run a looped command against the **frontend**.
+In a **dedicated** terminal window run a looped command against the **frontend** NLB.
 ```bash
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+while true; do curl http://${nlb_dnsname}; sleep 0.25; done
+# ctrl+c to quit loop
 ```
 
 From **another dedicated** terminal window, observe what happens now to the pods.

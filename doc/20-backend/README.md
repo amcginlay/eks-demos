@@ -53,6 +53,7 @@ done
 for color in blue green; do
   version=${versions[${color}]}
   helm -n demos upgrade -i echo-backend-${color} ~/environment/echo-backend/ \
+    --create-namespace \
     --set registry=${EKS_ECR_REGISTRY} \
     --set color=${color} \
     --set version=${version}
@@ -83,6 +84,7 @@ Leave the **dedicated** terminal window in this state and return to your origina
 Now **redeploy** your `echo-frontend` app, this time providing the URL for a compatible instance of `echo-backend` as follows.
 ```bash
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
   --set color=blue \
   --set version=2.0 \
