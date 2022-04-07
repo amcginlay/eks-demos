@@ -1,0 +1,15 @@
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: GatewayRoute
+metadata:
+  name: vgr-echo-frontend
+  labels:
+    gateway: vg-echo-frontend
+spec:
+  httpRoute:
+    match:
+      prefix: "/"
+    action:
+      target:
+        virtualService:
+          virtualServiceRef:
+            name: vs-echo-frontend
