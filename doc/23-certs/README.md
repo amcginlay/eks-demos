@@ -55,6 +55,10 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set version=2.0 \
   --set backend=http://echo-backend-blue.demos.svc.cluster.local:80 \
   --set serviceType=ClusterIP
+  
+# monitoring commands to have at hand as follows.
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+watch kubectl -n demos get pods
 ```
 
 ## Install system components
