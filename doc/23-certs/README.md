@@ -191,8 +191,8 @@ kubectl -n demos exec -it deploy/echo-frontend-blue -c echo-frontend -- curl htt
 
 Similar commands initiated **outside** the mesh will now fail in various ways.
 ```bash
-kubectl exec -it deploy/jumpbox -- curl http://vs-echo-backend.demos.svc.cluster.local:80
-kubectl exec -it deploy/jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80
+kubectl exec -it jumpbox -- curl http://vs-echo-backend.demos.svc.cluster.local:80
+kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80
 ```
 
 Verify with `envoy` that SSL metrics are being recorded.
