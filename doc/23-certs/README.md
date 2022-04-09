@@ -6,6 +6,7 @@ The assumptions listed in that section also apply here.
 ## Quickstart
 
 If, for whatever reason, it's not already in place, deploy the basic "unmeshed" application as follows.
+This assumes the `echo-backend` and `echo-frontend` container images are already in ECR.
 ```bash
 kubectl run jumpbox --image=nginx
 
