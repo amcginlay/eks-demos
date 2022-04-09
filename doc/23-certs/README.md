@@ -9,19 +9,8 @@ If, for whatever reason, it's not already in place, deploy the basic "unmeshed" 
 ```bash
 kubectl run jumpbox --image=nginx
 
-mkdir -p ~/environment/echo-frontend/templates/ \
-         ~/environment/echo-backend/templates/
-
-cat > ~/environment/echo-frontend/Chart.yaml << EOF
-apiVersion: v2
-name: echo-frontend
-version: 1.0.0
-EOF
-
-wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
-  -O ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml
-wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
-  -O ~/environment/echo-frontend/templates/echo-frontend-service.yaml
+mkdir -p ~/environment/echo-backend/templates/ \
+         ~/environment/echo-frontend/templates/
 
 cat > ~/environment/echo-backend/Chart.yaml << EOF
 apiVersion: v2
@@ -29,10 +18,21 @@ name: echo-backend
 version: 1.0.0
 EOF
 
+cat > ~/environment/echo-frontend/Chart.yaml << EOF
+apiVersion: v2
+name: echo-frontend
+version: 1.0.0
+EOF
+
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-backend/templates/echo-backend-deployment.yaml \
   -O ~/environment/echo-backend/templates/echo-backend-deployment.yaml
 wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-backend/templates/echo-backend-service.yaml \
   -O ~/environment/echo-backend/templates/echo-backend-service.yaml
+
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-service.yaml
 
 declare -A versions=()
 versions[blue]=11.0
