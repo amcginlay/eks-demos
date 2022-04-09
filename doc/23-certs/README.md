@@ -3,6 +3,13 @@
 This section assumes that you have completed the previous section named **"AWS App Mesh"**.
 The assumptions listed in that section also apply here.
 
+## Quickstart
+
+Deploy the basic "unmeshed" application as follows.
+```bash
+kubectl run jumpbox --image=nginx
+```
+
 ## Install system components
 
 Install cert-manager
@@ -284,7 +291,9 @@ Use Helm to uninstall the entire application and the App Mesh Controller.
 helm -n demos uninstall echo-backend-blue echo-backend-green echo-frontend-blue
 helm -n appmesh-system uninstall appmesh-controller
 kubectl delete namespace demos appmesh-system
-```
 
+# not forgetting the jumpbox
+kubectl run jumpbox --image=nginx
+```
 
 [Return To Main Menu](/README.md)
