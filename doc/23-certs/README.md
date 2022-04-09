@@ -239,4 +239,30 @@ EOF
 
 -->
 
+## Rollback
+
+Revert the changes from this chapter as follows.
+```bash
+# remove the mesh
+helm -n demos uninstall mesh
+
+# remove the namespace annotations
+kubectl label namespace demos mesh-
+kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook-
+
+# bounce the backends (they will lose thier envoy sidecars)
+kubectl -n demos rollout restart deployment \
+  echo-backend-blue \
+  echo-backend-green
+
+# hard-wire `echo-frontend-blue` to go back to using use `echo-backend-blue`.
+helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
+  --set registry=${EKS_ECR_REGISTRY} \
+  --set color=blue \
+  --set version=2.0 \
+  --set backend=http://echo-backend-blue.demos.svc.cluster.local:80 \
+  --set serviceType=ClusterIP
+```
+
 [Return To Main Menu](/README.md)
