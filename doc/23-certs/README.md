@@ -241,7 +241,7 @@ EOF
 
 ## Rollback
 
-Revert the changes from this chapter as follows.
+Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
 # remove the mesh
 helm -n demos uninstall mesh
@@ -266,6 +266,25 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
 
 # The NLB no longer exists so revert to the jumpbox for ingress
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+
+# delete the cert and the secret
+kubectl -n demos delete secret pca-secret
+kubectl -n demos delete cert pca-cert
+
+# uninstall cert-manager and PCA issuer
+helm -n aws-privateca-issuer uninstall aws-privateca-issuer
+helm -n cert-manager uninstall cert-manager
+kubectl delete namespace aws-privateca-issuer cert-manager
 ```
+
+At this point the app is back to how it was after the Helm chapter.
+
+Use Helm to uninstall the entire application and the App Mesh Controller.
+```bash
+helm -n demos uninstall echo-backend-blue echo-backend-green echo-frontend-blue
+helm -n appmesh-system uninstall appmesh-controller
+kubectl delete namespace demos appmesh-system
+```
+
 
 [Return To Main Menu](/README.md)
