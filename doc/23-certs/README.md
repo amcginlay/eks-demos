@@ -9,8 +9,8 @@ If, for whatever reason, it's not already in place, deploy the basic "unmeshed" 
 ```bash
 kubectl run jumpbox --image=nginx
 
-mkdir -p ~/environment/echo-frontend/templates/
-mkdir -p ~/environment/echo-backend/templates/
+mkdir -p ~/environment/echo-frontend/templates/ \
+         ~/environment/echo-backend/templates/
 
 cat > ~/environment/echo-frontend/Chart.yaml << EOF
 apiVersion: v2
