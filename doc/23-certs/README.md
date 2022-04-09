@@ -255,7 +255,7 @@ kubectl -n demos rollout restart deployment \
   echo-backend-blue \
   echo-backend-green
 
-# hard-wire `echo-frontend-blue` to go back to using use `echo-backend-blue`.
+# hard-wire `echo-frontend-blue` to go back to using plain old `echo-backend-blue`.
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
