@@ -397,11 +397,11 @@ EOF
 
 ## Rollback
 
+Remove all traces of App Mesh and cert-manager related changes as follows.
+```bash
 # The NLB will no longer exist so revert to the jumpbox for ingress
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 
-Remove all traces of App Mesh and cert-manager related changes as follows.
-```bash
 # remove the mesh
 helm -n demos uninstall mesh
 
