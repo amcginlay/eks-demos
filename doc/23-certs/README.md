@@ -5,7 +5,7 @@ The assumptions listed in that section also apply here.
 
 ## Quickstart
 
-Deploy the basic "unmeshed" application as follows.
+If, for whatever reason, it's not already in place, deploy the basic "unmeshed" application as follows.
 ```bash
 kubectl run jumpbox --image=nginx
 
