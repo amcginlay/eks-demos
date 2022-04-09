@@ -323,7 +323,7 @@ for target_vn in vn-echo-backend-blue vn-echo-backend-green vn-echo-frontend-blu
 done
 ```
 
-After a couple of seconds, the jumpbox's curl command, which is sourced in the default namespace, will start getting `curl: (52) Empty reply from server` errors.
+After 5-15 seconds, the jumpbox's curl command, which is sourced in the default namespace, will start getting `curl: (52) Empty reply from server` errors.
 All standard HTTP commands sourced from **outside** the mesh will now fail.
 This means it's time to switch over to your NLB which has its downstream traffic routed via an TLS-aware Envoy proxy inside the gateway pod.
 
