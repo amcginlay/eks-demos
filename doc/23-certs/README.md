@@ -246,7 +246,7 @@ Revert the changes from this chapter as follows.
 # remove the mesh
 helm -n demos uninstall mesh
 
-# remove the namespace annotations
+# remove the namespace labels
 kubectl label namespace demos mesh-
 kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook-
 
