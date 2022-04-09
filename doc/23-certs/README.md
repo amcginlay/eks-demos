@@ -399,7 +399,8 @@ EOF
 
 Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
-# The NLB will no longer exist so revert to the jumpbox for ingress (the ingress loop will start BROKEN!)
+# The NLB will no longer exist so revert to the jumpbox for ingress
+# [the ingress loop will start BROKEN!]
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 
 # remove the mesh
@@ -414,7 +415,8 @@ kubectl -n demos rollout restart deployment \
   echo-backend-blue \
   echo-backend-green
 
-# set the backend env var in echo-frontend-blue to re-point at the original echo-backend-blue (this will FIX the ingress loop)
+# set the backend env var in echo-frontend-blue to re-point at the original echo-backend-blue
+# [this will FIX the previously broken ingress loop]
 helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --create-namespace \
   --set registry=${EKS_ECR_REGISTRY} \
