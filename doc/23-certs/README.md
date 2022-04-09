@@ -8,6 +8,52 @@ The assumptions listed in that section also apply here.
 Deploy the basic "unmeshed" application as follows.
 ```bash
 kubectl run jumpbox --image=nginx
+
+mkdir -p ~/environment/echo-frontend/templates/
+mkdir -p ~/environment/echo-backend/templates/
+
+cat > ~/environment/echo-frontend/Chart.yaml << EOF
+apiVersion: v2
+name: echo-frontend
+version: 1.0.0
+EOF
+
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-deployment.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-deployment.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-frontend/templates/echo-frontend-service.yaml \
+  -O ~/environment/echo-frontend/templates/echo-frontend-service.yaml
+
+cat > ~/environment/echo-backend/Chart.yaml << EOF
+apiVersion: v2
+name: echo-backend
+version: 1.0.0
+EOF
+
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-backend/templates/echo-backend-deployment.yaml \
+  -O ~/environment/echo-backend/templates/echo-backend-deployment.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/echo-backend/templates/echo-backend-service.yaml \
+  -O ~/environment/echo-backend/templates/echo-backend-service.yaml
+
+declare -A versions=()
+versions[blue]=11.0
+versions[green]=12.0
+
+for color in blue green; do
+  version=${versions[${color}]}
+  helm -n demos upgrade -i echo-backend-${color} ~/environment/echo-backend/ \
+    --create-namespace \
+    --set registry=${EKS_ECR_REGISTRY} \
+    --set color=${color} \
+    --set version=${version}
+done
+
+helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --create-namespace \
+  --set registry=${EKS_ECR_REGISTRY} \
+  --set color=blue \
+  --set version=2.0 \
+  --set backend=http://echo-backend-blue.demos.svc.cluster.local:80 \
+  --set serviceType=ClusterIP
 ```
 
 ## Install system components
