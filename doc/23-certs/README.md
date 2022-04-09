@@ -397,6 +397,9 @@ EOF
 
 ## Rollback
 
+# The NLB will no longer exist so revert to the jumpbox for ingress
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+
 Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
 # remove the mesh
@@ -419,9 +422,6 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set version=2.0 \
   --set backend=http://echo-backend-blue.demos.svc.cluster.local:80 \
   --set serviceType=ClusterIP
-
-# The NLB no longer exists so revert to the jumpbox for ingress
-kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 
 # delete the cert and the secret
 kubectl -n demos delete secret pca-secret
