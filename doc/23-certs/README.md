@@ -344,11 +344,11 @@ done
 
 It should be business as usual.
 
-To further validate that all is well, we can exec into the frontend and curl the backend as before.
+<!-- To further validate that all is well, we can exec into the frontend and curl the backend as before.
 As this command is issued **inside** your frontend which is **encapsulated** by the mesh it works as before whilst looking just like plain old HTTP.
 ```bash
 kubectl -n demos exec -it deploy/echo-frontend-blue -c echo-frontend -- curl http://vs-echo-backend.demos.svc.cluster.local:80
-```
+``` -->
 
 <!-- Similar commands initiated **outside** the mesh will now fail in various ways.
 ```bash
