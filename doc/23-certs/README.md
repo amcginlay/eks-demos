@@ -339,7 +339,7 @@ helm -n appmesh-system uninstall appmesh-controller
 kubectl delete namespace demos appmesh-system
 
 # not forgetting the jumpbox
-kubectl run jumpbox --image=nginx
+kubectl delete pod jumpbox
 ```
 
 [Return To Main Menu](/README.md)
