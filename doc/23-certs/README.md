@@ -76,6 +76,7 @@ Apply a mesh with a 50/50 backend split as follows.
 ```bash
 eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes 4
 
+# required only once
 eksctl create iamserviceaccount \
   --cluster ${C9_PROJECT} \
   --namespace kube-system \
