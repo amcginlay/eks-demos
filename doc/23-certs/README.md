@@ -361,11 +361,6 @@ done
 
 If you see non-zero responses for `ssl.handshake` it's because traffic between the **frontend** and **backend** components is now encrypted.
 
-## TODO list (FUBAR!)
-
-- figure out why **enforced certificate validation** fails for these **frontend/backend** pods. I've seen it working for plain old nginx?!?!
-- figure out why acm-pca certs cannot be applied to `aws-load-balancer-ssl-cert` ELB annotations.
-
 <!--
 
 But traffic between the **NLB** and the **frontend** which passes through your VirtualGateway's deployment `gw-echo-frontend` remains in plaintext.
@@ -446,5 +441,10 @@ kubectl delete namespace demos appmesh-system
 # not forgetting the jumpbox
 kubectl delete pod jumpbox
 ```
+
+## TODO list (FUBAR!)
+
+- figure out why **enforced certificate validation** fails for these **frontend/backend** pods. I've seen it working for plain old nginx?!?!
+- figure out why acm-pca certs cannot be applied to `aws-load-balancer-ssl-cert` ELB annotations.
 
 [Return To Main Menu](/README.md)
