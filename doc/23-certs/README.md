@@ -3,7 +3,9 @@
 This section assumes that you have completed the previous section named **"AWS App Mesh"**.
 The assumptions listed in that section also apply here.
 
-## Quickstart
+# Quickstarts
+
+## Quickstart Part 1 - unmeshed
 
 If, for whatever reason, it's not already in place, deploy the basic "unmeshed" application as follows.
 This assumes the `echo-backend` and `echo-frontend` container images are already in ECR.
@@ -63,6 +65,99 @@ watch kubectl -n demos get pods
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 ```
 
+## Quickstart Part 2 - meshed
+
+Apply a mesh with a 50/50 backend split as follows.
+
+```bash
+eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes 4
+
+eksctl create iamserviceaccount \
+  --cluster ${C9_PROJECT} \
+  --namespace kube-system \
+  --name appmesh-controller \
+  --attach-policy-arn arn:aws:iam::aws:policy/AWSCloudMapFullAccess,arn:aws:iam::aws:policy/AWSAppMeshFullAccess \
+  --override-existing-serviceaccounts \
+  --approve
+
+helm repo add eks https://aws.github.io/eks-charts
+helm -n kube-system upgrade -i appmesh-controller eks/appmesh-controller \
+  --set region=${AWS_DEFAULT_REGION} \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=appmesh-controller
+
+kubectl label namespace demos mesh=demos
+kubectl label namespace demos appmesh.k8s.aws/sidecarInjectorWebhook=enabled
+
+mkdir -p ~/environment/mesh/templates/
+cat > ~/environment/mesh/Chart.yaml << EOF
+apiVersion: v2
+name: mesh
+version: 1.0.0
+EOF
+
+# the mesh
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/demos-mesh.yaml \
+  -O ~/environment/mesh/templates/demos-mesh.yaml
+
+# backend VirtualNodes
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vn-echo-backend-blue.yaml \
+  -O ~/environment/mesh/templates/vn-echo-backend-blue.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vn-echo-backend-green.yaml \
+  -O ~/environment/mesh/templates/vn-echo-backend-green.yaml
+
+# backend VirtualRouter
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vr-echo-backend.yaml \
+  -O ~/environment/mesh/templates/vr-echo-backend.yaml
+
+# backend VirtualService and "stub" service
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-backend.yaml \
+  -O ~/environment/mesh/templates/vs-echo-backend.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-backend-service.yaml \
+  -O ~/environment/mesh/templates/vs-echo-backend-service.yaml
+
+# frontend VirtualNode, VirtualService and "stub" service
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vn-echo-frontend-blue.yaml \
+  -O ~/environment/mesh/templates/vn-echo-frontend-blue.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-frontend.yaml \
+  -O ~/environment/mesh/templates/vs-echo-frontend.yaml
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vs-echo-frontend-service.yaml \
+  -O ~/environment/mesh/templates/vs-echo-frontend-service.yaml
+
+# frontend VirtualGateway etc.
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vg-echo-frontend.yaml \
+  -O ~/environment/mesh/templates/vg-echo-frontend.yaml
+
+# deploy this version (WITHOUT Gateway routes) [TWO PHASE HACK!]
+helm -n demos upgrade -i mesh ~/environment/mesh \
+  --set blueWeight=50 \
+  --set greenWeight=50
+
+# frontend GatewayRoute
+wget https://raw.githubusercontent.com/${EKS_GITHUB_USER}/eks-demos/main/mesh/templates/vg-echo-frontend-route.yaml \
+  -O ~/environment/mesh/templates/vg-echo-frontend-route.yaml
+
+# deploy this version (WITH Gateway routes)
+helm -n demos upgrade -i mesh ~/environment/mesh \
+  --set blueWeight=50 \
+  --set greenWeight=50
+
+# restart the backend
+kubectl -n demos rollout restart deployment \
+  echo-backend-blue \
+  echo-backend-green
+
+# reconfigure and restart the frontend
+helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
+  --set registry=${EKS_ECR_REGISTRY} \
+  --set color=blue \
+  --set version=2.0 \
+  --set backend=http://vs-echo-backend.demos.svc.cluster.local:80 \
+  --set serviceType=ClusterIP
+```
+
+# Certificates Management (main part)
+
 ## Install system components
 
 Install cert-manager
@@ -84,15 +179,6 @@ helm -n aws-privateca-issuer upgrade -i aws-privateca-issuer awspca/aws-privatec
   --create-namespace \
   --version 1.2.1
 watch kubectl -n aws-privateca-issuer get pods # ctrl+c the break 
-```
-
-## Hammer the external load balancer
-
-In a **dedicated** terminal window run a looped command against the **frontend** NLB.
-```bash
-nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-while true; do curl http://${nlb_dnsname}; sleep 0.25; done
-# ctrl+c to quit loop
 ```
 
 ## Create a private certificate authority
@@ -161,8 +247,8 @@ spec:
     name: pca-issuer
 EOF
 
-kubectl -n demos get certificates -o wide
-kubectl -n demos get secrets
+kubectl -n demos get certificates pca-cert -o wide
+kubectl -n demos get secrets pca-secret 
 ```
 
 Take a closer look at a certificate
@@ -232,6 +318,17 @@ for target_vn in vn-echo-backend-blue vn-echo-backend-green vn-echo-frontend-blu
 done
 ```
 
+After a couple of seconds, the jumpbox's curl command, which is sourced in the default namespace, will start getting `curl: (52) Empty reply from server` errors.
+All standard HTTP commands sourced from **outside** the mesh will now fail.
+This means it's time to switch over to your NLB which has its downstream traffic routed via an TLS-aware Envoy proxy inside the gateway pod.
+
+In a **dedicated** terminal window run a looped command against the **frontend** NLB.
+```bash
+nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+while true; do curl http://${nlb_dnsname}; sleep 0.25; done
+# ctrl+c to quit loop
+```
+
 <!-- Enforce certificate validation (like your browser does for public CAs)
 ```bash
 for target_vn in vn-echo-backend-blue vn-echo-backend-green vn-echo-frontend-blue; do
@@ -240,7 +337,6 @@ for target_vn in vn-echo-backend-blue vn-echo-backend-green vn-echo-frontend-blu
 done
 ``` -->
 
-Return to the terminal window running a looped command against the **frontend** NLB.
 It should be business as usual.
 
 To further validate that all is well, we can exec into the frontend and curl the backend as before.
@@ -249,11 +345,11 @@ As this command is issued **inside** your frontend which is **encapsulated** by 
 kubectl -n demos exec -it deploy/echo-frontend-blue -c echo-frontend -- curl http://vs-echo-backend.demos.svc.cluster.local:80
 ```
 
-Similar commands initiated **outside** the mesh will now fail in various ways.
+<!-- Similar commands initiated **outside** the mesh will now fail in various ways.
 ```bash
 kubectl exec -it jumpbox -- curl http://vs-echo-backend.demos.svc.cluster.local:80
 kubectl exec -it jumpbox -- curl http://echo-frontend-blue.demos.svc.cluster.local:80
-```
+``` -->
 
 Verify with `envoy` that SSL metrics are being recorded.
 ```bash
