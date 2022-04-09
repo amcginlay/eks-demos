@@ -324,7 +324,7 @@ done
 ```
 
 After 10-15 seconds, the jumpbox's curl command, which is sourced in the default namespace, will start getting `curl: (52) Empty reply from server` errors.
-All standard HTTP commands sourced from **outside** the mesh will now fail.
+At this point **all** standard HTTP commands sourced from **outside** the mesh will now fail.
 This means it's time to switch over to your NLB which has its downstream traffic routed via an TLS-aware Envoy proxy inside the gateway pod.
 
 In a **dedicated** terminal window run a looped command against the **frontend** NLB.
