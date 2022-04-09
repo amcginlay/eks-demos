@@ -365,6 +365,14 @@ done
 
 If you see non-zero responses for `ssl.handshake` it's because traffic between the **frontend** and **backend** components is now encrypted.
 
+## Link cluster to Jetstack Secure
+
+- Ensure cert-manager is installed
+- Head over to `https://platform.jetstack.io/` and hit **ACCESS YOUR ACCOUNT**.
+- Click **CONNECT CLUSTER**, name it something unique like `eks_dev_220405_1` (no hyphens!).
+- Click **COPY INSTALLATION COMMAND TO CLIPBOARD**
+- Paste this back into 
+
 <!--
 
 But traffic between the **NLB** and the **frontend** which passes through your VirtualGateway's deployment `gw-echo-frontend` remains in plaintext.
@@ -398,6 +406,9 @@ EOF
 
 Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
+
+Head to `https://platform.jetstack.io/` and DELETE and clusters you have here.
+
 # The NLB will no longer exist so revert to the jumpbox for ingress
 # [the ingress loop will start BROKEN!]
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
