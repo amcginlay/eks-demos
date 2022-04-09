@@ -414,7 +414,7 @@ Head to `https://platform.jetstack.io/` and DELETE any clusters you have listed 
 Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
 
-# The NLB will no longer exist so revert to the jumpbox for ingress
+# As you rollback the NLB will be deleted so revert to the jumpbox for ingress polling.
 # [the ingress loop will start BROKEN!]
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 
