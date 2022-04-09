@@ -265,4 +265,9 @@ helm -n demos upgrade -i echo-frontend-blue ~/environment/echo-frontend/ \
   --set serviceType=ClusterIP
 ```
 
+# The NLB no longer exists so revert to the jumpbox for ingress
+```bash
+kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
+```
+
 [Return To Main Menu](/README.md)
