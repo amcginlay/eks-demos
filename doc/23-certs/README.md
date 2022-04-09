@@ -314,6 +314,9 @@ for target_deploy in echo-backend-blue echo-backend-green echo-frontend-blue gw-
   echo "tls.crt in ${target_deploy}:"
   kubectl -n demos exec -it deploy/${target_deploy} -c envoy -- cat /etc/keys/tls.crt
 done
+```
+
+**This** is the critical moment.
 
 Tell App Mesh to start using the cert across all the workloads (will not cause pod restarts)
 ```bash
