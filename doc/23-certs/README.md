@@ -330,7 +330,7 @@ After 10-15 seconds, the jumpbox's curl command, which is sourced in the default
 From this point **all** standard HTTP commands sourced from **outside** the mesh will fail.
 This means it's time to switch over to your NLB which has its downstream traffic routed via an TLS-aware Envoy proxy inside the gateway pod.
 
-In a **dedicated** terminal window run a looped command against the **frontend** NLB.
+Replace the jumpbox's curl command with a looped command running against the external-facing **frontend** NLB.
 ```bash
 nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${nlb_dnsname}; sleep 0.25; done
