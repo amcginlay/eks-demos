@@ -435,7 +435,7 @@ At this point the app is back to how it was after the Helm chapter.
 Use Helm to uninstall the entire application and the App Mesh Controller.
 ```bash
 helm -n demos uninstall echo-backend-blue echo-backend-green echo-frontend-blue
-helm -n appmesh-system uninstall appmesh-controller
+helm -n kube-system uninstall appmesh-controller
 kubectl delete namespace demos appmesh-system
 
 # not forgetting the jumpbox
