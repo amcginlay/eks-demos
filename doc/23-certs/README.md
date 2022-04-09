@@ -373,7 +373,7 @@ If you see non-zero responses for `ssl.handshake` it's because traffic between t
 
 - Ensure cert-manager is installed
 - Head over to `https://platform.jetstack.io/` and hit **ACCESS YOUR ACCOUNT**.
-- Click **CONNECT CLUSTER**, name it something unique like `eks_dev_220405_1` (no hyphens!).
+- Click **CONNECT CLUSTER**, name it something unique like `eks_dev_nnnnnn` (no hyphens!).
 - Click **COPY INSTALLATION COMMAND TO CLIPBOARD**
 - Paste this back into 
 
