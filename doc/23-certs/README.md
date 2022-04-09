@@ -399,7 +399,7 @@ EOF
 
 Remove all traces of App Mesh and cert-manager related changes as follows.
 ```bash
-# The NLB will no longer exist so revert to the jumpbox for ingress
+# The NLB will no longer exist so revert to the jumpbox for ingress (it will start BROKEN!)
 kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://echo-frontend-blue.demos.svc.cluster.local:80; sleep 0.25; done"
 
 # remove the mesh
