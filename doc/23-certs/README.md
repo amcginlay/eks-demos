@@ -375,7 +375,8 @@ If you see non-zero responses for `ssl.handshake` it's because traffic between t
 - Head over to `https://platform.jetstack.io/` and hit **ACCESS YOUR ACCOUNT**.
 - Click **CONNECT CLUSTER**, name it something unique like `eks_dev_nnnnnn` (no hyphens!).
 - Click **COPY INSTALLATION COMMAND TO CLIPBOARD**
-- Paste this back into 
+- Paste this back into you activate terminal session.
+- After about 15-20 seconds our cluster is shown in JetStack Secure.
 
 <!--
 
