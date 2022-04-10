@@ -256,6 +256,11 @@ kubectl -n demos get certificates pca-cert -o wide
 kubectl -n demos get secrets pca-secret 
 ```
 
+Observe the fields named `duration` and `renewBefore`.
+This is an instruction to cert-manager to always request 90 day certificates and to renew them 15 days before the expiry of the previous one.
+Renewing a certificate does not expire any previous ones so, in this case, you have a 15 day window during which two certificates will be valid.
+Be aware that renewed certificates are not auto-reloaded into your workloads, but that's a discussion for another day.
+
 Take a closer look at a certificate
 ```bash
 kubectl -n demos get secret pca-secret -o 'go-template={{index .data "tls.crt"}}' | base64 --decode | openssl x509 -noout -text
