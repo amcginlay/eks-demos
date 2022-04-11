@@ -66,4 +66,4 @@ kubectl -n kube-system describe configmap aws-auth
 
 You may, of course, edit the `aws-auth` configmap manually but `eksctl create iamidentitymapping` is the safer option.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Build A Container Image](../08-build-container-image/README.md)

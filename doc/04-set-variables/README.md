@@ -25,4 +25,4 @@ Familiarize yourself with these variable settings
 env | sort | grep "AWS\|EKS"
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Configure Client Tools](../05-client-tools/README.md)

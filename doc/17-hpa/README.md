@@ -82,4 +82,4 @@ Excess pods will be terminated and, correspondingly, the TARGETS ratio will stab
 The CA will eventually follow this pattern and underutilized nodes will be terminated.
 However, as previously discussed, this will happen in a slower timeframe so feel free to quit `siege` and move on.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Karpenter](../18-karpenter/README.md)

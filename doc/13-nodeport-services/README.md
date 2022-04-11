@@ -35,4 +35,4 @@ kubectl exec -it jumpbox -- /bin/bash -c "while true; do curl http://${node_ips[
 
 Other resources inside your VPC, such as regular EC2 instances or lambda functions, could now successfully communicate with your app.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [K8s LoadBalancer Services](../14-loadbalancer-services/README.md)

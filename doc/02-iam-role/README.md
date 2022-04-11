@@ -47,4 +47,4 @@ aws iam add-role-to-instance-profile --instance-profile-name Role-EC2-EKSCluster
 aws iam attach-role-policy --role-name Role-EC2-EKSClusterAdmin --policy-arn ${admin_policy_arn}
 ```
 
-[Next](../03-cloud9/README.md)
+Next: [Main Menu](/README.md) | [Create Cloud9 (EC2) Environment](../03-cloud9/README.md)

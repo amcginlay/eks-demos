@@ -62,4 +62,4 @@ kubectl -n demos exec -it ${first_pod} -- curl http://localhost:80
 
 Do not delete this deployment. You will need it later.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Prepare Upgraded Image](../11-prepare-upgraded-image/README.md)

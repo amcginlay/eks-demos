@@ -96,4 +96,4 @@ You can further validate your permissions by observing the pods initally deploye
 kubectl -n kube-system get pods -o wide
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Configure Local Machine Access](../07-local-access/README.md)

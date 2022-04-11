@@ -52,4 +52,4 @@ This operation would take 10+ minutes so, to save time, manually revert the desi
 eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes 2
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Horizonal Pod Autoscaler](../17-hpa/README.md)

@@ -102,4 +102,4 @@ This introduces **unintended risk** to your deployments as well as **tight coupl
 Instead, you want your deployments to be **risk averse** and **loosely coupled**.
 A solution to this problem is presented in the next chapter on **App Mesh**.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [AWS App Mesh](../21-appmesh/README.md)

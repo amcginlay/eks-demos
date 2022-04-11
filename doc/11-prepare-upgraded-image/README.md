@@ -49,4 +49,4 @@ You may also like to visit [https://us-west-2.console.aws.amazon.com/ecr/reposit
 
 The version 2.0 image remains in ECR for later use.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [K8s ClusterIP Services](../12-clusterip-services/README.md)

@@ -16,4 +16,4 @@ sudo ./aws/install --update
 
 Failure to update the CLI can cause some later commands to fail (e.g. `aws cloud9 create-environment-ec2`)
 
-[Next](../02-iam-role/README.md)
+Next: [Main Menu](/README.md) | [Configure IAM Role](../02-iam-role/README.md)

@@ -73,4 +73,4 @@ We are done with running images in Docker for now so stop the container (which w
 docker stop ${container_id}
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Push Container Image To ECR](../09-push-to-ecr/README.md)

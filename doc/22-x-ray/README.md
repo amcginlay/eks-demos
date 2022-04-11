@@ -47,4 +47,4 @@ kubectl -n demos rollout restart deployment \
 Head over to [https://us-west-2.console.aws.amazon.com/xray/home](https://us-west-2.console.aws.amazon.com/xray/home) to see your service graph.
 Note there was no need to augment your codebase to achieve this.
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md)

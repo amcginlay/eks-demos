@@ -77,4 +77,4 @@ sudo xfs_growfs -d /
 df -T # ... check disk use percentage has been reduced
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Set Variables](../04-set-variables/README.md)

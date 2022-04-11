@@ -107,4 +107,4 @@ kubectl -n demos delete service echo-frontend-green
 kubectl -n demos delete deployment echo-frontend-green
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Cluster Autoscaler](../16-ca/README.md)

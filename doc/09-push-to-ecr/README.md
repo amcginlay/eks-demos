@@ -28,4 +28,4 @@ Review the ECR repository for your app.
 aws ecr list-images --repository-name echo-frontend
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Deploy From ECR To Kubernetes](../10-deploy-to-k8s/README.md)

@@ -52,4 +52,4 @@ echo "source ~/.kubectl-ac" >> ~/.bashrc
 source ~/.kubectl-ac
 ```
 
-[Return To Main Menu](/README.md)
+Next: [Main Menu](/README.md) | [Build EKS Cluster](../06-build-cluster/README.md)
