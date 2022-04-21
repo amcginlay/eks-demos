@@ -102,7 +102,7 @@ kubectl -n kube-system get pods -o wide
 You have already put your worker nodes into private subnets and port 22 is closed.
 This is good practice but what if you still require occasional remote access to these EC2 instances for diagnostic purposes?
 
-Here's the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your worker nodes to Systems Manager (SSM) Session Manager.
+Here's the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your private worker nodes to Systems Manager (SSM) Session Manager via VPC Endpoints.
 Note that the IAM role for your worker nodes already has the `AmazonSSMManagedInstanceCore` policy attached which is part of this solution (see your cluster config YAML file above).
 
 ```bash
