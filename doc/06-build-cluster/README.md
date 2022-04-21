@@ -101,7 +101,8 @@ kubectl -n kube-system get pods -o wide
 
 You have already put your worker nodes into private subnets and port 22 is closed.
 This is good practice but what if you still require occasional remote access to these EC2 instances for diagnostic purposes.
-There follows the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your worker nodes to Systems Manager (SSM) Session Manager.
+
+Here's the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your worker nodes to Systems Manager (SSM) Session Manager.
 
 ```bash
 CLUSTER_NAME=${C9_PROJECT}
@@ -114,7 +115,7 @@ aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ec2messages --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
 ```
 
-Now you may connect to your worker nodes using the following.
+Since you already have the SSM CLI plugin installed, you may now connect to your worker nodes using the following.
 ```bash
 aws ssm start-session --target <EC2_INSTANCE_ID>
 ```
