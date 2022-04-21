@@ -104,9 +104,10 @@ This is good practice but what if you still require occasional remote access to 
 There follows the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your worker nodes to Systems Manager (SSM) Session Manager.
 
 ```bash
-vpc=$(aws eks describe-cluster --name ${C9_PROJECT} --query cluster.resourcesVpcConfig.vpcId --output text)
-subnets=($(aws ec2 describe-subnets | jq --arg C9_PROJECT "$C9_PROJECT" '.Subnets[] | select(contains({Tags: [{Key: "Name"}, {Value: $C9_PROJECT}]}) and contains({Tags: [{Key: "Name"}, {Value: "Private"}]})) | .SubnetId' --raw-output))
-sg=$(aws ec2 create-security-group --group-name allow-https-${C9_PROJECT} --description allow-https-${C9_PROJECT} --vpc-id ${vpc} --query GroupId --output text)
+CLUSTER_NAME=${C9_PROJECT}
+vpc=$(aws eks describe-cluster --name ${CLUSTER_NAME} --query cluster.resourcesVpcConfig.vpcId --output text)
+subnets=($(aws ec2 describe-subnets | jq --arg CLUSTER_NAME "$CLUSTER_NAME" '.Subnets[] | select(contains({Tags: [{Key: "Name"}, {Value: $CLUSTER_NAME}]}) and contains({Tags: [{Key: "Name"}, {Value: "Private"}]})) | .SubnetId' --raw-output))
+sg=$(aws ec2 create-security-group --group-name allow-https-${CLUSTER_NAME} --description allow-https-${CLUSTER_NAME} --vpc-id ${vpc} --query GroupId --output text)
 aws ec2 authorize-security-group-ingress --group-id ${sg} --protocol tcp --port 443 --cidr 0.0.0.0/0
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ssm --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ssmmessages --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
@@ -115,7 +116,7 @@ aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west
 
 Now you may connect to your worker nodes using the following.
 ```bash
-aws ssm start-session --target <INSTANCE_ID>
+aws ssm start-session --target <EC2_INSTANCE_ID>
 ```
 
 Next: [Main Menu](/README.md) | [Configure Local Machine Access](../07-local-access/README.md)
