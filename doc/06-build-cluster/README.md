@@ -114,7 +114,7 @@ sg=$(aws ec2 create-security-group --group-name allow-https-${CLUSTER_NAME} --de
 aws ec2 authorize-security-group-ingress --group-id ${sg} --protocol tcp --port 443 --cidr 0.0.0.0/0
 ```
 
-If your worker nodes are "protected" (i.e. they cannot route request to any NAT Gateway resource) then the addition of VPC Endpoints is required, as follows.
+If your worker nodes are "protected" (i.e. they cannot route requests to any NAT Gateway resource) then the addition of VPC Endpoints is required, as follows.
 
 ```bash
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ssm --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
