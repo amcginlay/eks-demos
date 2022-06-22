@@ -103,8 +103,8 @@ kubectl -n kube-system get pods -o wide
 Additionally port 22 (SSH) is blocked across the fleet.
 This enhances your security posture but what if you still require occasional remote access to these EC2 instances for diagnostic purposes?
 
-Here's the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your private worker nodes to Systems Manager (SSM) Session Manager via VPC Endpoints.
-Note that the IAM role for your worker nodes already has the `AmazonSSMManagedInstanceCore` policy attached which is part of this solution (see your cluster config YAML file above).
+Here's the scripted equivalent of [this](https://aws.amazon.com/premiumsupport/knowledge-center/ec2-systems-manager-vpc-endpoints/) knowledge base article which opens up your private (or "protected") worker nodes to Systems Manager (SSM) Session Manager.
+Note that the IAM role for your worker nodes already has the `AmazonSSMManagedInstanceCore` policy attached, which is a key part of this solution (see your cluster config YAML file above).
 
 ```bash
 CLUSTER_NAME=${C9_PROJECT}
@@ -112,6 +112,11 @@ vpc=$(aws eks describe-cluster --name ${CLUSTER_NAME} --query cluster.resourcesV
 subnets=($(aws ec2 describe-subnets | jq --arg CLUSTER_NAME "$CLUSTER_NAME" '.Subnets[] | select(contains({Tags: [{Key: "Name"}, {Value: $CLUSTER_NAME}]}) and contains({Tags: [{Key: "Name"}, {Value: "Private"}]})) | .SubnetId' --raw-output))
 sg=$(aws ec2 create-security-group --group-name allow-https-${CLUSTER_NAME} --description allow-https-${CLUSTER_NAME} --vpc-id ${vpc} --query GroupId --output text)
 aws ec2 authorize-security-group-ingress --group-id ${sg} --protocol tcp --port 443 --cidr 0.0.0.0/0
+```
+
+If your worker nodes are "protected" (i.e. they cannot route request to any NAT Gateway resource) then the addition of VPC Endpoints is required, as follows.
+
+```bash
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ssm --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ssmmessages --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
 aws ec2 create-vpc-endpoint --vpc-id ${vpc} --service-name com.amazonaws.us-west-2.ec2messages --vpc-endpoint-type Interface --subnet-ids ${subnets[*]} --security-group-ids ${sg}
