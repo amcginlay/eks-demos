@@ -269,7 +269,7 @@ Inspect your new objects/resources as usual to confirm their presence.
 ## Prepare your watchers
 
 In a **dedicated** terminal window run a looped command against the **frontend** Network Load Balancer (NLB).
-THe new NLB will make a couple of minutes to resolve so be patient.
+The new NLB will take a couple of minutes to resolve so be patient.
 ```bash
 nlb_dnsname=$(kubectl -n demos get service gw-echo-frontend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 while true; do curl http://${nlb_dnsname}; sleep 0.25; done
