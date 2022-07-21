@@ -12,7 +12,7 @@ If the above command responds with valid JSON then the role already exists and y
 
 If, however, your receive a `NoSuchEntity` error, that's your signal to stay here and continue as follows.
 
-Identify the AWS managed `AdministratorAccess` policy then create the Role-EC2-EKSClusterAdmin role, ensuring both the current user and EC2 instances are able to assume it.
+Identify the AWS managed `AdministratorAccess` policy then create the Role-EC2-EKSClusterAdmin role, ensuring both EC2 instances and IAM principals in the current account are able to assume it.
 
 ```bash
 # NOTE cluster creators should IDEALLY prepare a set of least-privilege policies - see here -> https://eksctl.io/usage/minimum-iam-policies/
