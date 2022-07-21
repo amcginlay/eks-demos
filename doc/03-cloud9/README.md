@@ -24,7 +24,12 @@ env_id=$( \
 )
 echo env_id=${env_id}
 sleep 30 && instance_id=$(aws ec2 describe-instances --filters "Name='tag:aws:cloud9:environment',Values='${env_id}'" --query "Reservations[].Instances[0].InstanceId" --output text)
-echo instance_id=${instance_id}                                                                          # if blank, wait (sleep) a little longer and repeat previous instruction
+echo instance_id=${instance_id}
+```
+
+If `instance_id` has not been set, repeat the `aws ec2 describe-instances` instruction (i.e. wait a little longer).
+Upon success of the previous commands, assign the instance profile to the Cloud9 EC2 instance. 
+```bash
 aws cloud9 update-environment --environment-id $env_id --managed-credentials-action DISABLE # disable "AWS managed temporary credentials"
 aws ec2 associate-iam-instance-profile --instance-id ${instance_id} --iam-instance-profile Name=Role-EC2-EKSClusterAdmin
 ```
