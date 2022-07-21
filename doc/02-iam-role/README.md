@@ -18,12 +18,7 @@ Identify the AWS managed `AdministratorAccess` policy then create the Role-EC2-E
 # NOTE cluster creators should IDEALLY prepare a set of least-privilege policies - see here -> https://eksctl.io/usage/minimum-iam-policies/
 admin_policy_arn=$(aws iam list-policies --query "Policies[?PolicyName=='AdministratorAccess'].Arn" --output text)
 
-principal=$( \
-  aws sts get-caller-identity --query '[Arn]' --output text | \
-  sed "s/:assumed-role\//:role\//g" | \
-  sed "s/:sts::/:iam::/g" | \
-  rev | cut -d"/" -f2- | rev \
-)
+account=$(aws sts get-caller-identity --query '[Account]' --output text)
 
 cat > ./Role-EC2-EKSClusterAdmin.trust << EOF
 {
@@ -32,7 +27,7 @@ cat > ./Role-EC2-EKSClusterAdmin.trust << EOF
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "${principal}",
+        "AWS": "arn:aws:iam::${account}:root",
         "Service": "ec2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
