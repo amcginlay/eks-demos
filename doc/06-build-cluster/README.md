@@ -31,12 +31,7 @@ addons: # the usual suspects - accept defaults, formalize existence (see Console
   - name: vpc-cni
 cloudWatch: # comment out as necessary
   clusterLogging:
-    enableTypes:
-      - "api"
-      - "audit"
-      - "authenticator"
-      - "controllerManager"
-      - "scheduler"
+    enableTypes: ["*"]
 
 managedNodeGroups:
   - name: mng
