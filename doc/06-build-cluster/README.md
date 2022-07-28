@@ -29,7 +29,7 @@ addons: # the usual suspects - accept defaults, formalize existence (see Console
   - name: coredns
   - name: kube-proxy
   - name: vpc-cni
-cloudWatch: # comment out as necessary
+cloudWatch:
   clusterLogging:
     enableTypes: ["*"]
 
