@@ -18,7 +18,7 @@ env_id=$( \
     --instance-type m5.large \
     --image-id amazonlinux-2-x86_64 \
     --subnet-id ${subnet_id} \
-    --automatic-stop-time-minutes 1440 \
+    --automatic-stop-time-minutes 720 \
     --query "environmentId" \
     --output text \
 )
