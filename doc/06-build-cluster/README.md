@@ -122,16 +122,17 @@ Since you already have the SSM CLI plugin installed, you may now connect to your
 aws ssm start-session --target <EC2_INSTANCE_ID>
 ```
 
-## Resizing the managed node group (optional)
+## Resizing the managed node group for cost optimisation (optional)
 
-If you wish to save on EC2 costs by temporarily deflating the managed node group you can do so as follows.
+If you plan to continue with the next chapters now then please disregard this optional section for now.
+However, if you ever wish to do something else and return to these demos later then you can save on EC2 costs by temporarily deflating the managed node group as follows.
 This assumes the Cluster Autoscaler is not active.
 
 ```bash
 eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes-min 0 --nodes-max 1 --nodes 0
 ```
 
-Based upon the cluster config YAML file used above, the corrective operation would be as follows.
+Based upon the cluster config YAML file used above, the restorative operation would be as follows.
 
 ```bash
 eksctl scale nodegroup --cluster ${C9_PROJECT} --name mng --nodes-min 2 --nodes-max 6 --nodes 2
