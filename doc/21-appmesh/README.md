@@ -15,14 +15,14 @@ Install the [App Mesh Controller](https://aws.github.io/aws-app-mesh-controller-
 ```bash
 eksctl create iamserviceaccount \
   --cluster ${C9_PROJECT} \
-  --namespace kube-system \
+  --namespace appmesh-system \
   --name appmesh-controller \
   --attach-policy-arn arn:aws:iam::aws:policy/AWSCloudMapFullAccess,arn:aws:iam::aws:policy/AWSAppMeshFullAccess \
   --override-existing-serviceaccounts \
   --approve
 
 helm repo add eks https://aws.github.io/eks-charts
-helm -n kube-system upgrade -i appmesh-controller eks/appmesh-controller \
+helm -n appmesh-system upgrade -i appmesh-controller eks/appmesh-controller \
   --set region=${AWS_DEFAULT_REGION} \
   --set serviceAccount.create=false \
   --set serviceAccount.name=appmesh-controller
@@ -30,7 +30,7 @@ helm -n kube-system upgrade -i appmesh-controller eks/appmesh-controller \
 
 Verify that the App Mesh Controller is installed.
 ```bash
-kubectl -n kube-system get deployment appmesh-controller
+kubectl -n appmesh-system get deployment appmesh-controller
 ```
 
 ## Label your namespace
