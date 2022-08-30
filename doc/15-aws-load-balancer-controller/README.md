@@ -14,17 +14,17 @@ This is the case as you previously set `withOIDC: true` in the cluster config YA
 
 Install the AWS Load Balancer Controller as follows.
 ```bash
-aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy >/dev/null 2>&1
+version=v2.4.3
 aws iam create-policy \
-  --policy-name AWSLoadBalancerControllerIAMPolicy \
+  --policy-name AWSLBControllerPolicy-${C9_PROJECT} \
   --policy-document \
-  file://<(curl --silent iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.3.1/docs/install/iam_policy.json)
+  file://<(curl --silent iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/${version}/docs/install/iam_policy.json)
 
 eksctl create iamserviceaccount \
   --cluster=${C9_PROJECT} \
   --namespace kube-system \
   --name=aws-load-balancer-controller \
-  --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLoadBalancerControllerIAMPolicy \
+  --attach-policy-arn=arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AWSLBControllerPolicy-${C9_PROJECT} \
   --override-existing-serviceaccounts \
   --approve
 
@@ -33,7 +33,8 @@ helm repo add eks https://aws.github.io/eks-charts
 helm -n kube-system install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set clusterName=${C9_PROJECT} \
   --set serviceAccount.create=false \
-  --set serviceAccount.name=aws-load-balancer-controller
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set image.tag=${version}
 ```
 
 Verify that the AWS Load Balancer Controller is installed.
