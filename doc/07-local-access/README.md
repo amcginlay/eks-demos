@@ -24,7 +24,9 @@ The following command will confirm the **unauthorized** status of your **local m
 kubectl get nodes
 ```
 
-## From Local Machine (unauthorized)
+There a **two steps** required to resolve this issue, as follows
+
+## Step 1 - from Local Machine (unauthorized)
 
 To address this, first run the following Bash shell commands on your **local machine** to identify the ARN of the currently configured IAM principal.
 ```bash
@@ -37,7 +39,7 @@ fi
 echo -e "\nThe required value for <NEW_ADMIN_ARN> is ${new_admin_arn}\n"
 ```
 
-## From Cloud9 terminal (authorized)
+## Step 2 - from Cloud9 terminal (authorized)
 
 Then, in the **Cloud9 terminal**, run the following `eksctl` command, ensuring that you first update the `<NEW_ADMIN_ARN>` placeholder as appropriate.
 This will **explicitly** introduce the new administrator to the cluster.
