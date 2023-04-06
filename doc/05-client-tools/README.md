@@ -35,7 +35,7 @@ kubectl krew install neat get-all
 
 Verify the installs worked.
 ```bash
-which aws eksctl kubectl session-manager-plugin dive jq tree helm siege gradle kubectl-neat
+which aws eksctl kubectl session-manager-plugin dive jq tree helm siege kubectl-neat
 ```
 
 Configure [kubectl autocomplete](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/).
