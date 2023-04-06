@@ -17,9 +17,6 @@ dive_latest=$(curl -s https://api.github.com/repos/wagoodman/dive/releases/lates
 curl --silent --location https://github.com/wagoodman/dive/releases/download/${dive_latest}/dive_$(cut -c 2- <<< ${dive_latest})_linux_amd64.rpm -o dive.rpm 
 sudo yum install -y session-manager-plugin.rpm dive.rpm jq tree siege
 curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk install gradle
 rm -r ./aws/ ./awscliv2.zip session-manager-plugin.rpm dive.rpm
 # finally, install the kubectl neat add-on (https://krew.sigs.k8s.io/docs/user-guide/setup/install/ | https://github.com/itaysk/kubectl-neat)
 (
