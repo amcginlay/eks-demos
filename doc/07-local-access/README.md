@@ -24,7 +24,7 @@ The following command will confirm the **unauthorized** status of your **local m
 kubectl get nodes
 ```
 
-There a **two steps** required to resolve this issue, as follows
+There are **two steps** required to resolve this issue, as follows
 
 ## Step 1 - from Local Machine (unauthorized)
 
