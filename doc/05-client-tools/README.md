@@ -6,7 +6,7 @@ sudo mv /usr/local/bin/aws /usr/local/bin/aws.old
 sudo mv /usr/bin/aws /usr/bin/aws.old
 curl --silent "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
-sudo ./aws/install
+sudo ./aws/install --update
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v${EKS_K8S_VERSION}.0/bin/linux/amd64/kubectl
